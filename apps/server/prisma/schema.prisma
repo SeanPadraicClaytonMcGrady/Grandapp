@@ -29,13 +29,13 @@ model User {
 //This data pattern is called specialization
 
 model Senior {
-  id         Int    @id
+  id         Int    @id @default(autoincrement())
   user       User   @relation(fields: [id], references: [id])
   authorTask Task[] @relation("author")
 }
 
 model Volunteer {
-  id            Int    @id
+  id            Int    @id @default(autoincrement())
   user          User   @relation(fields: [id], references: [id])
   responderTask Task[] @relation("responder")
 }
