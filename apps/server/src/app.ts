@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { Server } from 'http'
+import router from './router'
 
 
 
@@ -8,6 +9,7 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(router)
 
 export function startServer(): Server {
     const PORT = process.env.PORT ?? 8080
