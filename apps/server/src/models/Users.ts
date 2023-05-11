@@ -1,9 +1,17 @@
-import { User, PrismaClient } from '@prisma/client'
+import { User, PrismaClient } from "@prisma/client";
 
-const prismaInstance = new PrismaClient()
+const prismaInstance = new PrismaClient();
 
-async function findAll(): Promise<User[]> {
-    const users = await prismaInstance.user.findMany()
-    return users
-}
+const User = {
+  async findAll(): Promise<User[]> {
+    const users = await prismaInstance.user.findMany({
+      include: {
+        senior: true,
+        volunteer: true,
+      },
+    });
+    return users;
+  },
+};
 
+export default User;
