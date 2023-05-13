@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int        @id @default(autoincrement())
+  username         String     @unique
+  name             String
+  email            String     @unique
+  password         String
+  phoneNumber      String     @unique
+  biography        String?
+  medicalNeeds     String?
+  address          String     @unique
+  sentMessages     Messages[] @relation("sender")
+  receivedMessages Messages[] @relation("receiver")
+  senior           Senior?
+  volunteer        Volunteer?
+}
+
+//This data pattern is called specialization
+
+model Senior {
+  id         Int    @id @default(autoincrement())
+  user       User   @relation(fields: [id], references: [id])
+  authorTask Task[] @relation("author")
+}
+
+model Volunteer {
+  id            Int    @id @default(autoincrement())
+  user          User   @relation(fields: [id], references: [id])
+  responderTask Task[] @relation("responder")
+}
+
+model Task {
+  id            Int        @id @default(autoincrement())
+  author        Senior?    @relation("author", fields: [authorId], references: [id], onDelete: SetNull)
+  authorId      Int?
+  responder     Volunteer? @relation("responder", fields: [responderId], references: [id], onDelete: SetNull)
+  responderId   Int?
+  type          TaskType   @default(EMOTIONAL)
+  description   String
+  creationDate  DateTime   @default(now())
+  scheduledDate DateTime   @default(now())
+  location      String
+}
+
+enum TaskType {
+  EMOTIONAL
+  PHYSICAL
+}
+
+model Messages {
+  id         Int    @id @default(autoincrement())
+  message    String
+  senderId   Int?
+  sender     User?  @relation(name: "sender", fields: [senderId], references: [id], onDelete: SetNull)
+  receiverId Int?
+  receiver   User?  @relation(name: "receiver", fields: [receiverId], references: [id], onDelete: SetNull)
+}
