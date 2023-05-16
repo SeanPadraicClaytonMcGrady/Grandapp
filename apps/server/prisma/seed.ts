@@ -1,10 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-
 async function main() {
-
-
   //Seniors are below.
   const darcy = await prisma.user.upsert({
     where: { email: "FitzwilliamDarcy@mail.com" },
@@ -19,10 +16,10 @@ async function main() {
       medicalNeeds: "",
       address: "123 Romance Street",
       sentMessages: {
-        create: []
+        create: [],
       },
       receivedMessages: {
-        create: []
+        create: [],
       },
       senior: {
         create: {
@@ -34,7 +31,7 @@ async function main() {
 
   const isabella = await prisma.user.upsert({
     where: {
-      email: "IsabelladeVille@mail.com"
+      email: "IsabelladeVille@mail.com",
     },
     update: {},
     create: {
@@ -48,10 +45,10 @@ async function main() {
       medicalNeeds: "Psoas muscle exercise to reduce pain.",
       address: "123 NotRomance Street",
       sentMessages: {
-        create: []
+        create: [],
       },
       receivedMessages: {
-        create: []
+        create: [],
       },
       senior: {
         create: {
@@ -74,10 +71,10 @@ async function main() {
       medicalNeeds: "None",
       address: "124 NotRomance Street",
       sentMessages: {
-        create: []
+        create: [],
       },
       receivedMessages: {
-        create: []
+        create: [],
       },
       senior: {
         create: {
@@ -91,7 +88,7 @@ async function main() {
 
   const sadie = await prisma.user.upsert({
     where: {
-      email: "sadiegirl1992@mail.com"
+      email: "sadiegirl1992@mail.com",
     },
     update: {},
     create: {
@@ -104,10 +101,10 @@ async function main() {
       medicalNeeds: "",
       address: "321 Volunteer Street",
       sentMessages: {
-        create: []
+        create: [],
       },
       receivedMessages: {
-        create: []
+        create: [],
       },
       volunteer: {
         create: {
@@ -147,7 +144,7 @@ async function main() {
     update: {},
     create: {
       author: { connect: { id: isabella.id } },
-      responder: { connect: { id: stewart.id } },
+      responder: {},
       type: "EMOTIONAL",
       description:
         "I'd like to deliver flowers to my husband's grave. It's a hard time.",
@@ -162,7 +159,7 @@ async function main() {
     update: {},
     create: {
       author: { connect: { id: veronika.id } },
-      responder: { connect: { id: sadie.id, } },
+      responder: { connect: { id: sadie.id } },
       type: "EMOTIONAL",
       description: "I'd like company while I walk.",
       creationDate: new Date(),

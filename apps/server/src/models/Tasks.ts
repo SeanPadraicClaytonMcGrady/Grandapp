@@ -1,4 +1,12 @@
-import { Task, PrismaClient, User, Senior } from "@prisma/client";
+import {
+  Task,
+  PrismaClient,
+  User,
+  Senior,
+  Volunteer,
+  Prisma,
+} from "@prisma/client";
+import { number } from "prop-types";
 
 const prismaInstance = new PrismaClient();
 
@@ -23,25 +31,68 @@ const Tasks = {
     return tasks;
   },
 
-  async createEmotionalTask(
-    author: Senior,
-    authorId: number,
-    type: string,
-    description: string,
-    location: string
+  // Return to this ASAP
+
+  async findAllSeniorTasks(): Promise<any> {
+    const searchResult = await prismaInstance.$queryRaw(
+      Prisma.sql`SELECT * FROM "Task" WHERE 
+      "Task"."responderId" IS NULL`
+    );
+
+    return searchResult;
+
+    console.log(searchResult);
+  },
+
+  async volunteerAcceptTask(
+    taskId: number,
+    responderId: number
   ): Promise<Task> {
-    const emotionalTask = await prismaInstance.task.create({
-      data: {
-        author: { connect: { id: authorId } },
-        type: "EMOTIONAL",
-        description,
-        location,
-      },
-      include: {
-        author: true,
-      },
+    const updatedTask = await prismaInstance.task.update({
+      where: { id: taskId },
+      data: { responder: { connect: { id: responderId } } },
     });
-    return emotionalTask;
+    return updatedTask;
+  },
+
+  async volunteerCancelTask(taskId: number): Promise<Task> {
+    const updatedTask = await prismaInstance.task.update({
+      where: { id: taskId },
+      data: { responder: { disconnect: true } },
+    });
+    return updatedTask;
+  },
+
+  async volunteerGetSeniorTasks(seniorId: number): Promise<Task[]> {
+    const fetchedTasks = await prismaInstance.task.findMany({
+      where: { id: seniorId },
+    });
+    if (!fetchedTasks) {
+      throw new Error("This senior does not have tasks yet.");
+    }
+
+    return fetchedTasks;
+  },
+
+  async volunteerGetAcceptedTasks(): Promise<any> {
+    const searchResult = await prismaInstance.$queryRaw(
+      Prisma.sql`SELECT * FROM "Task" WHERE 
+      "Task"."responderId" IS NOT NULL`
+    );
+
+    return searchResult;
+  },
+
+  async volunteerGetIndividualAcceptedTasks(
+    responderId: number
+  ): Promise<Task[]> {
+    const searchTask = await prismaInstance.task.findMany({
+      where: { responderId: responderId },
+    });
+    if (!searchTask) {
+      throw new Error("Task does not exist");
+    }
+    return searchTask;
   },
 };
 
