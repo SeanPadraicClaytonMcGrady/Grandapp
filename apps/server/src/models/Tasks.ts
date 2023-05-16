@@ -164,6 +164,20 @@ const Tasks = {
     });
     return deletedTask;
   },
+
+  async volunteerAcceptedBySenior(
+    taskId: number,
+    responderId: number
+  ): Promise<Task> {
+    const acceptedVolunteer = await prismaInstance.task.update({
+      where: { id: taskId },
+      data: {
+        accepted: { connect: { id: responderId } },
+        responder: { disconnect: true },
+      },
+    });
+    return acceptedVolunteer;
+  },
 };
 
 export default Tasks;

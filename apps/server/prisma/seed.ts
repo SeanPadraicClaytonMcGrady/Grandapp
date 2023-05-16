@@ -109,6 +109,7 @@ async function main() {
       volunteer: {
         create: {
           responderTask: { create: [] },
+          acceptedTask: { create: [] },
         },
       },
     },
@@ -145,6 +146,7 @@ async function main() {
     create: {
       author: { connect: { id: isabella.id } },
       responder: {},
+      accepted: {},
       type: "EMOTIONAL",
       description:
         "I'd like to deliver flowers to my husband's grave. It's a hard time.",
@@ -160,6 +162,7 @@ async function main() {
     create: {
       author: { connect: { id: veronika.id } },
       responder: { connect: { id: sadie.id } },
+      accepted: { connect: { id: sadie.id } },
       type: "EMOTIONAL",
       description: "I'd like company while I walk.",
       creationDate: new Date(),
@@ -174,6 +177,7 @@ async function main() {
     create: {
       author: { connect: { id: veronika.id } },
       responder: { connect: { id: stewart.id } },
+      accepted: {},
       type: "PHYSICAL",
       description: "I need help with my garden. The rocks are heavy.",
       creationDate: new Date(),

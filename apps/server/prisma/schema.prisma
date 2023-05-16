@@ -38,6 +38,7 @@ model Volunteer {
   id            Int    @id @default(autoincrement())
   user          User   @relation(fields: [id], references: [id])
   responderTask Task[] @relation("responder")
+  acceptedTask  Task[] @relation("accepted")
 }
 
 model Task {
@@ -46,6 +47,8 @@ model Task {
   authorId      Int?
   responder     Volunteer? @relation("responder", fields: [responderId], references: [id], onDelete: SetNull)
   responderId   Int?
+  accepted      Volunteer? @relation("accepted", fields: [acceptedId], references: [id], onDelete: SetNull)
+  acceptedId    Int?
   type          TaskType   @default(EMOTIONAL)
   description   String
   creationDate  DateTime   @default(now())
