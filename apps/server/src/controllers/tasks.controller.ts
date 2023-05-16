@@ -163,6 +163,21 @@ const TasksController = {
       next(e);
     }
   },
+
+  async volunteerConfirmedByAcceptedId(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const responderId = parseInt(req.body.responderId);
+      const taskId = parseInt(req.params.id);
+      const accept = await Tasks.volunteerAcceptedBySenior(taskId, responderId);
+      return res.status(201).json(accept);
+    } catch (e) {
+      next(e);
+    }
+  },
 };
 
 export default TasksController;

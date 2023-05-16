@@ -32,6 +32,10 @@ router.get("/tasks", TasksController.findAllTasks);
 router.get("/seniors/tasks/open", TasksController.findSeniorTasks);
 router.put("/tasks/:id/accept", TasksController.volunteerAcceptTaskById);
 router.put("/tasks/:id/cancel", TasksController.volunteerCancelTaskById);
+router.put(
+  "/tasks/:id/confirmed",
+  TasksController.volunteerConfirmedByAcceptedId
+);
 
 //Confirm this one works after merge.
 router.get(
