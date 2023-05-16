@@ -45,5 +45,9 @@ router.get(
   "/volunteers/tasks/:id",
   TasksController.volunteerGetIndividualAcceptedTasks
 );
+router.post("/emotionalTasks", TasksController.newEmotionalTask);
+router.post("/physicalTasks", TasksController.newPhysicalTask);
+router.put("/tasks/:id", TasksController.editTaskById);
+router.delete("/tasks/:id", TasksController.deleteTaskById);
 
 export default router;
