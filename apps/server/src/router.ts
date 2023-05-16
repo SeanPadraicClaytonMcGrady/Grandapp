@@ -30,5 +30,8 @@ router.delete("/messages/:id", MessagesController.deleteMessageById);
 router.get("/tasks/:id", TasksController.findTaskById);
 router.get("/tasks", TasksController.findAllTasks);
 router.post("/emotionalTasks", TasksController.newEmotionalTask);
+router.post("/physicalTasks", TasksController.newPhysicalTask);
+router.put("/tasks/:id", TasksController.editTaskById);
+router.delete("/tasks/:id", TasksController.deleteTaskById);
 
 export default router;

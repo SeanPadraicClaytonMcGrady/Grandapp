@@ -49,7 +49,7 @@ model Task {
   type          TaskType   @default(EMOTIONAL)
   description   String
   creationDate  DateTime   @default(now())
-  scheduledDate DateTime   @default(now())
+  scheduledDate DateTime
   location      String
 }
 
