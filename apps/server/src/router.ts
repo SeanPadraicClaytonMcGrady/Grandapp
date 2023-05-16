@@ -29,6 +29,21 @@ router.delete("/messages/:id", MessagesController.deleteMessageById);
 
 router.get("/tasks/:id", TasksController.findTaskById);
 router.get("/tasks", TasksController.findAllTasks);
-router.post("/emotionalTasks", TasksController.newEmotionalTask);
+router.get("/seniors/tasks/open", TasksController.findSeniorTasks);
+router.put("/tasks/:id/accept", TasksController.volunteerAcceptTaskById);
+router.put("/tasks/:id/cancel", TasksController.volunteerCancelTaskById);
+
+//Confirm this one works after merge.
+router.get(
+  "/seniors/:id/tasks",
+  TasksController.volunteerGetSingleSeniorTasksById
+);
+router.get("/volunteers/tasks", TasksController.volunteerGetAcceptedTasks);
+
+//Conirm this one works after merge.
+router.get(
+  "/volunteers/tasks/:id",
+  TasksController.volunteerGetIndividualAcceptedTasks
+);
 
 export default router;
