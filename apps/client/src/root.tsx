@@ -1,7 +1,7 @@
 export default function Root() {
   return (
     <>
-      <div id="sidebar">
+      {/* <div id="sidebar">
         <h1>React Router Contacts</h1>
         <div>
           <form id="search-form" role="search">
@@ -30,7 +30,7 @@ export default function Root() {
           </ul>
         </nav>
       </div>
-      <div id="detail"></div>
+      <div id="detail"></div> */}
     </>
   );
 }
