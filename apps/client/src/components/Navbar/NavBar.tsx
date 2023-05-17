@@ -1,8 +1,9 @@
 import { Link, Route, Routes } from "react-router-dom";
 import * as React from "react";
 import Home from "../Pages/Home";
-import Menu from "../Pages/Menu";
-import Profile from "../Pages/Profile";
+
+import Profile from "../../ProfilePage/Profile";
+import Users from "../Pages/Users";
 
 const Navbar = () => {
   return (
@@ -24,14 +25,14 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center">
-            <Link to="/menu">Menu</Link>
+            <Link to="/users">See users</Link>
           </div>
         </div>
       </nav>
       <Routes>
         <Route path="/profile" element={<Profile />} />
         <Route path="/home" element={<Home />} />
-        <Route path="menu" element={<Menu />} />
+        <Route path="users" element={<Users />} />
       </Routes>
     </>
   );
