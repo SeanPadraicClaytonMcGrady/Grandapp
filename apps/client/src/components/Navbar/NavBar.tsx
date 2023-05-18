@@ -13,7 +13,7 @@ const Navbar = () => {
             <Link to="/profile">
               <img
                 src="https://ychef.files.bbci.co.uk/976x549/p086k2k4.jpg"
-                alt="baby with headphones"
+                alt="old man with his tongue out"
                 className="w-12 h-12 rounded-full object-cover"
               />
             </Link>
@@ -31,7 +31,7 @@ const Navbar = () => {
       <Routes>
         <Route path="/profile" element={<Profile />} />
         <Route path="/home" element={<Home />} />
-        <Route path="menu" element={<Menu />} />
+        <Route path="/menu" element={<Menu />} />
       </Routes>
     </>
   );
