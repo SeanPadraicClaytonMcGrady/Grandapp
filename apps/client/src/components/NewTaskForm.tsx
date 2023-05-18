@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { EmotionalTask, PhysicalTask, Senior } from '../types'
 import { createEmotionalTask, createPhysicalTask, fetchSeniors } from '../lib/apiClient'
 
@@ -18,7 +18,7 @@ function useSeniors() {
 
 function NewTaskForm({ onEmotionalTaskCreated, onPhysicalTaskCreated }: NewTaskFromProps): JSX.Element {
     const seniors = useSeniors()
-    const formRef = useRef<HTMLFormElement>(null)
+    // const formRef = useRef<HTMLFormElement>(null)
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
@@ -44,7 +44,7 @@ function NewTaskForm({ onEmotionalTaskCreated, onPhysicalTaskCreated }: NewTaskF
 
     return (
         <div>
-            <form className='p-5  border-0 rounded-lg max-w-sm overflow-hidden shadow-lg'>
+            <form onSubmit={handleSubmit} className='p-5  border-0 rounded-lg max-w-sm overflow-hidden shadow-lg'>
                 <div className="border-b border-gray-900/10 pb-12" >
                     <h2 className="font-bold text-xl mb-2">Create a New Task</h2>
                     <div className='inline-block border-2 rounded-md px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-0'>

@@ -24,7 +24,15 @@ const Tasks = {
   },
 
   async findAllTasks(): Promise<Task[]> {
-    const tasks = await prismaInstance.task.findMany();
+    const tasks = await prismaInstance.task.findMany({
+      include: {
+        author: {
+          include: {
+            user: true
+          }
+        }
+      }
+    });
     if (!tasks) {
       throw new Error("There are no tasks.");
     }

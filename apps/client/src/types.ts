@@ -1,5 +1,6 @@
 export interface Author {
-    username: string
+    id: number,
+    user: { username: string }
 }
 
 export interface EmotionalTask {

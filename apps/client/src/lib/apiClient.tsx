@@ -1,12 +1,12 @@
 const BASE_URL = 'http://localhost:8080'
 
 export async function fetchEmotionalTasks() {
-    const response = await fetch(`${BASE_URL}/emotionalTasks`)
+    const response = await fetch(`${BASE_URL}/tasks`)
     const emotionalTasks = await response.json()
     return emotionalTasks
 }
 export async function fetchPhysicalTasks() {
-    const response = await fetch(`${BASE_URL}/physicalTasks`)
+    const response = await fetch(`${BASE_URL}/tasks`)
     const physicalTasks = await response.json()
     return physicalTasks
 }
