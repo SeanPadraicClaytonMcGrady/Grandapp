@@ -1,10 +1,12 @@
 import "./App.css";
-import Datepicker from "./components/DatePicker";
+import Navbar from "./components/Navbar/NavBar";
+
 
 function App() {
   return (
     <>
-      <Datepicker />
+      <Navbar />
+
     </>
   );
 }
