@@ -21,7 +21,7 @@ const TaskCard: FC<TaskProps> = ({ task }) => {
                     <label>Description: {task.description}</label>
                 </div>
                 <div>
-                    <label>{task.scheduleDate}</label>
+                    <label>Date: {task.scheduledDate}</label>
                 </div>
                 <div>
                     <label>Address: {task.location}</label>

@@ -29,7 +29,9 @@ router.delete("/messages/:id", MessagesController.deleteMessageById);
 
 router.get("/tasks/:id", TasksController.findTaskById);
 router.get("/tasks", TasksController.findAllTasks);
-router.get("/seniors/tasks/open", TasksController.findSeniorTasks);
+router.get("/seniors/tasks/open", TasksController.findSeniorTasksNoResponder);
+router.get("/seniors/tasks/respondernotaccepted", TasksController.findSeniorTasksResponderNotAccepted);
+router.get("/seniors/tasks/responderaccepted", TasksController.findSeniorTasksResponderAccepted);
 router.put("/tasks/:id/accept", TasksController.volunteerAcceptTaskById);
 router.put("/tasks/:id/cancel", TasksController.volunteerCancelTaskById);
 router.put(

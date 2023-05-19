@@ -23,7 +23,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center">
-            <Link to="/users">See users</Link>
+            <Link to="/users">See Users</Link>
           </div>
         </div>
       </nav>
@@ -31,7 +31,6 @@ const Navbar = () => {
       <Link to="/profile">{<Profile />}</Link>
       <Link to="/home">{<Home />}</Link>
       <Link to="/users"> {<Users />}</Link>
-
     </>
   );
 };

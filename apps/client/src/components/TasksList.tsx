@@ -1,4 +1,4 @@
-import { EmotionalTask, PhysicalTask, Senior } from '../types'
+import { EmotionalTask, PhysicalTask, Senior, Tasks } from '../types'
 import { FC } from 'react'
 import TaskCard from './TaskCard'
 
@@ -6,6 +6,7 @@ type TasksProps = {
     emotionalTasks: EmotionalTask[],
     physicalTasks: PhysicalTask[],
     seniors: Senior[]
+    tasks: Tasks[]
 }
 
 const TasksList: FC<TasksProps> = ({ emotionalTasks, physicalTasks, seniors }) => {

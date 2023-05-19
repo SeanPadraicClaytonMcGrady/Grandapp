@@ -6,11 +6,8 @@ import {
   Volunteer,
   Prisma,
 } from "@prisma/client";
-import { number } from "prop-types";
 
 const prismaInstance = new PrismaClient();
-
-//Random note: If Typescript says || null, consider throwing an error.
 
 const Tasks = {
   async findTask(taskId: number): Promise<Task> {
@@ -28,10 +25,12 @@ const Tasks = {
       include: {
         author: {
           include: {
-            user: true
-          }
-        }
-      }
+            user: {
+              select: { username: true },
+            },
+          },
+        },
+      },
     });
     if (!tasks) {
       throw new Error("There are no tasks.");
@@ -41,15 +40,43 @@ const Tasks = {
 
   // Return to this ASAP
 
-  async findAllSeniorTasks(): Promise<any> {
+  // `SELECT * FROM "Task" WHERE
+  // "Task"."responderId" IS NULL`
+
+  async findAllSeniorTasksNoResponder(): Promise<any> {
     const searchResult = await prismaInstance.$queryRaw(
-      Prisma.sql`SELECT * FROM "Task" WHERE 
-      "Task"."responderId" IS NULL`
+      Prisma.sql`SELECT "Task".*, "User"."name" AS name
+      FROM "Task"
+      LEFT JOIN "Senior" ON "Senior"."id" = "Task"."authorId"
+      LEFT JOIN "User" ON "User"."id" = "Senior"."id"
+      WHERE "Task"."responderId" IS NULL`
     );
 
     return searchResult;
+  },
 
-    console.log(searchResult);
+  async findAllSeniorTasksResponderNotAccepted(): Promise<any> {
+    const searchResult = await prismaInstance.$queryRaw(
+      Prisma.sql`SELECT "Task".*, "User"."name" AS name
+      FROM "Task"
+      LEFT JOIN "Senior" ON "Senior"."id" = "Task"."authorId"
+      LEFT JOIN "User" ON "User"."id" = "Senior"."id"
+      WHERE "Task"."responderId" IS TRUE AND "Task.acceptedId" IS NULL`
+    );
+
+    return searchResult;
+  },
+
+  async findAllSeniorTasksResponderAccepted(): Promise<any> {
+    const searchResult = await prismaInstance.$queryRaw(
+      Prisma.sql`SELECT "Task".*, "User"."name" AS name
+      FROM "Task"
+      LEFT JOIN "Senior" ON "Senior"."id" = "Task"."authorId"
+      LEFT JOIN "User" ON "User"."id" = "Senior"."id"
+      WHERE "Task"."responderId" IS TRUE AND "Task.acceptedId" IS TRUE`
+    );
+
+    return searchResult;
   },
 
   async volunteerAcceptTask(

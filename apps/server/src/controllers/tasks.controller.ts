@@ -21,9 +21,27 @@ const TasksController = {
     }
   },
 
-  async findSeniorTasks(_: Request, res: Response, next: NextFunction) {
+  async findSeniorTasksNoResponder(_: Request, res: Response, next: NextFunction) {
     try {
-      const allSeniorTasks = await Tasks.findAllSeniorTasks();
+      const allSeniorTasks = await Tasks.findAllSeniorTasksNoResponder();
+      return res.status(201).json(allSeniorTasks);
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  async findSeniorTasksResponderNotAccepted(_: Request, res: Response, next: NextFunction) {
+    try {
+      const allSeniorTasks = await Tasks.findAllSeniorTasksResponderNotAccepted();
+      return res.status(201).json(allSeniorTasks);
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  async findSeniorTasksResponderAccepted(_: Request, res: Response, next: NextFunction) {
+    try {
+      const allSeniorTasks = await Tasks.findAllSeniorTasksResponderNotAccepted();
       return res.status(201).json(allSeniorTasks);
     } catch (e) {
       next(e);
