@@ -1,27 +1,34 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
+import Home from "./components/Pages/Home.tsx";
 import {
-  BrowserRouter,
   createBrowserRouter,
-  RouterProvider,
+  RouterProvider
 } from "react-router-dom";
 import "./index.css";
-import Root from "./root.tsx";
+import Profile from "./ProfilePage/Profile.tsx";
+import Users from "./components/Pages/Users.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
-  },
+    element: <App />,
+  }, {
+    path: "/home",
+    element: <Home />
+  }, {
+    path: "/profile",
+    element: <Profile />
+  }, {
+    path: "/users",
+    element: <Users />
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-      {/* <RouterProvider router={router} /> */}
-    </BrowserRouter>
+    <RouterProvider router={router} />
   </React.StrictMode>
 
 );          

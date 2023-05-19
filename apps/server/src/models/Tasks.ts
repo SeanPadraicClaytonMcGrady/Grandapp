@@ -104,52 +104,83 @@ const Tasks = {
   },
 
   async createEmotionalTask(
-    author: Senior,
+    authorName: string,
     authorId: number,
     type: string,
     description: string,
     scheduledDate: string,
     location: string
-  ): Promise<Task> {
-    const newDate = new Date(scheduledDate);
-    const emotionalTask = await prismaInstance.task.create({
-      data: {
-        author: { connect: { id: authorId } },
-        type: "EMOTIONAL",
-        description,
-        scheduledDate: newDate,
-        location,
-      },
-      include: {
-        author: true,
-      },
-    });
-    return emotionalTask;
+  ): Promise<Task | null> {
+
+    const senior = await prismaInstance.senior.findFirst({
+      where: {
+        user: {
+          username: authorName
+        }
+      }
+    })
+
+    if (senior) {
+      try {
+        const newDate = new Date(scheduledDate);
+        const emotionalTask = await prismaInstance.task.create({
+          data: {
+            author: { connect: { id: senior.id } },
+            type: "EMOTIONAL",
+            description,
+            scheduledDate: newDate,
+            location,
+          },
+          include: {
+            author: true,
+          },
+        });
+        return emotionalTask;
+      } catch (err) {
+        console.log(err)
+        return null
+      }
+    } return null
   },
 
   async createPhysicalTask(
-    author: Senior,
+    authorName: string,
     authorId: number,
     type: string,
     description: string,
     scheduledDate: string,
     location: string
-  ): Promise<Task> {
-    const newDate = new Date(scheduledDate);
-    const physicalTask = await prismaInstance.task.create({
-      data: {
-        author: { connect: { id: authorId } },
-        type: "PHYSICAL",
-        description,
-        scheduledDate: newDate,
-        location,
-      },
-      include: {
-        author: true,
-      },
-    });
-    return physicalTask;
+  ): Promise<Task | null> {
+    const senior = await prismaInstance.senior.findFirst({
+      where: {
+        user: {
+          username: authorName
+        }
+      }
+    })
+    if (senior) {
+      try {
+        const newDate = new Date(scheduledDate);
+        const physicalTask = await prismaInstance.task.create({
+          data: {
+            author: { connect: { id: senior.id } },
+            type: "PHYSICAL",
+            description,
+            scheduledDate: newDate,
+            location,
+          },
+          include: {
+            author: true,
+          },
+        });
+        return physicalTask;
+      } catch (err) {
+        console.log(err)
+        return null
+      }
+    } return null
   },
+
 
   async editTask(
     taskId: number,
