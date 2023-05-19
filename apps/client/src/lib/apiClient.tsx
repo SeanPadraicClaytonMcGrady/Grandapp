@@ -16,7 +16,7 @@ export async function fetchSeniors() {
     return seniors
 }
 
-export async function createEmotionalTask(author: string, type: string, description: string, scheduleDate: string, location: string) {
+export async function createEmotionalTask(author: string, authorId: string, type: string, description: string, scheduleDate: string, location: string) {
     const response = await fetch(`${BASE_URL}/emotionalTasks`, {
         method: 'POST',
         headers: {
@@ -24,19 +24,23 @@ export async function createEmotionalTask(author: string, type: string, descript
         },
         body: JSON.stringify({
             author,
+            authorId,
             type,
             description,
             scheduleDate,
-            location
+            location,
         })
     })
+    console.log(response, '^ This is resposne!')
     const newEmotionalTask = await response.json()
+    console.log(newEmotionalTask, '^ This is newEmotionalTask')
+
     if (response.status === 400) {
         throw new Error('Can not create the task.')
     }
     return newEmotionalTask
 }
-export async function createPhysicalTask(author: string, type: string, description: string, scheduleDate: string, location: string) {
+export async function createPhysicalTask(author: string, authorId: string, type: string, description: string, scheduleDate: string, location: string) {
     const response = await fetch(`${BASE_URL}/physicalTasks`, {
         method: 'POST',
         headers: {
@@ -44,6 +48,7 @@ export async function createPhysicalTask(author: string, type: string, descripti
         },
         body: JSON.stringify({
             author,
+            authorId,
             type,
             description,
             scheduleDate,

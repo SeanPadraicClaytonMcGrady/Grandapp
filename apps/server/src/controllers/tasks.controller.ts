@@ -106,6 +106,7 @@ const TasksController = {
     try {
       const { author, authorId, type, description, scheduledDate, location } =
         req.body;
+
       const emotionalTask = await Tasks.createEmotionalTask(
         author,
         authorId,

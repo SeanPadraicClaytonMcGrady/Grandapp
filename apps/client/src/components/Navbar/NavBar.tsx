@@ -1,7 +1,5 @@
-import { Link, Route, Routes } from "react-router-dom";
-import * as React from "react";
+import { Link, Routes } from "react-router-dom";
 import Home from "../Pages/Home";
-
 import Profile from "../../ProfilePage/Profile";
 import Users from "../Pages/Users";
 
@@ -29,13 +27,11 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-      <Routes>
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/users" element={<Users />} />
-      </Routes>
+
     </>
   );
 };
+
+//<LInk to />
 
 export default Navbar;
