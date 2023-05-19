@@ -6,11 +6,8 @@ import {
   Volunteer,
   Prisma,
 } from "@prisma/client";
-import { number } from "prop-types";
 
 const prismaInstance = new PrismaClient();
-
-//Random note: If Typescript says || null, consider throwing an error.
 
 const Tasks = {
   async findTask(taskId: number): Promise<Task> {
@@ -28,10 +25,12 @@ const Tasks = {
       include: {
         author: {
           include: {
-            user: true
-          }
-        }
-      }
+            user: {
+              select: { username: true },
+            },
+          },
+        },
+      },
     });
     if (!tasks) {
       throw new Error("There are no tasks.");
@@ -41,15 +40,19 @@ const Tasks = {
 
   // Return to this ASAP
 
+  // `SELECT * FROM "Task" WHERE
+  // "Task"."responderId" IS NULL`
+
   async findAllSeniorTasks(): Promise<any> {
     const searchResult = await prismaInstance.$queryRaw(
-      Prisma.sql`SELECT * FROM "Task" WHERE 
-      "Task"."responderId" IS NULL`
+      Prisma.sql`SELECT "Task".*, "User"."name" AS name
+      FROM "Task"
+      LEFT JOIN "Senior" ON "Senior"."id" = "Task"."authorId"
+      LEFT JOIN "User" ON "User"."id" = "Senior"."id"
+      WHERE "Task"."responderId" IS NULL`
     );
 
     return searchResult;
-
-    console.log(searchResult);
   },
 
   async volunteerAcceptTask(
