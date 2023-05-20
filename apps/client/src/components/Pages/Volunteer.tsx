@@ -1,7 +1,7 @@
-import TasksList from '../TasksList'
-import { getRelevantTasks } from '../../lib/apiClient'
-import { useState, useEffect } from 'react'
-import { Task } from '../../types'
+import TasksList from "../TasksList";
+import { getRelevantTasks } from "../../lib/apiClient";
+import { useState, useEffect } from "react";
+import { Task } from "../../types";
 
 // List
 // 1. Tasks that haven't been responded to
@@ -9,28 +9,28 @@ import { Task } from '../../types'
 // 3. Tasks that I senior has accepted my response
 
 const Volunteer = () => {
-    const [openTasks, setOpenTasks] = useState<Task[]>([])
-    const [pendingTasks, setPendingTasks] = useState<Task[]>([])
-    const [acceptedTasks, setAcceptedTasks] = useState<Task[]>([])
-    
-    const reloadTasks = async () => {
-      const relevantTasks = await getRelevantTasks()
-      setOpenTasks(relevantTasks.openTasks)
-      setPendingTasks(relevantTasks.pendingTasks)
-      setAcceptedTasks(relevantTasks.acceptedTasks)
-    }
+  const [openTasks, setOpenTasks] = useState<Task[]>([]);
+  const [pendingTasks, setPendingTasks] = useState<Task[]>([]);
+  const [acceptedTasks, setAcceptedTasks] = useState<Task[]>([]);
 
-    useEffect(() => {
-        reloadTasks()
-    }, [])
+  const reloadTasks = async () => {
+    const relevantTasks = await getRelevantTasks();
+    setOpenTasks(relevantTasks.openTasks);
+    setPendingTasks(relevantTasks.pendingTasks);
+    setAcceptedTasks(relevantTasks.acceptedTasks);
+  };
 
-    return (
-        <>
-            <TasksList tasks={openTasks} />
-            <TasksList tasks={pendingTasks} />
-            <TasksList tasks={acceptedTasks} />
-        </>
-    )
-}
+  useEffect(() => {
+    reloadTasks();
+  }, []);
 
-export default Volunteer
+  return (
+    <>
+      <TasksList tasks={openTasks} />
+      <TasksList tasks={pendingTasks} />
+      <TasksList tasks={acceptedTasks} />
+    </>
+  );
+};
+
+export default Volunteer;
