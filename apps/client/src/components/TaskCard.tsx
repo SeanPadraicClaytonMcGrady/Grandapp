@@ -1,4 +1,4 @@
-import { EmotionalTask, PhysicalTask, Senior } from '../types'
+import { EmotionalTask, PhysicalTask } from '../types'
 import { FC } from 'react'
 
 type TaskProps = {
@@ -6,27 +6,19 @@ type TaskProps = {
 }
 
 const TaskCard: FC<TaskProps> = ({ task }) => {
-    console.log()
     return (
-        <div className="w-full max-w-xs">
-            <form className='p-5  border-0 rounded-lg max-w-sm overflow-hidden shadow-lg bg-white'>
-                <div>
-                    <label>{task.author.user.username}</label>
-                </div>
-                <div>
-                    <label>Type of task: {task.type}</label>
-                </div>
-                <div>
-                    <label>Description: {task.description}</label>
-                </div>
-                <div>
-                    <label>Date: {task.scheduledDate}</label>
-                </div>
-                <div>
-                    <label>Address: {task.location}</label>
-                </div>
-            </form>
-        </div>
+      <tr>
+        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+          {task.author.user.username}
+        </td>
+        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{task.description}</td>
+        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{task.type}</td>
+        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+          <a href="#" className="text-indigo-600 hover:text-indigo-900">
+            Apply<span className="sr-only">, {task.description}</span>
+          </a>
+        </td>
+      </tr>
     )
 }
 
