@@ -54,8 +54,6 @@ const Tasks = {
         GROUP BY "Task"."id", "User"."name"
         `
     );
-
-    console.log(searchResult)
     return searchResult;
   },
 

@@ -28,7 +28,7 @@ const TasksController = {
   ) {
     try {
       const taskId = parseInt(req.params.id);
-      const responderId = parseInt(req.user.volunteerId);
+      const responderId = req.user.id;
       const declinedTask = await Tasks.deleteResponse(taskId, responderId);
       return res.status(201).json(declinedTask);
     } catch (e) {
@@ -43,7 +43,7 @@ const TasksController = {
   ) {
     try {
       const seniorId = parseInt(req.params.id);
-      const fetchedTasks = await Tasks.volunteerGetSeniorTasks(seniorId);
+      const fetchedTasks = await Tasks.getTasksBySeniorId(seniorId);
       return res.status(201).json(fetchedTasks);
     } catch (e) {
       next(e);
@@ -56,7 +56,7 @@ const TasksController = {
     next: NextFunction
   ) {
     try {
-      const volunteerId = parseInt(req.user.volunteerId);
+      const volunteerId = req.user.id
       const fetchedAcceptedTasks = await Tasks.getToDoTasks(volunteerId);
       return res.status(201).json(fetchedAcceptedTasks);
     } catch (e) {
@@ -144,7 +144,7 @@ const TasksController = {
 
   async createResponse(req: Request, res: Response, next: NextFunction) {
     try {
-      const responderId = parseInt(req.user.responderId);
+      const responderId = req.user.id
       const taskId = parseInt(req.params.id);
       const response = await Tasks.createResponse(
         taskId,
