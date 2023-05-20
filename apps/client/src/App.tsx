@@ -4,6 +4,7 @@ import NewTaskForm from "./components/NewTaskForm";
 import { fetchEmotionalTasks, fetchPhysicalTasks, fetchSeniors } from "./lib/apiClient";
 import TasksList from "./components/TasksList";
 import Navbar from "./components/Navbar/NavBar";
+import Volunteer from "./components/Pages/Volunteer";
 
 function App() {
   const [emotionalTasks, setEmotionalTasks] = useState([])
@@ -29,7 +30,8 @@ function App() {
     <>
 
       <Navbar />
-      <div className="min-h-screen flex justify-center items-center bg-slate-50">
+      <Volunteer />
+      {/* <div className="min-h-screen flex justify-center items-center bg-slate-50">
         <div className="bg-white rounded-lg" >
           <NewTaskForm onEmotionalTaskCreated={() => reloadEmotionalTasks()}
             onPhysicalTaskCreated={() => reloadPhysicalTasks()}
@@ -38,7 +40,7 @@ function App() {
         <div>
           <TasksList emotionalTasks={emotionalTasks} physicalTasks={physicalTasks} seniors={seniors} />
         </div>
-      </div>
+      </div> */}
 
     </>
   );

@@ -43,13 +43,37 @@ const Tasks = {
   // `SELECT * FROM "Task" WHERE
   // "Task"."responderId" IS NULL`
 
-  async findAllSeniorTasks(): Promise<any> {
+  async findAllSeniorTasksNoResponder(): Promise<any> {
     const searchResult = await prismaInstance.$queryRaw(
       Prisma.sql`SELECT "Task".*, "User"."name" AS name
       FROM "Task"
       LEFT JOIN "Senior" ON "Senior"."id" = "Task"."authorId"
       LEFT JOIN "User" ON "User"."id" = "Senior"."id"
       WHERE "Task"."responderId" IS NULL`
+    );
+
+    return searchResult;
+  },
+
+  async findAllSeniorTasksResponderNotAccepted(): Promise<any> {
+    const searchResult = await prismaInstance.$queryRaw(
+      Prisma.sql`SELECT "Task".*, "User"."name" AS name
+      FROM "Task"
+      LEFT JOIN "Senior" ON "Senior"."id" = "Task"."authorId"
+      LEFT JOIN "User" ON "User"."id" = "Senior"."id"
+      WHERE "Task"."responderId" IS TRUE AND "Task.acceptedId" IS NULL`
+    );
+
+    return searchResult;
+  },
+
+  async findAllSeniorTasksResponderAccepted(): Promise<any> {
+    const searchResult = await prismaInstance.$queryRaw(
+      Prisma.sql`SELECT "Task".*, "User"."name" AS name
+      FROM "Task"
+      LEFT JOIN "Senior" ON "Senior"."id" = "Task"."authorId"
+      LEFT JOIN "User" ON "User"."id" = "Senior"."id"
+      WHERE "Task"."responderId" IS TRUE AND "Task.acceptedId" IS TRUE`
     );
 
     return searchResult;

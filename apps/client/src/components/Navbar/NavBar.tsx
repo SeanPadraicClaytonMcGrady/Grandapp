@@ -23,7 +23,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center">
-            <Link to="/users">See users</Link>
+            <Link to="/users">See Users</Link>
           </div>
         </div>
       </nav>

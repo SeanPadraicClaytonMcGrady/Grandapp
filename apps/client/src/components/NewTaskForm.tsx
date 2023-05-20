@@ -27,7 +27,7 @@ function useSeniors() {
 const initialValues = {
     author: '',
     type: '',
-    scheduleDate: '',
+    scheduledDate: '',
     description: '',
     location: '',
 }
@@ -40,15 +40,17 @@ function NewTaskForm({ onEmotionalTaskCreated, onPhysicalTaskCreated }: NewTaskF
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
-
         try {
             //emotionalTask seems to be null in our attempts to call it. values has all the information, but we still get null.
             const seniorId = seniors.filter((senior) => senior.username === values.author)[0].id
-            const emotionalTask = await createEmotionalTask(values.author, seniorId.toString(), values.type, values.description, values.scheduleDate[0], values.location)
-            console.log(emotionalTask, '^ This is emotionalTask from NewTaskForm!')
-            onEmotionalTaskCreated(emotionalTask)
-            const physicalTask = await createPhysicalTask(values.author, seniorId.toString(), values.type, values.description, values.scheduleDate[0], values.location)
-            onPhysicalTaskCreated(physicalTask)
+            if (values.type === "emotional") {
+                const emotionalTask = await createEmotionalTask({ author: values.author, authorId: seniorId.toString(), type: values.type, description: values.description, scheduledDate: values.scheduledDate[0], location: values.location })
+                onEmotionalTaskCreated(emotionalTask)
+            }
+            else if (values.type === "physical") {
+                const physicalTask = await createPhysicalTask({ author: values.author, authorId: seniorId.toString(), type: values.type, description: values.description, scheduledDate: values.scheduledDate[0], location: values.location })
+                onPhysicalTaskCreated(physicalTask)
+            }
             setValues(initialValues)
         } catch (e) {
             console.error((e as Error).message)
@@ -57,9 +59,7 @@ function NewTaskForm({ onEmotionalTaskCreated, onPhysicalTaskCreated }: NewTaskF
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => {
-        console.log('here')
         const { name, value } = e.target
-        console.log(e.target)
         setValues({
             ...values,
             [name]: value,
@@ -68,7 +68,6 @@ function NewTaskForm({ onEmotionalTaskCreated, onPhysicalTaskCreated }: NewTaskF
 
     const Datepicker = ({ name, handleChange }: Props) => {
         const datepickerRef = useRef<HTMLInputElement>(null);
-        console.log(name)
         useEffect(() => {
             if (datepickerRef.current) {
                 const today = new Date();
@@ -92,7 +91,7 @@ function NewTaskForm({ onEmotionalTaskCreated, onPhysicalTaskCreated }: NewTaskF
         }, [name, handleChange]);
 
         return (<>
-            <input ref={datepickerRef} onChange={handleChange} name="scheduleDate" value={values.scheduleDate} type="text" className="datepicker block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400" />
+            <input ref={datepickerRef} onChange={handleChange} name="scheduledDate" value={values.scheduledDate} type="text" className="datepicker block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400" />
         </>)
     }
 
@@ -126,9 +125,9 @@ function NewTaskForm({ onEmotionalTaskCreated, onPhysicalTaskCreated }: NewTaskF
                             </div>
                             <div>
                                 <div className="sm:col-span-3 mt-2 text-sm leading-6 text-gray-900 name='ddw" >
-                                    <label htmlFor="scheduleDate">Schedule Date</label>
+                                    <label htmlFor="scheduledDate">Schedule Date</label>
                                     <div>
-                                        <Datepicker handleChange={handleChange} name="scheduleDate" value={values.scheduleDate} />
+                                        <Datepicker handleChange={handleChange} name="scheduledDate" value={values.scheduledDate} />
                                     </div>
                                     <div className="mt-2">
                                     </div>

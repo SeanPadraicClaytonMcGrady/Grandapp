@@ -23,7 +23,10 @@ const router = createBrowserRouter([
   }, {
     path: "/users",
     element: <Users />
+  }, {
+
   }
+
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

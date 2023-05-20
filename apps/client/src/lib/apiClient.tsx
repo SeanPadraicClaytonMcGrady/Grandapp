@@ -16,7 +16,38 @@ export async function fetchSeniors() {
     return seniors
 }
 
-export async function createEmotionalTask(author: string, authorId: string, type: string, description: string, scheduleDate: string, location: string) {
+export async function fetchTasksNoResponder() {
+    const response = await fetch(`${BASE_URL}/seniors/tasks/open`)
+    const tasks = await response.json()
+    return tasks
+}
+export async function fetchTasksWithResponder() {
+    const response = await fetch(`${BASE_URL}/seniors/tasks/responder`)
+    const tasks = await response.json()
+    return tasks
+}
+
+interface ICreateEmotionalTaskPayload {
+    author: string,
+    authorId: string,
+    type: string,
+    description: string,
+    scheduledDate: string,
+    location: string
+}
+
+interface ICreatePhysicalTaskPayload {
+    author: string,
+    authorId: string,
+    type: string,
+    description: string,
+    scheduledDate: string,
+    location: string
+}
+
+
+
+export async function createEmotionalTask({ author, authorId, type, description, scheduledDate, location }: ICreateEmotionalTaskPayload) {
     const response = await fetch(`${BASE_URL}/emotionalTasks`, {
         method: 'POST',
         headers: {
@@ -27,7 +58,7 @@ export async function createEmotionalTask(author: string, authorId: string, type
             authorId,
             type,
             description,
-            scheduleDate,
+            scheduledDate,
             location,
         })
     })
@@ -40,7 +71,7 @@ export async function createEmotionalTask(author: string, authorId: string, type
     }
     return newEmotionalTask
 }
-export async function createPhysicalTask(author: string, authorId: string, type: string, description: string, scheduleDate: string, location: string) {
+export async function createPhysicalTask({ author, authorId, type, description, scheduledDate, location }: ICreatePhysicalTaskPayload) {
     const response = await fetch(`${BASE_URL}/physicalTasks`, {
         method: 'POST',
         headers: {
@@ -51,7 +82,7 @@ export async function createPhysicalTask(author: string, authorId: string, type:
             authorId,
             type,
             description,
-            scheduleDate,
+            scheduledDate,
             location
         })
     })
