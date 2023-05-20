@@ -40,6 +40,7 @@ authRouter.delete("/messages/:id", MessagesController.deleteMessageById);
 
 router.get("/tasks/:id", TasksController.findTaskById);
 router.get("/tasks", TasksController.findAllTasks);
+volunteerRouter.get("/relevant-tasks", TasksController.getRelevantTasks);
 volunteerRouter.put("/tasks/:id/response", TasksController.createResponse);
 volunteerRouter.put("/tasks/:id/cancel", TasksController.volunteerCancelTaskById);
 

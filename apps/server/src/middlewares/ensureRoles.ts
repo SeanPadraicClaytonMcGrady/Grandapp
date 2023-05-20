@@ -6,8 +6,8 @@ export function ensureSenior(req: Request, res: Response, next: NextFunction) {
 
 export function ensureVolunteer(req: Request, res: Response, next: NextFunction) {
   req.user = {
-    id: 5,
-    username: "Stewart",
+    id: 4,
+    username: "Sadie",
     role: "volunteer"
   }
   next();

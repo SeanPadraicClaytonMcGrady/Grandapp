@@ -7,8 +7,21 @@ import {
   Volunteer,
   Prisma,
 } from "@prisma/client";
+import { get } from "http";
 
 const prismaInstance = new PrismaClient();
+
+const includeAuthor = {
+  author: {
+    select: {
+      user: {
+        select: {
+          username: true
+        }
+      }
+    }
+  }
+}
 
 const Tasks = {
   async findTask(taskId: number): Promise<Task> {
@@ -110,6 +123,7 @@ const Tasks = {
   ): Promise<Task[]> {
     const searchTask = await prismaInstance.task.findMany({
       where: { acceptedId: responderId },
+      include: includeAuthor
     });
     if (!searchTask) {
       throw new Error("Task does not exist");
@@ -229,6 +243,39 @@ const Tasks = {
     });
     return acceptedVolunteer;
   },
+
+  // Get tasks that have no response from me
+  async getOpenTasks(volunteerId: number): Promise<Task[]> {
+
+    const openTasks = await prismaInstance.task.findMany({
+      where: {
+        responses: {
+          none: {
+            responderId: volunteerId
+          }
+        }
+      },
+      include: includeAuthor
+    });
+    return openTasks;
+  },
+
+  // Get tasks that have a response from me but not accepted by senior
+  async getPendingTasks(volunteerId: number): Promise<Task[]> {
+    const pendingTasks = await prismaInstance.task.findMany({
+      where: {
+        responses: {
+          some: {
+            responderId: volunteerId
+          }
+        },
+        accepted: null
+      },
+      include: includeAuthor
+    });
+    return pendingTasks;
+  }
 };
+
 
 export default Tasks;

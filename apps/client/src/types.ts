@@ -33,7 +33,7 @@ export interface Senior {
     address: string
 }
 
-export interface Tasks {
+export interface Task {
     id: number,
     author: Author,
     type: string,

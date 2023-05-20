@@ -64,6 +64,23 @@ const TasksController = {
     }
   },
 
+  async getRelevantTasks(req: Request, res: Response, next: NextFunction) {
+    try {
+      const volunteerId = req.user.id
+      const openTasks = await Tasks.getOpenTasks(volunteerId);
+      const pendingTasks = await Tasks.getPendingTasks(volunteerId);
+      const acceptedTasks = await Tasks.getToDoTasks(volunteerId);
+
+      return res.json({
+        openTasks,
+        pendingTasks,
+        acceptedTasks,
+      })
+    } catch(e) {
+      next(e);
+    }
+  },
+
   //Here
   async newEmotionalTask(req: Request, res: Response, next: NextFunction) {
     try {

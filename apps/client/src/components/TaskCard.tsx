@@ -3,7 +3,6 @@ import { FC } from 'react'
 
 type TaskProps = {
     task: EmotionalTask | PhysicalTask
-    seniors: Senior[]
 }
 
 const TaskCard: FC<TaskProps> = ({ task }) => {

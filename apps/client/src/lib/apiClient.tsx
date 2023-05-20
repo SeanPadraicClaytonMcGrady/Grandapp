@@ -1,3 +1,5 @@
+import { Task } from "../types"
+
 const BASE_URL = 'http://localhost:8080'
 
 export async function fetchEmotionalTasks() {
@@ -25,6 +27,17 @@ export async function fetchTasksWithResponder() {
     const response = await fetch(`${BASE_URL}/seniors/tasks/responder`)
     const tasks = await response.json()
     return tasks
+}
+
+export type RelevantTasks = {
+  openTasks: Task[],
+  pendingTasks: Task[],
+  acceptedTasks: Task[]
+}
+export async function getRelevantTasks(): Promise<RelevantTasks> {
+  const response = await fetch(`${BASE_URL}/relevant-tasks`)
+  const relevantTasks = await response.json()
+  return relevantTasks
 }
 
 interface ICreateEmotionalTaskPayload {
