@@ -6,7 +6,7 @@ const TasksController = {
     try {
       const taskId = parseInt(req.params.id);
       const task = await Tasks.findTask(taskId);
-      return res.status(201).json(task);
+      return res.status(200).json(task);
     } catch (e) {
       next(e);
     }
@@ -15,34 +15,7 @@ const TasksController = {
   async findAllTasks(_: Request, res: Response, next: NextFunction) {
     try {
       const allTasks = await Tasks.findAllTasks();
-      return res.status(201).json(allTasks);
-    } catch (e) {
-      next(e);
-    }
-  },
-
-  async findSeniorTasksNoResponder(_: Request, res: Response, next: NextFunction) {
-    try {
-      const allSeniorTasks = await Tasks.findAllSeniorTasksNoResponder();
-      return res.status(201).json(allSeniorTasks);
-    } catch (e) {
-      next(e);
-    }
-  },
-
-  async findSeniorTasksResponderNotAccepted(_: Request, res: Response, next: NextFunction) {
-    try {
-      const allSeniorTasks = await Tasks.findAllSeniorTasksResponderNotAccepted();
-      return res.status(201).json(allSeniorTasks);
-    } catch (e) {
-      next(e);
-    }
-  },
-
-  async findSeniorTasksResponderAccepted(_: Request, res: Response, next: NextFunction) {
-    try {
-      const allSeniorTasks = await Tasks.findAllSeniorTasksResponderNotAccepted();
-      return res.status(201).json(allSeniorTasks);
+      return res.status(200).json(allTasks);
     } catch (e) {
       next(e);
     }

@@ -34,19 +34,29 @@ model Senior {
   authorTask Task[] @relation("author")
 }
 
+// delted repospderTask
 model Volunteer {
   id            Int    @id @default(autoincrement())
   user          User   @relation(fields: [id], references: [id])
-  responderTask Task[] @relation("responder")
+  responses     Response[]
   acceptedTask  Task[] @relation("accepted")
 }
 
+model Response { 
+  id Int @id @default(autoincrement())
+  task Task @relation(fields: [taskId], references: [id])
+  taskId Int
+  responder Volunteer @relation(fields: [responderId], references: [id])
+  responderId Int
+}
+
+
+// deleted responder & responderId
 model Task {
   id            Int        @id @default(autoincrement())
   author        Senior?    @relation("author", fields: [authorId], references: [id], onDelete: SetNull)
   authorId      Int?
-  responder     Volunteer? @relation("responder", fields: [responderId], references: [id], onDelete: SetNull)
-  responderId   Int?
+  responses     Response[]
   accepted      Volunteer? @relation("accepted", fields: [acceptedId], references: [id], onDelete: SetNull)
   acceptedId    Int?
   type          TaskType   @default(EMOTIONAL)
