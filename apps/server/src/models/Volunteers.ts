@@ -30,9 +30,7 @@ const Volunteer = {
           create: [],
         },
         volunteer: {
-          create: {
-            responderTask: { create: [] },
-          },
+          create: {},
         },
       },
     });

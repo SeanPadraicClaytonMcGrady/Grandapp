@@ -107,10 +107,7 @@ async function main() {
         create: [],
       },
       volunteer: {
-        create: {
-          responderTask: { create: [] },
-          acceptedTask: { create: [] },
-        },
+        create: {},
       },
     },
   });
@@ -131,9 +128,7 @@ async function main() {
       sentMessages: { create: [] },
       receivedMessages: { create: [] },
       volunteer: {
-        create: {
-          responderTask: { create: [] },
-        },
+        create: {},
       },
     },
   });
@@ -145,8 +140,11 @@ async function main() {
     update: {},
     create: {
       author: { connect: { id: isabella.id } },
-      responder: {},
-      accepted: {},
+      responses: {
+        create: [{
+          responder: { connect: { id: sadie.id } }
+        }]
+      },
       type: "EMOTIONAL",
       description:
         "I'd like to deliver flowers to my husband's grave. It's a hard time.",
@@ -161,7 +159,12 @@ async function main() {
     update: {},
     create: {
       author: { connect: { id: veronika.id } },
-      responder: { connect: { id: sadie.id } },
+      responses: {
+        create: [
+          { responder: { connect: { id: stewart.id } } },
+          { responder: { connect: { id: sadie.id } } }
+        ],
+      },
       accepted: { connect: { id: sadie.id } },
       type: "EMOTIONAL",
       description: "I'd like company while I walk.",
@@ -176,7 +179,6 @@ async function main() {
     update: {},
     create: {
       author: { connect: { id: veronika.id } },
-      responder: { connect: { id: stewart.id } },
       accepted: {},
       type: "PHYSICAL",
       description: "I need help with my garden. The rocks are heavy.",

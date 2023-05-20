@@ -8,7 +8,7 @@ export interface EmotionalTask {
     author: Author,
     type: string,
     description: string,
-    scheduleDate: string,
+    scheduledDate: string,
     location: string
 }
 
@@ -17,7 +17,7 @@ export interface PhysicalTask {
     author: Author,
     type: string,
     description: string,
-    scheduleDate: string,
+    scheduledDate: string,
     location: string
 }
 
@@ -31,4 +31,13 @@ export interface Senior {
     biography: string,
     medicalNeeds: string,
     address: string
+}
+
+export interface Task {
+    id: number,
+    author: Author,
+    type: string,
+    description: string,
+    scheduledDate: string,
+    location: string
 }

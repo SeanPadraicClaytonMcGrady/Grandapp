@@ -1,13 +1,27 @@
 import {
   Task,
   PrismaClient,
+  Response,
   User,
   Senior,
   Volunteer,
   Prisma,
 } from "@prisma/client";
+import { get } from "http";
 
 const prismaInstance = new PrismaClient();
+
+const includeAuthor = {
+  author: {
+    select: {
+      user: {
+        select: {
+          username: true
+        }
+      }
+    }
+  }
+}
 
 const Tasks = {
   async findTask(taskId: number): Promise<Task> {
@@ -20,61 +34,71 @@ const Tasks = {
     return task;
   },
 
-  async findAllTasks(): Promise<Task[]> {
-    const tasks = await prismaInstance.task.findMany({
-      include: {
-        author: {
-          include: {
-            user: {
-              select: { username: true },
-            },
-          },
-        },
-      },
-    });
-    if (!tasks) {
-      throw new Error("There are no tasks.");
-    }
-    return tasks;
-  },
 
   // Return to this ASAP
 
   // `SELECT * FROM "Task" WHERE
   // "Task"."responderId" IS NULL`
 
-  async findAllSeniorTasks(): Promise<any> {
-    const searchResult = await prismaInstance.$queryRaw(
-      Prisma.sql`SELECT "Task".*, "User"."name" AS name
-      FROM "Task"
-      LEFT JOIN "Senior" ON "Senior"."id" = "Task"."authorId"
-      LEFT JOIN "User" ON "User"."id" = "Senior"."id"
-      WHERE "Task"."responderId" IS NULL`
-    );
+  // List all seniors tasks that 0 volunteers applied
 
+  // List all the seniors task that have not been accepted 
+  // ordered by number of applications (ascending)
+  async findAllTasks(): Promise<any> {
+    // const searchResult = await prismaInstance.$queryRaw(
+    //   Prisma.sql`SELECT "Task".*, "User"."name" AS name, CAST(count("Response"."taskId") AS INTEGER) AS "numberOfApplications" 
+    //   FROM "Task"
+    //   INNER JOIN "Senior" ON "Senior"."id" = "Task"."authorId"
+    //   INNER JOIN "User" ON "User"."id" = "Senior"."id"
+    //   LEFT JOIN "Response" ON "Response"."taskId" = "Task"."id"
+    //   WHERE "Task"."acceptedId" IS NULL
+    //   GROUP BY "Task"."id"
+    //   `
+    // );
+
+    const searchResult = await prismaInstance.$queryRaw(
+      Prisma.sql`
+        SELECT "Task".*, "User"."name" AS "name", CAST(COUNT("Response"."responderId") AS INTEGER) AS "numberOfApplications"
+        FROM "Task"
+        LEFT JOIN "Senior" ON "Senior"."id" = "Task"."authorId"
+        LEFT JOIN "User" ON "User"."id" = "Senior"."id"
+        LEFT JOIN "Response" ON "Response"."taskId" = "Task"."id"
+        WHERE "Task"."acceptedId" IS NULL
+        GROUP BY "Task"."id", "User"."name"
+        `
+    );
     return searchResult;
   },
 
-  async volunteerAcceptTask(
+  async createResponse(
     taskId: number,
     responderId: number
-  ): Promise<Task> {
-    const updatedTask = await prismaInstance.task.update({
-      where: { id: taskId },
-      data: { responder: { connect: { id: responderId } } },
+  ): Promise<Response> {
+    const response = await prismaInstance.response.create({
+      data: {
+        responder: { connect: { id: responderId } },
+        task: { connect: { id: taskId } },
+      },
+      include: {
+        task: true,
+      },
     });
-    return updatedTask;
+    return response;
   },
 
-  async volunteerCancelTask(taskId: number): Promise<Task> {
-    const updatedTask = await prismaInstance.task.update({
-      where: { id: taskId },
-      data: { responder: { disconnect: true } },
+  async deleteResponse(taskId: number, responderId: number): Promise<Response> {
+    const deletedResponse = await prismaInstance.response.delete({
+      where: {
+        taskId_responderId: {
+          responderId: responderId,
+          taskId: taskId,
+        }
+      },
     });
-    return updatedTask;
+    return deletedResponse;
   },
 
-  async volunteerGetSeniorTasks(seniorId: number): Promise<Task[]> {
+  async getTasksBySeniorId(seniorId: number): Promise<Task[]> {
     const fetchedTasks = await prismaInstance.task.findMany({
       where: { id: seniorId },
     });
@@ -85,7 +109,7 @@ const Tasks = {
     return fetchedTasks;
   },
 
-  async volunteerGetAcceptedTasks(): Promise<any> {
+  async getAcceptedTasks(): Promise<any> {
     const searchResult = await prismaInstance.$queryRaw(
       Prisma.sql`SELECT * FROM "Task" WHERE 
       "Task"."responderId" IS NOT NULL`
@@ -94,11 +118,12 @@ const Tasks = {
     return searchResult;
   },
 
-  async volunteerGetIndividualAcceptedTasks(
+  async getToDoTasks(
     responderId: number
   ): Promise<Task[]> {
     const searchTask = await prismaInstance.task.findMany({
-      where: { responderId: responderId },
+      where: { acceptedId: responderId },
+      include: includeAuthor
     });
     if (!searchTask) {
       throw new Error("Task does not exist");
@@ -107,51 +132,81 @@ const Tasks = {
   },
 
   async createEmotionalTask(
-    author: Senior,
+    authorName: string,
     authorId: number,
     type: string,
     description: string,
     scheduledDate: string,
     location: string
-  ): Promise<Task> {
-    const newDate = new Date(scheduledDate);
-    const emotionalTask = await prismaInstance.task.create({
-      data: {
-        author: { connect: { id: authorId } },
-        type: "EMOTIONAL",
-        description,
-        scheduledDate: newDate,
-        location,
-      },
-      include: {
-        author: true,
-      },
-    });
-    return emotionalTask;
+  ): Promise<Task | null> {
+
+    const senior = await prismaInstance.senior.findFirst({
+      where: {
+        user: {
+          username: authorName
+        }
+      }
+    })
+
+    if (senior) {
+      try {
+        const newDate = new Date(scheduledDate);
+        const emotionalTask = await prismaInstance.task.create({
+          data: {
+            author: { connect: { id: senior.id } },
+            type: "EMOTIONAL",
+            description,
+            scheduledDate: newDate,
+            location,
+          },
+          include: {
+            author: true,
+          },
+        });
+        return emotionalTask;
+      } catch (err) {
+        console.log(err)
+        return null
+      }
+    } return null
   },
 
   async createPhysicalTask(
-    author: Senior,
+    authorName: string,
     authorId: number,
     type: string,
     description: string,
     scheduledDate: string,
     location: string
-  ): Promise<Task> {
-    const newDate = new Date(scheduledDate);
-    const physicalTask = await prismaInstance.task.create({
-      data: {
-        author: { connect: { id: authorId } },
-        type: "PHYSICAL",
-        description,
-        scheduledDate: newDate,
-        location,
-      },
-      include: {
-        author: true,
-      },
-    });
-    return physicalTask;
+  ): Promise<Task | null> {
+    const senior = await prismaInstance.senior.findFirst({
+      where: {
+        user: {
+          username: authorName
+        }
+      }
+    })
+    if (senior) {
+      try {
+        const newDate = new Date(scheduledDate);
+        const physicalTask = await prismaInstance.task.create({
+          data: {
+            author: { connect: { id: senior.id } },
+            type: "PHYSICAL",
+            description,
+            scheduledDate: newDate,
+            location,
+          },
+          include: {
+            author: true,
+          },
+        });
+        return physicalTask;
+      } catch (err) {
+        console.log(err)
+        return null
+      }
+    } return null
   },
 
   async editTask(
@@ -176,7 +231,7 @@ const Tasks = {
     return deletedTask;
   },
 
-  async volunteerAcceptedBySenior(
+  async accept(
     taskId: number,
     responderId: number
   ): Promise<Task> {
@@ -184,11 +239,43 @@ const Tasks = {
       where: { id: taskId },
       data: {
         accepted: { connect: { id: responderId } },
-        responder: { disconnect: true },
       },
     });
     return acceptedVolunteer;
   },
+
+  // Get tasks that have no response from me
+  async getOpenTasks(volunteerId: number): Promise<Task[]> {
+
+    const openTasks = await prismaInstance.task.findMany({
+      where: {
+        responses: {
+          none: {
+            responderId: volunteerId
+          }
+        }
+      },
+      include: includeAuthor
+    });
+    return openTasks;
+  },
+
+  // Get tasks that have a response from me but not accepted by senior
+  async getPendingTasks(volunteerId: number): Promise<Task[]> {
+    const pendingTasks = await prismaInstance.task.findMany({
+      where: {
+        responses: {
+          some: {
+            responderId: volunteerId
+          }
+        },
+        accepted: null
+      },
+      include: includeAuthor
+    });
+    return pendingTasks;
+  }
 };
+
 
 export default Tasks;
