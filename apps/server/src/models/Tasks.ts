@@ -50,6 +50,7 @@ const Tasks = {
         LEFT JOIN "Senior" ON "Senior"."id" = "Task"."authorId"
         LEFT JOIN "User" ON "User"."id" = "Senior"."id"
         LEFT JOIN "Response" ON "Response"."taskId" = "Task"."id"
+        WHERE "Task"."acceptedId" IS NULL
         GROUP BY "Task"."id", "User"."name"
         `
     );
@@ -58,7 +59,7 @@ const Tasks = {
     return searchResult;
   },
 
-  async createVolunteerResponse(
+  async createResponse(
     taskId: number,
     responderId: number
   ): Promise<Response> {
@@ -74,15 +75,19 @@ const Tasks = {
     return response;
   },
 
-  async volunteerCancelTask(taskId: number, responderId: number): Promise<Task> {
-    const updatedTask = await prismaInstance.response.delete({
-      where: { responderId, taskId },
+  async deleteResponse(taskId: number, responderId: number): Promise<Response> {
+    const deletedResponse = await prismaInstance.response.delete({
+      where: {
+        taskId_responderId: {
+          responderId: responderId,
+          taskId: taskId,
+        }
+      },
     });
-    return updatedTask;
-    return { id: 1, type: "EMOTIONAL", description: "test", scheduledDate: new Date(), location: "test", authorId: 1, acceptedId: 1, responses: [], creationDate: new Date() }
+    return deletedResponse;
   },
 
-  async volunteerGetSeniorTasks(seniorId: number): Promise<Task[]> {
+  async getTasksBySeniorId(seniorId: number): Promise<Task[]> {
     const fetchedTasks = await prismaInstance.task.findMany({
       where: { id: seniorId },
     });
@@ -93,7 +98,7 @@ const Tasks = {
     return fetchedTasks;
   },
 
-  async volunteerGetAcceptedTasks(): Promise<any> {
+  async getAcceptedTasks(): Promise<any> {
     const searchResult = await prismaInstance.$queryRaw(
       Prisma.sql`SELECT * FROM "Task" WHERE 
       "Task"."responderId" IS NOT NULL`
@@ -102,17 +107,16 @@ const Tasks = {
     return searchResult;
   },
 
-  async volunteerGetIndividualAcceptedTasks(
+  async getToDoTasks(
     responderId: number
   ): Promise<Task[]> {
-    // const searchTask = await prismaInstance.task.findMany({
-    //   where: { responderId: responderId },
-    // });
-    // if (!searchTask) {
-    //   throw new Error("Task does not exist");
-    // }
-    // return searchTask;
-    return []
+    const searchTask = await prismaInstance.task.findMany({
+      where: { acceptedId: responderId },
+    });
+    if (!searchTask) {
+      throw new Error("Task does not exist");
+    }
+    return searchTask;
   },
 
   async createEmotionalTask(
@@ -193,7 +197,6 @@ const Tasks = {
     } return null
   },
 
-
   async editTask(
     taskId: number,
     description: string,
@@ -216,7 +219,7 @@ const Tasks = {
     return deletedTask;
   },
 
-  async volunteerAcceptedBySenior(
+  async accept(
     taskId: number,
     responderId: number
   ): Promise<Task> {
@@ -224,7 +227,6 @@ const Tasks = {
       where: { id: taskId },
       data: {
         accepted: { connect: { id: responderId } },
-        responder: { disconnect: true },
       },
     });
     return acceptedVolunteer;

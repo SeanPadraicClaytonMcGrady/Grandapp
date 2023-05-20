@@ -32,7 +32,7 @@ router.get("/tasks", TasksController.findAllTasks);
 // router.get("/seniors/tasks/open", TasksController.findSeniorTasksNoResponder);
 // router.get("/seniors/tasks/respondernotaccepted", TasksController.findSeniorTasksResponderNotAccepted);
 // router.get("/seniors/tasks/responderaccepted", TasksController.findSeniorTasksResponderAccepted);
-router.put("/tasks/:id/response", TasksController.createVolunteerResponse);
+router.put("/tasks/:id/response", TasksController.createResponse);
 router.put("/tasks/:id/cancel", TasksController.volunteerCancelTaskById);
 router.put(
   "/tasks/:id/confirmed",
@@ -47,10 +47,6 @@ router.get(
 router.get("/volunteers/tasks", TasksController.volunteerGetAcceptedTasks);
 
 //Conirm this one works after merge.
-router.get(
-  "/volunteers/tasks/:id",
-  TasksController.volunteerGetIndividualAcceptedTasks
-);
 router.post("/emotionalTasks", TasksController.newEmotionalTask);
 router.post("/physicalTasks", TasksController.newPhysicalTask);
 router.put("/tasks/:id", TasksController.editTaskById);

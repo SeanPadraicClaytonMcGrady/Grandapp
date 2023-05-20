@@ -21,21 +21,6 @@ const TasksController = {
     }
   },
 
-  async volunteerAcceptTaskById(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
-    try {
-      const taskId = parseInt(req.params.id);
-      const responderId = parseInt(req.body.responderId);
-      const acceptedTask = await Tasks.volunteerAcceptTask(taskId, responderId);
-      return res.status(201).json(acceptedTask);
-    } catch (e) {
-      next(e);
-    }
-  },
-
   async volunteerCancelTaskById(
     req: Request,
     res: Response,
@@ -43,7 +28,8 @@ const TasksController = {
   ) {
     try {
       const taskId = parseInt(req.params.id);
-      const declinedTask = await Tasks.volunteerCancelTask(taskId);
+      const responderId = parseInt(req.user.volunteerId);
+      const declinedTask = await Tasks.deleteResponse(taskId, responderId);
       return res.status(201).json(declinedTask);
     } catch (e) {
       next(e);
@@ -70,23 +56,9 @@ const TasksController = {
     next: NextFunction
   ) {
     try {
-      const fetchedAcceptedTasks = await Tasks.volunteerGetAcceptedTasks();
+      const volunteerId = parseInt(req.user.volunteerId);
+      const fetchedAcceptedTasks = await Tasks.getToDoTasks(volunteerId);
       return res.status(201).json(fetchedAcceptedTasks);
-    } catch (e) {
-      next(e);
-    }
-  },
-
-  async volunteerGetIndividualAcceptedTasks(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) {
-    try {
-      const responderId = parseInt(req.params.id);
-      const fetchedVolunteerIndividualTasks =
-        await Tasks.volunteerGetIndividualAcceptedTasks(responderId);
-      return res.status(201).json(fetchedVolunteerIndividualTasks);
     } catch (e) {
       next(e);
     }
@@ -163,12 +135,26 @@ const TasksController = {
     try {
       const responderId = parseInt(req.body.responderId);
       const taskId = parseInt(req.params.id);
-      const accept = await Tasks.volunteerAcceptedBySenior(taskId, responderId);
+      const accept = await Tasks.accept(taskId, responderId);
       return res.status(201).json(accept);
     } catch (e) {
       next(e);
     }
   },
+
+  async createResponse(req: Request, res: Response, next: NextFunction) {
+    try {
+      const responderId = parseInt(req.user.responderId);
+      const taskId = parseInt(req.params.id);
+      const response = await Tasks.createResponse(
+        taskId,
+        responderId
+      );
+      return res.status(201).json(response);
+    } catch (e) {
+      next(e);
+    }
+  }
 };
 
 export default TasksController;
