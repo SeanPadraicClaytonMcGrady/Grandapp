@@ -1,36 +1,45 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import NewTaskForm from "./components/NewTaskForm";
-import { fetchEmotionalTasks, fetchPhysicalTasks, fetchSeniors } from "./lib/apiClient";
+import {
+  fetchEmotionalTasks,
+  fetchPhysicalTasks,
+  fetchSeniors,
+} from "./lib/apiClient";
 import TasksList from "./components/TasksList";
 import Navbar from "./components/Navbar/NavBar";
 import Volunteer from "./components/Pages/Volunteer";
+import SplashPage from "./components/Pages/SplashPage";
 
 function App() {
-  const [emotionalTasks, setEmotionalTasks] = useState([])
-  const [physicalTasks, setPhysicalTasks] = useState([])
-  const [seniors, setSeniors] = useState([])
+  const [emotionalTasks, setEmotionalTasks] = useState([]);
+  const [physicalTasks, setPhysicalTasks] = useState([]);
+  const [seniors, setSeniors] = useState([]);
 
   const reloadEmotionalTasks = () => {
-    fetchEmotionalTasks().then((emotionalTasks) => setEmotionalTasks(emotionalTasks))
-  }
+    fetchEmotionalTasks().then((emotionalTasks) =>
+      setEmotionalTasks(emotionalTasks)
+    );
+  };
   const reloadPhysicalTasks = () => {
-    fetchPhysicalTasks().then((physicalTasks) => setPhysicalTasks(physicalTasks))
-  }
+    fetchPhysicalTasks().then((physicalTasks) =>
+      setPhysicalTasks(physicalTasks)
+    );
+  };
   const reloadSeniors = () => {
-    fetchSeniors().then((seniors) => setSeniors(seniors))
-  }
+    fetchSeniors().then((seniors) => setSeniors(seniors));
+  };
   useEffect(() => {
-    reloadEmotionalTasks()
-    reloadPhysicalTasks()
-    reloadSeniors()
-  }, [])
+    reloadEmotionalTasks();
+    reloadPhysicalTasks();
+    reloadSeniors();
+  }, []);
 
   return (
     <>
-
       <Navbar />
-      <Volunteer />
+      <SplashPage />
+      {/* <Volunteer /> */}
       {/* <div className="min-h-screen flex justify-center items-center bg-slate-50">
         <div className="bg-white rounded-lg" >
           <NewTaskForm onEmotionalTaskCreated={() => reloadEmotionalTasks()}
@@ -41,7 +50,6 @@ function App() {
           <TasksList emotionalTasks={emotionalTasks} physicalTasks={physicalTasks} seniors={seniors} />
         </div>
       </div> */}
-
     </>
   );
 }

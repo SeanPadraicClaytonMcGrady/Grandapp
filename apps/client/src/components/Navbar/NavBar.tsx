@@ -1,7 +1,4 @@
-import { Link, Routes } from "react-router-dom";
-import Home from "../Pages/Home";
-import Profile from "../../ProfilePage/Profile";
-import Users from "../Pages/Users";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -27,7 +24,6 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-
     </>
   );
 };
