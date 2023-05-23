@@ -2,6 +2,15 @@ import { Request, Response, NextFunction } from "express";
 import Senior from "../models/Seniors";
 import User from "../models/Users";
 import { emit } from "process";
+import bcrypt from 'bcrypt'
+
+
+const saltRounds = 10
+
+async function hashPassword(pasw: string): Promise<string> {
+  const hashed = await bcrypt.hash(pasw, saltRounds)
+  return hashed
+}
 
 const SeniorsController = {
   async create(req: Request, res: Response, next: NextFunction) {
@@ -16,19 +25,32 @@ const SeniorsController = {
         medicalNeeds,
         address,
       } = req.body;
+      if (!username || !name || !password || !email || !phoneNumber || !biography || !medicalNeeds || !address) {
+        throw new Error('Missing parameters.')
+      }
       //We need to add hashes to passwords.
+      const hashedPasw = await hashPassword(password)
       const newSenior = await Senior.createSenior(
         username,
         name,
         email,
-        password,
+        hashedPasw,
         phoneNumber,
         biography,
         medicalNeeds,
         address
       );
+      const resp = {
+        username: newSenior.username,
+        name: newSenior.name,
+        email: newSenior.email,
+        phoneNumber: newSenior.phoneNumber,
+        biography: newSenior.biography,
+        medicalNeeds: newSenior.medicalNeeds,
+        address: newSenior.address,
+      }
 
-      return res.status(201).json(newSenior);
+      return res.status(201).json(resp);
     } catch (e) {
       next(e);
     }

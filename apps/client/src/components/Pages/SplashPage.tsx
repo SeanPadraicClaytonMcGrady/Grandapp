@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import { fetchLoginUsers } from "../../lib/apiClient";
 const SplashPage = () => {
-  const [email, setEmail] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [isSeniorChecked, setIsSeniorChecked] = useState(false);
   const [isVolunteerChecked, setIsVolunteerChecked] = useState(false);
 
   const navigate = useNavigate();
-  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,13 +27,13 @@ const SplashPage = () => {
     setIsVolunteerChecked(true);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     //EMAIL VALIDATION
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError("Invalid email format");
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;!emailRegex.test
+    if ((!username)) {
+      setError("Invalid username format");
     }
 
     //PASSWORD VALIDATION
@@ -41,15 +41,21 @@ const SplashPage = () => {
       setError("Please enter your password");
     }
     setError(null);
-    setEmail("");
-    setPassword("");
+    // setEmail();
+    // setPassword("");
+    try {
+      const user = await fetchLoginUsers({ username, password });
 
-    if (isSeniorChecked) {
-      navigate("/senior");
-    } else if (isVolunteerChecked) {
-      navigate("/volunteer");
-    } else {
-      navigate("/welcome");
+      if (user.type === "senior") {
+        navigate("/senior");
+      } else if (user.type === "volunteer") {
+        navigate("/volunteer");
+      } else {
+        navigate("/welcome");
+      }
+    } catch (e) {
+      const error = e as Error
+      setError(error.message)
     }
   };
   return (
@@ -61,20 +67,20 @@ const SplashPage = () => {
           </div>
           <div className="text-center font-medium text-xl">Login</div>
         </div>
-        <div className="max-w-md w-full mx-auto mt-4 bg-white p-8 border border-gray-300">
+        <div className="max-w-md w-full mx-auto mt-4 bg-white p-8 border border-gray-300 rounded-lg">
           <form action="" className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
-                htmlFor="email"
+                htmlFor="username"
                 className="text-left text-sm font-bold text-gray-600 block"
               >
-                Email
+                Username
               </label>
               <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={handleEmailChange}
+                type="username"
+                id="username"
+                value={username}
+                onChange={handleUsernameChange}
                 required
                 className="w-full p-2 border border-gray-300 rounded mt1"
               />
@@ -95,35 +101,16 @@ const SplashPage = () => {
                 className="w-full p-2 border border-gray-300 rounded mt1"
               />
             </div>
-            <div className="flex items-center justify-between">
-              <div className="">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 text-blue-300 rounded"
-                  checked={isSeniorChecked}
-                  onChange={handleSeniorChange}
-                />
-                <label htmlFor="" className="ml-2 text-sm text-gray-600">
-                  Senior
-                </label>
-              </div>
-              <div className="">
-                <input
-                  type="checkbox"
-                  className="h-4 w-4 text-blue-300 rounded"
-                  checked={isVolunteerChecked}
-                  onChange={handleVolunteerChange}
-                />
-                <label htmlFor="" className="ml-2 text-sm text-gray-600">
-                  Volunteer
-                </label>
-              </div>
-            </div>
             <div>
-              <button className="w-full py-2 px-4 bg-blue-400 hover:bg-blue-500 rounded-md text-white text-sm">
+              <button className="w-full py-2 px-4 bg-blue-400 hover:bg-orange-500 rounded-md text-white text-sm">
                 Proceed
               </button>
             </div>
+
+            <div className="text-red-500 px-4 py-2 font-bold">
+              <p> {error}</p>
+            </div>
+
           </form>
         </div>
       </div>
