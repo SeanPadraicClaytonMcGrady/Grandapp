@@ -1,14 +1,23 @@
 import { FC, useEffect, useState } from "react";
 import Navbar from "./NavBar";
 import { useParams } from "react-router-dom";
-import { fetchTask } from "../../lib/apiClient";
+import { fetchTask, fetchVolunteers } from "../../lib/apiClient";
 import { Task, Volunteer } from "../../types";
 import { Link } from "react-router-dom";
 
+const useVolunteers = () => {
+  const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
+
+  useEffect(() => {
+    fetchVolunteers().then((volunteers) => setVolunteers(volunteers));
+  }, []);
+  return volunteers;
+};
+
 const ApplyToTask = () => {
+  const volunteers = useVolunteers();
   const { id } = useParams<{ id: string }>();
   const [task, setTask] = useState<Task | null>(null);
-  const [volunteers, setVolunteers] = useState<Volunteer[]>([]);
 
   useEffect(() => {
     const taskId = Number(id);
@@ -47,6 +56,16 @@ const ApplyToTask = () => {
               </div>
               <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
                 {task.location}
+              </div>
+              <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
+                <option key="" value="">
+                  Select Volunteer
+                </option>
+                {volunteers.map((volunteer) => (
+                  <option key={volunteer.id} value={volunteer.username}>
+                    {volunteer.username}
+                  </option>
+                ))}
               </div>
             </div>
             <div className="flex justify-center">
