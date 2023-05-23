@@ -16,13 +16,18 @@ export async function fetchPhysicalTasks() {
 export async function fetchTask(id: number) {
   const response = await fetch(`${BASE_URL}/tasks/${id}`);
   const individualTask = await response.json();
-  console.log(individualTask);
   return individualTask;
 }
 export async function fetchSeniors() {
   const response = await fetch(`${BASE_URL}/seniors`);
   const seniors = await response.json();
   return seniors;
+}
+
+export async function fetchVolunteers() {
+  const response = await fetch(`${BASE_URL}/volunteers`);
+  const volunteers = await response.json();
+  return volunteers;
 }
 
 export async function fetchTasksNoResponder() {
