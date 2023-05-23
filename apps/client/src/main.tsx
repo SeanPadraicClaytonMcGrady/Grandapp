@@ -61,27 +61,10 @@ const router = createBrowserRouter([
     path: "/volunteer",
     element: <Volunteer />,
   },
-  {
-    path: "/tasks/:id",
-    element: <ApplyToTask />,
-  },
-  {
-    path: "/emotionalTasks",
-    element: (
-      <NewTaskForm
-        onEmotionalTaskCreated={() => {}}
-        onPhysicalTaskCreated={() => {}}
-      />
-    ),
-  },
-  {
-    path: "/tasks/:id/applied",
-    element: <AppliedToTask />,
-  },
-  {
-    path: "/login",
-    element: <SplashPage />,
-  },
+  // {
+  //   path: "/senior",
+  //   element: <Senior />
+  // }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

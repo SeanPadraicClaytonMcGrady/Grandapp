@@ -12,7 +12,7 @@ const Volunteer = {
     biography: string | null,
     medicalNeeds: string | null,
     address: string
-  ): Promise<Volunteer> {
+  ): Promise<User> {
     const userVolunteer = await prismaInstance.user.create({
       data: {
         username,

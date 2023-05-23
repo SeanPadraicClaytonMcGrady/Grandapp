@@ -1,4 +1,6 @@
 import { User, PrismaClient, Volunteer, Senior } from "@prisma/client";
+import { NextFunction } from "express";
+
 
 const prismaInstance = new PrismaClient();
 
@@ -48,6 +50,21 @@ const User = {
     });
     return updateUser;
   },
+
+  async findUser(username: string): Promise<User> {
+    const user = await prismaInstance.user.findUnique({
+      where: { username },
+      include: {
+        volunteer: true,
+        senior: true,
+      },
+    });
+    if (user === null) {
+      throw new Error("User does not exist");
+    }
+    return user;
+  },
+
 };
 
 // username,

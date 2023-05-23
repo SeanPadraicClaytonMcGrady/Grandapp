@@ -6,6 +6,7 @@ import MessagesController from "./controllers/messages.controller";
 import TasksController from "./controllers/tasks.controller";
 import authentication from "./middlewares/authentitcation";
 import { ensureSenior, ensureVolunteer } from "./middlewares/ensureRoles";
+import authMiddleware from "./middlewares/authoritzation";
 
 const router = express.Router();
 
@@ -25,8 +26,9 @@ router.get("/seniors", SeniorsController.getSeniors);
 router.get("/volunteers", VolunteersController.getVolunteers);
 router.get("/users", UsersController.getUsers);
 
-router.get("/seniors/username", SeniorsController.getSeniorByUsername);
-router.get("/volunteers/username", VolunteersController.getVolunteerByUsername);
+router.post("/login", UsersController.loginUser)
+router.get("/seniors/username", authMiddleware, SeniorsController.getSeniorByUsername);
+router.get("/volunteers/username", authMiddleware, VolunteersController.getVolunteerByUsername);
 
 authRouter.delete("/users/:id", UsersController.deleteUserById);
 authRouter.put("/users/:id", UsersController.editUserById);
