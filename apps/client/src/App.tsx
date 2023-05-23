@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import NewTaskForm from "./components/NewTaskForm";
 import {
   fetchEmotionalTasks,
   fetchPhysicalTasks,
   fetchSeniors,
 } from "./lib/apiClient";
 import TasksList from "./components/TasksList";
-import Navbar from "./components/Navbar/NavBar";
+import Navbar from "./components/Pages/NavBar";
 import Volunteer from "./components/Pages/Volunteer";
 import SplashPage from "./components/Pages/SplashPage";
+import { EmotionalTask, PhysicalTask } from "./types";
 
 function App() {
   const [emotionalTasks, setEmotionalTasks] = useState([]);
@@ -39,6 +39,7 @@ function App() {
     <>
       <Navbar />
       <SplashPage />
+
       {/* <Volunteer /> */}
       {/* <div className="min-h-screen flex justify-center items-center bg-slate-50">
         <div className="bg-white rounded-lg" >
