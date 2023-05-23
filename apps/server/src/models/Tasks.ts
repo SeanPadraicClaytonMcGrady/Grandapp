@@ -26,6 +26,11 @@ const Tasks = {
   async findTask(taskId: number): Promise<Task> {
     const task = await prismaInstance.task.findUnique({
       where: { id: taskId },
+      include: {
+        author: {
+          include: { user: true },
+        },
+      },
     });
     if (!task) {
       throw new Error("Task does not exist.");
