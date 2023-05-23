@@ -16,7 +16,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center px-2 border-solid border-2 border-black rounded mt-2 mb-2">
-            <Link to="/home">GrandApp</Link>
+            <Link to="/login">GrandApp</Link>
           </div>
 
           <div className="flex items-center">
@@ -27,7 +27,5 @@ const Navbar = () => {
     </>
   );
 };
-
-//<LInk to />
 
 export default Navbar;

@@ -45,7 +45,7 @@ const SplashPage = () => {
     setPassword("");
 
     if (isSeniorChecked) {
-      navigate("/senior");
+      navigate("/emotionalTasks");
     } else if (isVolunteerChecked) {
       navigate("/volunteer");
     } else {
