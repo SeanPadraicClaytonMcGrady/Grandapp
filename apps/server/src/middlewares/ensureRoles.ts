@@ -21,3 +21,5 @@ export function ensureVolunteer(
   };
   next();
 }
+
+// Convert data from JWT into information for this ensureSenior & ensureVolunteer.

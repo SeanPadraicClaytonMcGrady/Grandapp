@@ -26,9 +26,9 @@ const Volunteer = () => {
 
   return (
     <>
-      <TasksList tasks={acceptedTasks} />
-      <TasksList tasks={pendingTasks} />
-      <TasksList tasks={openTasks} />
+      {acceptedTasks.length > 0 && <TasksList tasks={acceptedTasks} />}
+      {pendingTasks.length > 0 && <TasksList tasks={pendingTasks} />}
+      {openTasks.length > 0 && <TasksList tasks={openTasks} />}
     </>
   );
 };

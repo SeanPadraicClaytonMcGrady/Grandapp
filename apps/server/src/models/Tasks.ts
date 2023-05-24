@@ -250,10 +250,6 @@ const Tasks = {
       include: { volunteer: true },
     });
 
-    console.log(user);
-    //Right now defaults to senior.
-    //For some reason, this keeps referencing Sadie.
-    //wtf
     return !!user?.volunteer;
   },
 

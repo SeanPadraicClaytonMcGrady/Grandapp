@@ -105,18 +105,6 @@ const UsersController = {
   },
 };
 
-// HERE
-// function inferUserType(
-//   user: User & {
-//     senior: boolean;
-//   }
-// ): "senior" | "volunteer" {
-//   if ("senior" in user) {
-//     return "senior";
-//   }
-//   return "volunteer";
-// }
-
 function inferUserType(
   user: User & {
     volunteer: Volunteer | null;
@@ -129,12 +117,5 @@ function inferUserType(
 
   return "senior";
 }
-
-// function inferUserType(user: User): "senior" | "volunteer" {
-//   if (user.volunteer) {
-//     return "volunteer"
-//   }
-//   return "senior"
-// }
 
 export default UsersController;
