@@ -141,9 +141,11 @@ async function main() {
     create: {
       author: { connect: { id: isabella.id } },
       responses: {
-        create: [{
-          responder: { connect: { id: sadie.id } }
-        }]
+        create: [
+          {
+            responder: { connect: { id: sadie.id } },
+          },
+        ],
       },
       type: "EMOTIONAL",
       description:
@@ -162,7 +164,7 @@ async function main() {
       responses: {
         create: [
           { responder: { connect: { id: stewart.id } } },
-          { responder: { connect: { id: sadie.id } } }
+          { responder: { connect: { id: sadie.id } } },
         ],
       },
       accepted: { connect: { id: sadie.id } },
@@ -219,5 +221,5 @@ main()
   .catch(async (e) => {
     console.error(e);
     await prisma.$disconnect();
-    process.exit(1);
+    // process.exit(1);
   });

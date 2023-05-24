@@ -39,18 +39,6 @@ function App() {
     <>
       <Navbar />
       <SplashPage />
-
-      {/* <Volunteer /> */}
-      {/* <div className="min-h-screen flex justify-center items-center bg-slate-50">
-        <div className="bg-white rounded-lg" >
-          <NewTaskForm onEmotionalTaskCreated={() => reloadEmotionalTasks()}
-            onPhysicalTaskCreated={() => reloadPhysicalTasks()}
-          />
-        </div>
-        <div>
-          <TasksList emotionalTasks={emotionalTasks} physicalTasks={physicalTasks} seniors={seniors} />
-        </div>
-      </div> */}
     </>
   );
 }

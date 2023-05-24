@@ -1,18 +1,19 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../models/Users";
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import atob from 'atob'
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import atob from "atob";
+import { Senior, Volunteer } from "@prisma/client";
 // import  passwordUtils  from "../utils/passwordUtils";
 
-const saltRounds = 10
+const saltRounds = 10;
 
 // async function hashPassword(pasw: string): Promise<string> {
 //   const hashed = await bcrypt.hash(pasw, saltRounds)
 //   return hashed
 // }
 function checkPassword(pasw: string, hashedPasw: string): Boolean {
-  return bcrypt.compareSync(pasw, hashedPasw)
+  return bcrypt.compareSync(pasw, hashedPasw);
 }
 
 const UsersController = {
@@ -69,43 +70,71 @@ const UsersController = {
 
   async loginUser(req: Request, res: Response, next: NextFunction) {
     try {
-
-      const authHeader = req.headers.authorization?.split('Basic ')
+      const authHeader = req.headers.authorization?.split("Basic ");
       if (!authHeader) {
         return res.status(401).json({
-          message: 'There are no headers'
-        })
+          message: "There are no headers",
+        });
       }
-      const decoded = atob(authHeader.toString())
-      const [username, password] = decoded.split(':')
-      const user = await User.findUser(username)
+      const decoded = atob(authHeader.toString());
+      const [username, password] = decoded.split(":");
+      const user = await User.findUser(username);
       if (!user) {
         return res.status(401).json({
-          message: 'User does not exist'
-        })
+          message: "User does not exist",
+        });
       }
-      const checkPasw = checkPassword(password, user.password)
+      const checkPasw = checkPassword(password, user.password);
       if (checkPasw === false) {
         return res.status(401).json({
-          message: 'Incorrect password.'
-        })
+          message: "Incorrect password.",
+        });
       }
-      const secret = process.env.JWT_SECRET
-      if (!secret) return res.status(500)
-      const token = jwt.sign(user, secret)
-      return res.status(200).json({ id: user.id, user: user.username, token, type: inferUserType(user) })
+      const secret = process.env.JWT_SECRET;
+      if (!secret) return res.status(500);
+      const token = jwt.sign(user, secret);
+      return res.status(200).json({
+        id: user.id,
+        user: user.username,
+        token,
+        type: inferUserType(user),
+      });
     } catch (e) {
-      return next(e)
+      return next(e);
     }
-  }
-
+  },
 };
 
-function inferUserType(user: User): "senior" | "volunteer" {
-  if (user.volunteer) {
-    return "volunteer"
+// HERE
+// function inferUserType(
+//   user: User & {
+//     senior: boolean;
+//   }
+// ): "senior" | "volunteer" {
+//   if ("senior" in user) {
+//     return "senior";
+//   }
+//   return "volunteer";
+// }
+
+function inferUserType(
+  user: User & {
+    volunteer: Volunteer | null;
+    senior: Senior | null;
   }
-  return "senior"
+): string {
+  if (user.volunteer) {
+    return "volunteer";
+  }
+
+  return "senior";
 }
+
+// function inferUserType(user: User): "senior" | "volunteer" {
+//   if (user.volunteer) {
+//     return "volunteer"
+//   }
+//   return "senior"
+// }
 
 export default UsersController;

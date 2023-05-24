@@ -132,7 +132,6 @@ function NewTaskForm({
 
   return (
     <div>
-      <Navbar />
       <form
         onSubmit={handleSubmit}
         className="p-5  border-0 rounded-lg max-w-sm overflow-hidden shadow-lg"
@@ -142,7 +141,7 @@ function NewTaskForm({
           <div className="inline-block border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-0">
             <select name="author" onChange={handleChange}>
               <option key="" value="">
-                Select Author
+                Author
               </option>
               {seniors.map((senior) => (
                 <option

@@ -7,38 +7,7 @@ import "./index.css";
 import Profile from "./components/Pages/Profile.tsx";
 import Users from "./components/Pages/Users.tsx";
 import Volunteer from "./components/Pages/Volunteer.tsx";
-import ApplyToTask from "./components/Pages/ApplyToTask.tsx";
-import NewTaskForm from "./components/NewTaskForm.tsx";
-import TasksList from "./components/TasksList.tsx";
-import { EmotionalTask, PhysicalTask } from "./types.ts";
-import AppliedToTask from "./components/Pages/AppliedToTask.tsx";
-import SplashPage from "./components/Pages/SplashPage.tsx";
-import {
-  fetchEmotionalTasks,
-  fetchPhysicalTasks,
-  fetchSeniors,
-} from "./lib/apiClient.tsx";
-
-// const [emotionalTasks, setEmotionalTasks] = useState([]);
-// const [physicalTasks, setPhysicalTasks] = useState([]);
-// const [seniors, setSeniors] = useState([]);
-
-// const reloadEmotionalTasks = () => {
-//   fetchEmotionalTasks().then((emotionalTasks) =>
-//     setEmotionalTasks(emotionalTasks)
-//   );
-// };
-// const reloadPhysicalTasks = () => {
-//   fetchPhysicalTasks().then((physicalTasks) => setPhysicalTasks(physicalTasks));
-// };
-// const reloadSeniors = () => {
-//   fetchSeniors().then((seniors) => setSeniors(seniors));
-// };
-// useEffect(() => {
-//   reloadEmotionalTasks();
-//   reloadPhysicalTasks();
-//   reloadSeniors();
-// }, []);
+import Senior from "./components/Pages/Senior.tsx";
 
 const router = createBrowserRouter([
   {
@@ -61,10 +30,10 @@ const router = createBrowserRouter([
     path: "/volunteer",
     element: <Volunteer />,
   },
-  // {
-  //   path: "/senior",
-  //   element: <Senior />
-  // }
+  {
+    path: "/senior",
+    element: <Senior />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

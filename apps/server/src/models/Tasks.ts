@@ -22,6 +22,18 @@ const includeAuthor = {
   },
 };
 
+const includeVolunteer = {
+  accepted: {
+    select: {
+      user: {
+        select: {
+          username: true,
+        },
+      },
+    },
+  },
+};
+
 const Tasks = {
   async findTask(taskId: number): Promise<Task> {
     const task = await prismaInstance.task.findUnique({
@@ -116,17 +128,6 @@ const Tasks = {
     );
 
     return searchResult;
-  },
-
-  async getToDoTasks(responderId: number): Promise<Task[]> {
-    const searchTask = await prismaInstance.task.findMany({
-      where: { acceptedId: responderId },
-      include: includeAuthor,
-    });
-    if (!searchTask) {
-      throw new Error("Task does not exist");
-    }
-    return searchTask;
   },
 
   async createEmotionalTask(
@@ -240,35 +241,105 @@ const Tasks = {
     return acceptedVolunteer;
   },
 
-  // Get tasks that have no response from me
-  async getOpenTasks(volunteerId: number): Promise<Task[]> {
-    const openTasks = await prismaInstance.task.findMany({
-      where: {
-        responses: {
-          none: {
-            responderId: volunteerId,
-          },
-        },
-      },
-      include: includeAuthor,
+  //Need boolean check for user identity in functions below:
+  //volunteer: true or false?
+  //This is a helper function to make the boolean check.
+  async isVolunteer(userId: number): Promise<boolean> {
+    const user = await prismaInstance.user.findUnique({
+      where: { id: userId },
+      include: { volunteer: true },
     });
-    return openTasks;
+
+    console.log(user);
+    //Right now defaults to senior.
+    //For some reason, this keeps referencing Sadie.
+    //wtf
+    return !!user?.volunteer;
   },
 
-  // Get tasks that have a response from me but not accepted by senior
-  async getPendingTasks(volunteerId: number): Promise<Task[]> {
-    const pendingTasks = await prismaInstance.task.findMany({
-      where: {
-        responses: {
-          some: {
-            responderId: volunteerId,
+  // Get tasks that have no response from me
+  //Get tasks that have no responses (volunteers) for me (senior)
+  async getOpenTasks(id: number): Promise<Task[]> {
+    const isUserVolunteer = await this.isVolunteer(id);
+    if (isUserVolunteer) {
+      const openTasksVolunteer = await prismaInstance.task.findMany({
+        where: {
+          responses: {
+            none: {
+              responderId: id,
+            },
           },
         },
-        accepted: null,
+        include: includeAuthor,
+      });
+      return openTasksVolunteer;
+    }
+
+    const openTasksSenior = await prismaInstance.task.findMany({
+      where: {
+        authorId: id,
+        responses: {
+          none: {
+            responderId: { equals: 0 },
+          },
+        },
       },
-      include: includeAuthor,
     });
-    return pendingTasks;
+    return openTasksSenior;
+  },
+
+  // Get tasks that have a response from me (volunteer) but not accepted by senior
+  //Get tasks that have a response for them (volunteers) but not accepted by me (senior)
+  async getPendingTasks(id: number): Promise<Task[]> {
+    const isUserVolunteer = await this.isVolunteer(id);
+    if (isUserVolunteer) {
+      const pendingTasksVolunteer = await prismaInstance.task.findMany({
+        where: {
+          responses: {
+            some: {
+              responderId: id,
+            },
+          },
+          accepted: null,
+        },
+        include: includeAuthor,
+      });
+      return pendingTasksVolunteer;
+    }
+    const pendingTasksSenior = await prismaInstance.task.findMany({
+      where: {
+        authorId: id,
+        responses: {
+          some: {
+            responderId: { gt: 0 },
+          },
+        },
+      },
+    });
+    return pendingTasksSenior;
+  },
+
+  //Get tasks that are confirmed & scheduled (senior & volunteer)
+  async getToDoTasks(id: number): Promise<Task[]> {
+    const isUserVolunteer = await this.isVolunteer(id);
+    if (isUserVolunteer) {
+      const volunteerToDoTasks = await prismaInstance.task.findMany({
+        where: { acceptedId: id },
+        include: includeAuthor,
+      });
+      if (!isUserVolunteer) {
+        throw new Error("Task does not exist");
+      }
+      return volunteerToDoTasks;
+    }
+    const seniorToDoTasks = await prismaInstance.task.findMany({
+      where: {
+        authorId: id,
+        acceptedId: { gt: 0 },
+      },
+      include: includeVolunteer,
+    });
+    return seniorToDoTasks;
   },
 };
 
