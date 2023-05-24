@@ -3,29 +3,29 @@ import { Task } from "../types";
 const BASE_URL = "http://localhost:8080";
 
 interface LoginUsers {
-    username: string,
-    password: string
+  username: string;
+  password: string;
 }
 
-let authToken = localStorage.getItem('token')
+let authToken = localStorage.getItem("token");
 
 export async function fetchLoginUsers({ username, password }: LoginUsers) {
-    const credentials = window.btoa(`${username}:${password}`)
-    const response = await fetch(`${BASE_URL}/login`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Basic ${credentials}`,
-            'Content-type': 'application/json'
-        },
-    })
-    if (response.status !== 200) {
-        throw new Error('Incorrect credentials! Please try again.')
-    }
-    const loginUser = await response.json()
+  const credentials = window.btoa(`${username}:${password}`);
+  const response = await fetch(`${BASE_URL}/login`, {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${credentials}`,
+      "Content-type": "application/json",
+    },
+  });
+  if (response.status !== 200) {
+    throw new Error("Incorrect credentials! Please try again.");
+  }
+  const loginUser = await response.json();
 
-    localStorage.setItem("token", loginUser.token);
+  localStorage.setItem("token", loginUser.token);
 
-    return loginUser
+  return loginUser;
 }
 
 export async function fetchEmotionalTasks() {
@@ -68,19 +68,18 @@ export async function fetchTasksWithResponder() {
 }
 
 export type RelevantTasks = {
-
-    openTasks: Task[],
-    pendingTasks: Task[],
-    acceptedTasks: Task[]
-}
+  openTasks: Task[];
+  pendingTasks: Task[];
+  acceptedTasks: Task[];
+};
 export async function getRelevantTasks(): Promise<RelevantTasks> {
-    const response = await fetch(`${BASE_URL}/relevant-tasks`, {
-        headers: {
-            Authorization: `Bearer ${authToken}`
-        }
-    })
-    const relevantTasks = await response.json()
-    return relevantTasks
+  const response = await fetch(`${BASE_URL}/relevant-tasks`, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
+  const relevantTasks = await response.json();
+  return relevantTasks;
 }
 
 interface ICreateEmotionalTaskPayload {
@@ -123,9 +122,8 @@ export async function createEmotionalTask({
       location,
     }),
   });
-  console.log(response, "^ This is resposne!");
+
   const newEmotionalTask = await response.json();
-  console.log(newEmotionalTask, "^ This is newEmotionalTask");
 
   if (response.status === 400) {
     throw new Error("Can not create the task.");

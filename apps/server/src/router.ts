@@ -4,20 +4,19 @@ import SeniorsController from "./controllers/seniors.controller";
 import UsersController from "./controllers/users.controller";
 import MessagesController from "./controllers/messages.controller";
 import TasksController from "./controllers/tasks.controller";
-import authentication from "./middlewares/authentitcation";
 import { ensureSenior, ensureVolunteer } from "./middlewares/ensureRoles";
-import authMiddleware from "./middlewares/authoritzation";
+import authMiddleware from "./middlewares/authentication";
 
 const router = express.Router();
 
 const authRouter = express.Router();
-authRouter.use(authentication)
+authRouter.use(authMiddleware);
 
 const seniorRouter = express.Router();
-seniorRouter.use(ensureSenior)
+seniorRouter.use(ensureSenior);
 
 const volunteerRouter = express.Router();
-volunteerRouter.use(ensureVolunteer)
+volunteerRouter.use(ensureVolunteer);
 
 //volunteers, seniors, users
 router.post("/volunteers", VolunteersController.create);
@@ -26,9 +25,17 @@ router.get("/seniors", SeniorsController.getSeniors);
 router.get("/volunteers", VolunteersController.getVolunteers);
 router.get("/users", UsersController.getUsers);
 
-router.post("/login", UsersController.loginUser)
-router.get("/seniors/username", authMiddleware, SeniorsController.getSeniorByUsername);
-router.get("/volunteers/username", authMiddleware, VolunteersController.getVolunteerByUsername);
+router.post("/login", UsersController.loginUser);
+router.get(
+  "/seniors/username",
+  authMiddleware,
+  SeniorsController.getSeniorByUsername
+);
+router.get(
+  "/volunteers/username",
+  authMiddleware,
+  VolunteersController.getVolunteerByUsername
+);
 
 authRouter.delete("/users/:id", UsersController.deleteUserById);
 authRouter.put("/users/:id", UsersController.editUserById);
@@ -42,22 +49,23 @@ authRouter.delete("/messages/:id", MessagesController.deleteMessageById);
 
 router.get("/tasks/:id", TasksController.findTaskById);
 router.get("/tasks", TasksController.findAllTasks);
-volunteerRouter.get("/relevant-tasks", TasksController.getRelevantTasks);
-volunteerRouter.put("/tasks/:id/response", TasksController.createResponse);
-volunteerRouter.put("/tasks/:id/cancel", TasksController.volunteerCancelTaskById);
+authRouter.get("/relevant-tasks", TasksController.getRelevantTasks);
+authRouter.put("/tasks/:id/response", TasksController.createResponse);
+authRouter.put("/tasks/:id/cancel", TasksController.volunteerCancelTaskById);
 
 //Confirm this one works after merge.
-volunteerRouter.get(
+authRouter.get(
   "/seniors/:id/tasks",
   TasksController.volunteerGetSingleSeniorTasksById
 );
-volunteerRouter.get("/volunteers/tasks", TasksController.volunteerGetAcceptedTasks);
+authRouter.get("/volunteers/tasks", TasksController.volunteerGetAcceptedTasks);
 
 //Conirm this one works after merge.
-seniorRouter.post("/emotionalTasks", TasksController.newEmotionalTask);
-seniorRouter.post("/physicalTasks", TasksController.newPhysicalTask);
-seniorRouter.put("/tasks/:id", TasksController.editTaskById);
-seniorRouter.delete("/tasks/:id", TasksController.deleteTaskById);
+authRouter.get("/relevant-tasks", TasksController.getRelevantTasks);
+authRouter.post("/emotionalTasks", TasksController.newEmotionalTask);
+authRouter.post("/physicalTasks", TasksController.newPhysicalTask);
+authRouter.put("/tasks/:id", TasksController.editTaskById);
+authRouter.delete("/tasks/:id", TasksController.deleteTaskById);
 
 router.use(authRouter);
 router.use(seniorRouter);

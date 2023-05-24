@@ -56,7 +56,7 @@ const TasksController = {
     next: NextFunction
   ) {
     try {
-      const volunteerId = req.user.id
+      const volunteerId = req.user.id;
       const fetchedAcceptedTasks = await Tasks.getToDoTasks(volunteerId);
       return res.status(201).json(fetchedAcceptedTasks);
     } catch (e) {
@@ -66,17 +66,17 @@ const TasksController = {
 
   async getRelevantTasks(req: Request, res: Response, next: NextFunction) {
     try {
-      const volunteerId = req.user.id
-      const openTasks = await Tasks.getOpenTasks(volunteerId);
-      const pendingTasks = await Tasks.getPendingTasks(volunteerId);
-      const acceptedTasks = await Tasks.getToDoTasks(volunteerId);
+      const userId = req.user.id;
+      const openTasks = await Tasks.getOpenTasks(userId);
+      const pendingTasks = await Tasks.getPendingTasks(userId);
+      const acceptedTasks = await Tasks.getToDoTasks(userId);
 
       return res.json({
         openTasks,
         pendingTasks,
         acceptedTasks,
-      })
-    } catch(e) {
+      });
+    } catch (e) {
       next(e);
     }
   },
@@ -161,17 +161,14 @@ const TasksController = {
 
   async createResponse(req: Request, res: Response, next: NextFunction) {
     try {
-      const responderId = req.user.id
+      const responderId = req.user.id;
       const taskId = parseInt(req.params.id);
-      const response = await Tasks.createResponse(
-        taskId,
-        responderId
-      );
+      const response = await Tasks.createResponse(taskId, responderId);
       return res.status(201).json(response);
     } catch (e) {
       next(e);
     }
-  }
+  },
 };
 
 export default TasksController;

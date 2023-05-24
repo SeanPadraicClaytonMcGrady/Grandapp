@@ -32,7 +32,7 @@ const SplashPage = () => {
 
     //EMAIL VALIDATION
     // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;!emailRegex.test
-    if ((!username)) {
+    if (!username) {
       setError("Invalid username format");
     }
 
@@ -54,8 +54,8 @@ const SplashPage = () => {
         navigate("/welcome");
       }
     } catch (e) {
-      const error = e as Error
-      setError(error.message)
+      const error = e as Error;
+      setError(error.message);
     }
   };
   return (
@@ -110,7 +110,6 @@ const SplashPage = () => {
             <div className="text-red-500 px-4 py-2 font-bold">
               <p> {error}</p>
             </div>
-
           </form>
         </div>
       </div>

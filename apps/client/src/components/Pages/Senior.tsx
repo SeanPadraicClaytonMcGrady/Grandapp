@@ -2,13 +2,10 @@ import TasksList from "../TasksList";
 import { getRelevantTasks } from "../../lib/apiClient";
 import { useState, useEffect } from "react";
 import { Task } from "../../types";
+import NewTaskForm from "../NewTaskForm";
+import Navbar from "./NavBar";
 
-// List
-// 1. Tasks that haven't been responded to
-// 2. Tasks that I have responded but not accepted yet
-// 3. Tasks that I senior has accepted my response
-
-const Volunteer = () => {
+const Senior = () => {
   const [openTasks, setOpenTasks] = useState<Task[]>([]);
   const [pendingTasks, setPendingTasks] = useState<Task[]>([]);
   const [acceptedTasks, setAcceptedTasks] = useState<Task[]>([]);
@@ -26,11 +23,15 @@ const Volunteer = () => {
 
   return (
     <>
+      <Navbar />
       {acceptedTasks.length > 0 && <TasksList tasks={acceptedTasks} />}
       {pendingTasks.length > 0 && <TasksList tasks={pendingTasks} />}
       {openTasks.length > 0 && <TasksList tasks={openTasks} />}
+      <div className="flex justify-center">
+        <NewTaskForm />
+      </div>
     </>
   );
 };
 
-export default Volunteer;
+export default Senior;
