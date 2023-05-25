@@ -19,7 +19,7 @@ model User {
   phoneNumber      String     @unique
   biography        String?
   medicalNeeds     String?
-  address          String     @unique
+  address          String
   sentMessages     Messages[] @relation("sender")
   receivedMessages Messages[] @relation("receiver")
   senior           Senior?
@@ -36,20 +36,20 @@ model Senior {
 
 // delted repospderTask
 model Volunteer {
-  id            Int    @id @default(autoincrement())
-  user          User   @relation(fields: [id], references: [id])
-  responses     Response[]
-  acceptedTask  Task[] @relation("accepted")
+  id           Int        @id @default(autoincrement())
+  user         User       @relation(fields: [id], references: [id])
+  responses    Response[]
+  acceptedTask Task[]     @relation("accepted")
 }
 
-model Response { 
-  task Task @relation(fields: [taskId], references: [id])
-  taskId Int
-  responder Volunteer @relation(fields: [responderId], references: [id])
+model Response {
+  task        Task      @relation(fields: [taskId], references: [id])
+  taskId      Int
+  responder   Volunteer @relation(fields: [responderId], references: [id])
   responderId Int
+
   @@unique([taskId, responderId])
 }
-
 
 // deleted responder & responderId
 model Task {
@@ -65,7 +65,6 @@ model Task {
   scheduledDate DateTime
   location      String
 }
-
 
 enum TaskType {
   EMOTIONAL

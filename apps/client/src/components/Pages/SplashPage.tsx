@@ -5,26 +5,15 @@ const SplashPage = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [isSeniorChecked, setIsSeniorChecked] = useState(false);
-  const [isVolunteerChecked, setIsVolunteerChecked] = useState(false);
 
   const navigate = useNavigate();
+
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
-  };
-
-  const handleSeniorChange = () => {
-    setIsSeniorChecked(true);
-    setIsVolunteerChecked(false);
-  };
-
-  const handleVolunteerChange = () => {
-    setIsSeniorChecked(false);
-    setIsVolunteerChecked(true);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -41,8 +30,7 @@ const SplashPage = () => {
       setError("Please enter your password");
     }
     setError(null);
-    // setEmail();
-    // setPassword("");
+
     try {
       const user = await fetchLoginUsers({ username, password });
 
@@ -106,7 +94,12 @@ const SplashPage = () => {
                 Proceed
               </button>
             </div>
-
+            <div className="flex justify-between">
+              <div>Don't have an account?</div>
+              <div>
+                <Link to="/register">Register here</Link>
+              </div>
+            </div>
             <div className="text-red-500 px-4 py-2 font-bold">
               <p> {error}</p>
             </div>

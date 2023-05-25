@@ -51,3 +51,15 @@ export interface Task {
   scheduledDate: string;
   location: string;
 }
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  biography: string;
+  address: string;
+  volunteer: Volunteer | null;
+  senior: Senior | null;
+}
