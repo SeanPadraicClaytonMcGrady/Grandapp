@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "./NavBar";
 import { Link } from "react-router-dom";
-import { createVolunteer } from "../../lib/apiClient";
+import { createSenior, createVolunteer } from "../../lib/apiClient";
 
 const SignUp = () => {
   const [email, setEmail] = useState<string>("");
@@ -11,8 +11,7 @@ const SignUp = () => {
   const [address, setAddress] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [password, setPassword] = useState<string>("");
-  const [senior, setSenior] = useState<boolean>(true);
-  const [volunteer, setVolunteer] = useState<boolean>(false);
+  const [volunteer, setVolunteer] = useState<boolean>(true);
   const [medicalNeeds, setMedicalNeeds] = useState<string>("");
   const [biography, setBiography] = useState<string>("");
 
@@ -39,9 +38,8 @@ const SignUp = () => {
   };
 
   const handleUserChange = () => {
-    setSenior(!senior);
     setVolunteer(!volunteer);
-    console.log("senior:", senior, "volunteer", volunteer);
+    console.log("senior:", !volunteer, "volunteer", volunteer);
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,23 +66,33 @@ const SignUp = () => {
       username,
       password,
       email,
+      medicalNeeds,
       address,
       phoneNumber,
       biography,
     };
 
     try {
-      const newVolunteer = await createVolunteer(payload);
-      console.log("new volunteer created:", newVolunteer);
+      if (volunteer) {
+        const newVolunteer = await createVolunteer(payload);
+
+        console.log("new volunteer created:", newVolunteer);
+      } else {
+        const newSenior = await createSenior(payload);
+        console.log("new senior created:", newSenior);
+      }
       setName("");
       setUsername("");
       setPassword("");
       setEmail("");
+      setMedicalNeeds("");
       setAddress("");
       setPhoneNumber("");
       setBiography("");
     } catch (e) {
-      console.error("failed to create a new volunteer:", error);
+      const newError = e as Error;
+      setError(newError.message);
+      console.error("failed to create a new volunteer:", newError);
     }
   };
 
@@ -112,6 +120,7 @@ const SignUp = () => {
               <select
                 name="User Type"
                 id="userType"
+                value={volunteer ? "volunteer" : "senior"}
                 onChange={handleUserChange}
                 className="w-full p-2 border border-gray-300 rounded mt1"
               >
@@ -221,7 +230,7 @@ const SignUp = () => {
               />
             </div>
 
-            {senior && (
+            {!volunteer && (
               <div>
                 <label
                   htmlFor="Medical Needs"
@@ -258,7 +267,9 @@ const SignUp = () => {
 
             <div>
               <button className="w-full py-2 px-4 bg-blue-400 hover:bg-orange-500 rounded-md text-white text-sm">
-                Create Account
+                <Link to={volunteer ? "/volunteer" : "/senior"}>
+                  Create Account
+                </Link>
               </button>
             </div>
             <div className="flex justify-between">
@@ -268,7 +279,7 @@ const SignUp = () => {
               </div>
             </div>
             <div className="text-red-500 px-4 py-2 font-bold">
-              <p> {error}</p>
+              <p>{error}</p>
             </div>
           </form>
         </div>

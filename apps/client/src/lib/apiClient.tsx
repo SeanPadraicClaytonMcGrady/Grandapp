@@ -216,47 +216,47 @@ export async function createVolunteer({
   return newVolunteer;
 }
 
-// interface ICreateSeniorPayload {
-//   name: string;
-//   username: string;
-//   password: string;
-//   email: string;
-//   medicalNeeds: string;
-//   address: string;
-//   phoneNumber: string;
-//   biography: string;
-// }
+interface ICreateSeniorPayload {
+  name: string;
+  username: string;
+  password: string;
+  email: string;
+  medicalNeeds: string;
+  address: string;
+  phoneNumber: string;
+  biography: string;
+}
 
-// export async function createSenior({
-//   name,
-//   username,
-//   password,
-//   email,
-//   medicalNeeds,
-//   address,
-//   phoneNumber,
-//   biography,
-// }: ICreateSeniorPayload) {
-//   const response = await fetch(`${BASE_URL}/seniors`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `Bearer ${authToken}`,
-//     },
-//     body: JSON.stringify({
-//       name,
-//       username,
-//       password,
-//       email,
-//       medicalNeeds,
-//       address,
-//       phoneNumber,
-//       biography,
-//     }),
-//   });
-//   const newSenior = await response.json();
-//   if (response.status === 400) {
-//     throw new Error("Can not create new senior profile.");
-//   }
-//   return newSenior;
-// }
+export async function createSenior({
+  name,
+  username,
+  password,
+  email,
+  medicalNeeds,
+  address,
+  phoneNumber,
+  biography,
+}: ICreateSeniorPayload) {
+  const response = await fetch(`${BASE_URL}/seniors`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify({
+      name,
+      username,
+      password,
+      email,
+      medicalNeeds,
+      address,
+      phoneNumber,
+      biography,
+    }),
+  });
+  const newSenior = await response.json();
+  if (response.status === 400) {
+    throw new Error(newSenior.message);
+  }
+  return newSenior;
+}
