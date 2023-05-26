@@ -4,16 +4,14 @@ import SeniorsController from "./controllers/seniors.controller";
 import UsersController from "./controllers/users.controller";
 import MessagesController from "./controllers/messages.controller";
 import TasksController from "./controllers/tasks.controller";
-
 import authMiddleware from "./middlewares/authentication";
-
 
 const router = express.Router();
 router.post("/login", UsersController.loginUser);
 
 const authRouter = express.Router();
+authRouter.use(authMiddleware);
 router.use(authRouter);
-
 
 //volunteers, seniors, users
 router.post("/volunteers", VolunteersController.create);
@@ -51,7 +49,6 @@ authRouter.get("/relevant-tasks", TasksController.getRelevantTasks);
 authRouter.put("/tasks/:id/response", TasksController.createResponse);
 authRouter.put("/tasks/:id/cancel", TasksController.volunteerCancelTaskById);
 
-
 //Confirm this one works after merge.
 authRouter.get(
   "/seniors/:id/tasks",
@@ -61,7 +58,6 @@ authRouter.get(
 authRouter.get("/volunteers/tasks", TasksController.volunteerGetAcceptedTasks);
 
 //Conirm this one works after merge.
-authRouter.get("/relevant-tasks", TasksController.getRelevantTasks);
 authRouter.post("/emotionalTasks", TasksController.newEmotionalTask);
 authRouter.post("/physicalTasks", TasksController.newPhysicalTask);
 authRouter.put("/tasks/:id", TasksController.editTaskById);

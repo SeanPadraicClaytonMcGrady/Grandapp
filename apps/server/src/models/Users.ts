@@ -3,6 +3,12 @@ import { NextFunction } from "express";
 
 const prismaInstance = new PrismaClient();
 
+type UserWithUserType = User & {
+  volunteer: Volunteer | null;
+  senior: Senior | null;
+  role: "senior" | "volunteer";
+};
+
 const User = {
   async findAll(): Promise<User[]> {
     const users = await prismaInstance.user.findMany({
@@ -50,12 +56,7 @@ const User = {
     return updateUser;
   },
 
-  async findUser(username: string): Promise<
-    User & {
-      volunteer: Volunteer | null;
-      senior: Senior | null;
-    }
-  > {
+  async findUser(username: string): Promise<UserWithUserType> {
     const user = await prismaInstance.user.findUnique({
       where: { username },
       include: {
@@ -66,7 +67,12 @@ const User = {
     if (user === null) {
       throw new Error("User does not exist");
     }
-    return user;
+    const role = user.volunteer ? "volunteer" : "senior";
+    const foundUser: UserWithUserType = {
+      ...user,
+      role,
+    };
+    return foundUser;
   },
 };
 

@@ -5,15 +5,9 @@ import dotenv from "dotenv";
 dotenv.config();
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import atob from "atob";
-// import  passwordUtils  from "../utils/passwordUtils";
 
 const saltRounds = 10;
 
-// async function hashPassword(pasw: string): Promise<string> {
-//   const hashed = await bcrypt.hash(pasw, saltRounds)
-//   return hashed
-// }
 function checkPassword(pasw: string, hashedPasw: string): Boolean {
   return bcrypt.compareSync(pasw, hashedPasw);
 }
@@ -84,19 +78,25 @@ const UsersController = {
         });
       }
 
-      const token = jwt.sign(username, secret);
+      const token = jwt.sign(
+        {
+          id: existingUser.id,
+          username: existingUser.username,
+          role: existingUser.role,
+        },
+        secret
+      );
       res.setHeader(
         `Set-Cookie`,
         `AUTHORIZATION=BEARER ${token}; Max-Age=90000;`
       );
       return res
         .status(200)
-        .json({ ...existingUser, type: inferUserType(existingUser), token });
+        .json({ ...existingUser, type: inferUserType(existingUser) });
     } catch (e) {
       return next(e);
     }
   },
-
 };
 
 function inferUserType(

@@ -1,49 +1,34 @@
-
 import { Task } from '../types'
-
-import { EmotionalTask, PhysicalTask, Task } from "../types";
-import Cookies from "js-cookie";
-import { AxiosRequestConfig } from "axios";
-
 
 const BASE_URL = 'http://localhost:8080'
 
-import axios from "axios";
+import axios from 'axios'
 const apiClient = axios.create({
   baseURL: BASE_URL,
-  headers: { "Content-Type": "application/json" },
-});
+  headers: { 'Content-Type': 'application/json' },
+})
 
 interface LoginUsers {
-  username: string;
-  password: string;
+  username: string
+  password: string
 }
-
-//function that reads cookies
 
 export async function fetchLoginUsers({ username, password }: LoginUsers) {
-  console.log("here is the start of fetchLoginUsers");
   const response = await fetch(`${BASE_URL}/login`, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({ username, password }),
     headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Credentials": "true",
+      'Content-Type': 'application/json',
     },
-    credentials: "include",
-  });
-  console.log(response.headers);
+    credentials: 'include',
+  })
   if (response.status !== 200) {
-    throw new Error("Incorrect credentials! Please try again.");
+    throw new Error('Incorrect credentials! Please try again.')
   }
-  const loginUser = await response.json();
+  const loginUser = await response.json()
 
-  return loginUser;
+  return loginUser
 }
-
-// const authOptions = {
-// this needs to put the cookie in the fetch... ?
-// }
 
 export async function fetchEmotionalTasks() {
   const response = await fetch(`${BASE_URL}/tasks`)
@@ -69,9 +54,9 @@ export async function fetchSeniors() {
 }
 
 export async function fetchUser(id: number) {
-  const response = await fetch(`${BASE_URL}/user/${id}`);
-  const user = await response.json();
-  return user;
+  const response = await fetch(`${BASE_URL}/user/${id}`)
+  const user = await response.json()
+  return user
 }
 
 export async function fetchVolunteers() {
@@ -92,32 +77,40 @@ export async function fetchTasksWithResponder() {
 }
 
 export type RelevantTasks = {
-  openTasks: Task[];
-  pendingTasks: Task[];
-  acceptedTasks: Task[];
-};
-export async function getRelevantTasks(): Promise<RelevantTasks> {
-  const response = await fetch(`${BASE_URL}/relevant-tasks`);
-  const relevantTasks = await response.json();
-  return relevantTasks;
+  openTasks: Task[]
+  pendingTasks: Task[]
+  acceptedTasks: Task[]
+}
+export async function getRelevantTasks(
+  token: string | undefined
+): Promise<RelevantTasks> {
+  const response = await fetch(`${BASE_URL}/relevant-tasks`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    credentials: 'include',
+  })
+  const relevantTasks = await response.json()
+  return relevantTasks
 }
 
 interface ICreateEmotionalTaskPayload {
-  author: string | undefined;
-  authorId: string | undefined;
-  type: string;
-  description: string;
-  scheduledDate: string;
-  location: string;
+  author: string | undefined
+  authorId: string | undefined
+  type: string
+  description: string
+  scheduledDate: string
+  location: string
 }
 
 interface ICreatePhysicalTaskPayload {
-  author: string | undefined;
-  authorId: string | undefined;
-  type: string;
-  description: string;
-  scheduledDate: string;
-  location: string;
+  author: string | undefined
+  authorId: string | undefined
+  type: string
+  description: string
+  scheduledDate: string
+  location: string
 }
 
 export async function createEmotionalTask({
@@ -144,12 +137,10 @@ export async function createEmotionalTask({
   })
   const newEmotionalTask = await response.json()
 
-
   if (response.status === 400) {
     throw new Error('Can not create the task.')
   }
-  return newEmotionalTask;
-
+  return newEmotionalTask
 }
 
 export async function createPhysicalTask({
@@ -172,22 +163,23 @@ export async function createPhysicalTask({
       description,
       scheduledDate,
       location,
-    },
-  );
-  const newPhysicalTask = response.data;
-  return newPhysicalTask;
+    }),
+  })
+
+  const newPhysicalTask = response.body
+  return newPhysicalTask
 }
 
-export default apiClient;
+export default apiClient
 
 interface ICreateVolunteerPayload {
-  name: string;
-  username: string;
-  password: string;
-  email: string;
-  address: string;
-  phoneNumber: string;
-  biography: string;
+  name: string
+  username: string
+  password: string
+  email: string
+  address: string
+  phoneNumber: string
+  biography: string
 }
 
 export async function createVolunteer({
@@ -200,9 +192,9 @@ export async function createVolunteer({
   biography,
 }: ICreateVolunteerPayload) {
   const response = await fetch(`${BASE_URL}/volunteers`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       name,
@@ -214,28 +206,22 @@ export async function createVolunteer({
       biography,
     }),
   })
-  const newPhysicalTask = await response.json()
+  const newVolunteer = await response.json()
   if (response.status === 400) {
-    throw new Error('Can not create the task.')
+    throw new Error('Can not create new volunteer profile.')
   }
-  return newPhysicalTask
-  });
-  const newVolunteer = await response.json();
-  if (response.status === 400) {
-    throw new Error("Can not create new volunteer profile.");
-  }
-  return newVolunteer;
+  return newVolunteer
 }
 
 interface ICreateSeniorPayload {
-  name: string;
-  username: string;
-  password: string;
-  email: string;
-  medicalNeeds: string;
-  address: string;
-  phoneNumber: string;
-  biography: string;
+  name: string
+  username: string
+  password: string
+  email: string
+  medicalNeeds: string
+  address: string
+  phoneNumber: string
+  biography: string
 }
 
 export async function createSenior({
@@ -249,9 +235,9 @@ export async function createSenior({
   biography,
 }: ICreateSeniorPayload) {
   const response = await fetch(`${BASE_URL}/seniors`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       name,
@@ -263,11 +249,10 @@ export async function createSenior({
       phoneNumber,
       biography,
     }),
-  });
-  const newSenior = await response.json();
+  })
+  const newSenior = await response.json()
   if (response.status === 400) {
-    throw new Error(newSenior.message);
+    throw new Error(newSenior.message)
   }
-  return newSenior;
+  return newSenior
 }
-
