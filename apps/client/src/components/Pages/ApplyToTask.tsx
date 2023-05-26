@@ -58,14 +58,7 @@ const ApplyToTask = () => {
                 {task.location}
               </div>
               <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
-                <option key="" value="">
-                  Select Volunteer
-                </option>
-                {volunteers.map((volunteer) => (
-                  <option key={volunteer.id} value={volunteer.username}>
-                    {volunteer.username}
-                  </option>
-                ))}
+                <option key="" value=""></option>
               </div>
             </div>
             <div className="flex justify-center">

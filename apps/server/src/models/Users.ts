@@ -1,7 +1,6 @@
 import { User, PrismaClient, Volunteer, Senior } from "@prisma/client";
 import { NextFunction } from "express";
 
-
 const prismaInstance = new PrismaClient();
 
 const User = {
@@ -51,7 +50,12 @@ const User = {
     return updateUser;
   },
 
-  async findUser(username: string): Promise<User> {
+  async findUser(username: string): Promise<
+    User & {
+      volunteer: Volunteer | null;
+      senior: Senior | null;
+    }
+  > {
     const user = await prismaInstance.user.findUnique({
       where: { username },
       include: {
@@ -64,35 +68,6 @@ const User = {
     }
     return user;
   },
-
 };
-
-// username,
-// name,
-// email,
-// password,
-// phoneNumber,
-// biography,
-// medicalNeeds,
-// address,
-// sentMessages: {
-//   create: [],
-// },
-// receivedMessages: {
-//   create: [],
-// },
-// senior: {
-//   create: {
-//     authorTask: { create: [] },
-//   },
-
-// model Messages {
-//   id         Int    @id @default(autoincrement())
-//   message    String
-//   senderId   Int?
-//   sender     User?  @relation(name: "sender", fields: [senderId], references: [id], onDelete: SetNull)
-//   receiverId Int?
-//   receiver   User?  @relation(name: "receiver", fields: [receiverId], references: [id], onDelete: SetNull)
-// }
 
 export default User;

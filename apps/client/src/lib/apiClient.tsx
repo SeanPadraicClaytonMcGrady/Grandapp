@@ -1,32 +1,49 @@
+
 import { Task } from '../types'
+
+import { EmotionalTask, PhysicalTask, Task } from "../types";
+import Cookies from "js-cookie";
+import { AxiosRequestConfig } from "axios";
+
 
 const BASE_URL = 'http://localhost:8080'
 
+import axios from "axios";
+const apiClient = axios.create({
+  baseURL: BASE_URL,
+  headers: { "Content-Type": "application/json" },
+});
+
 interface LoginUsers {
-  username: string
-  password: string
+  username: string;
+  password: string;
 }
 
-let authToken = localStorage.getItem('token')
+//function that reads cookies
 
 export async function fetchLoginUsers({ username, password }: LoginUsers) {
-  const credentials = window.btoa(`${username}:${password}`)
+  console.log("here is the start of fetchLoginUsers");
   const response = await fetch(`${BASE_URL}/login`, {
-    method: 'POST',
+    method: "POST",
+    body: JSON.stringify({ username, password }),
     headers: {
-      Authorization: `Basic ${credentials}`,
-      'Content-type': 'application/json',
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Credentials": "true",
     },
-  })
+    credentials: "include",
+  });
+  console.log(response.headers);
   if (response.status !== 200) {
-    throw new Error('Incorrect credentials! Please try again.')
+    throw new Error("Incorrect credentials! Please try again.");
   }
-  const loginUser = await response.json()
+  const loginUser = await response.json();
 
-  localStorage.setItem('token', loginUser.token)
-
-  return loginUser
+  return loginUser;
 }
+
+// const authOptions = {
+// this needs to put the cookie in the fetch... ?
+// }
 
 export async function fetchEmotionalTasks() {
   const response = await fetch(`${BASE_URL}/tasks`)
@@ -44,10 +61,17 @@ export async function fetchTask(id: number) {
   const individualTask = await response.json()
   return individualTask
 }
+
 export async function fetchSeniors() {
   const response = await fetch(`${BASE_URL}/seniors`)
   const seniors = await response.json()
   return seniors
+}
+
+export async function fetchUser(id: number) {
+  const response = await fetch(`${BASE_URL}/user/${id}`);
+  const user = await response.json();
+  return user;
 }
 
 export async function fetchVolunteers() {
@@ -68,36 +92,32 @@ export async function fetchTasksWithResponder() {
 }
 
 export type RelevantTasks = {
-  openTasks: Task[]
-  pendingTasks: Task[]
-  acceptedTasks: Task[]
-}
+  openTasks: Task[];
+  pendingTasks: Task[];
+  acceptedTasks: Task[];
+};
 export async function getRelevantTasks(): Promise<RelevantTasks> {
-  const response = await fetch(`${BASE_URL}/relevant-tasks`, {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  })
-  const relevantTasks = await response.json()
-  return relevantTasks
+  const response = await fetch(`${BASE_URL}/relevant-tasks`);
+  const relevantTasks = await response.json();
+  return relevantTasks;
 }
 
 interface ICreateEmotionalTaskPayload {
-  author: string
-  authorId: string
-  type: string
-  description: string
-  scheduledDate: string
-  location: string
+  author: string | undefined;
+  authorId: string | undefined;
+  type: string;
+  description: string;
+  scheduledDate: string;
+  location: string;
 }
 
 interface ICreatePhysicalTaskPayload {
-  author: string
-  authorId: string
-  type: string
-  description: string
-  scheduledDate: string
-  location: string
+  author: string | undefined;
+  authorId: string | undefined;
+  type: string;
+  description: string;
+  scheduledDate: string;
+  location: string;
 }
 
 export async function createEmotionalTask({
@@ -122,15 +142,16 @@ export async function createEmotionalTask({
       location,
     }),
   })
-  console.log(response, '^ This is resposne!')
   const newEmotionalTask = await response.json()
-  console.log(newEmotionalTask, '^ This is newEmotionalTask')
+
 
   if (response.status === 400) {
     throw new Error('Can not create the task.')
   }
-  return newEmotionalTask
+  return newEmotionalTask;
+
 }
+
 export async function createPhysicalTask({
   author,
   authorId,
@@ -151,6 +172,46 @@ export async function createPhysicalTask({
       description,
       scheduledDate,
       location,
+    },
+  );
+  const newPhysicalTask = response.data;
+  return newPhysicalTask;
+}
+
+export default apiClient;
+
+interface ICreateVolunteerPayload {
+  name: string;
+  username: string;
+  password: string;
+  email: string;
+  address: string;
+  phoneNumber: string;
+  biography: string;
+}
+
+export async function createVolunteer({
+  name,
+  username,
+  password,
+  email,
+  address,
+  phoneNumber,
+  biography,
+}: ICreateVolunteerPayload) {
+  const response = await fetch(`${BASE_URL}/volunteers`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      username,
+      password,
+      email,
+      address,
+      phoneNumber,
+      biography,
     }),
   })
   const newPhysicalTask = await response.json()
@@ -158,24 +219,55 @@ export async function createPhysicalTask({
     throw new Error('Can not create the task.')
   }
   return newPhysicalTask
+  });
+  const newVolunteer = await response.json();
+  if (response.status === 400) {
+    throw new Error("Can not create new volunteer profile.");
+  }
+  return newVolunteer;
 }
 
-// export async function uploadPhoto(photo: File) {
-//   const formData = new FormData()
-//   console.log(photo)
-//   formData.append('file', photo)
-//   try {
-//     const response = await fetch(`${BASE_URL}/uploadphoto`, {
-//       method: 'POST',
+interface ICreateSeniorPayload {
+  name: string;
+  username: string;
+  password: string;
+  email: string;
+  medicalNeeds: string;
+  address: string;
+  phoneNumber: string;
+  biography: string;
+}
 
-//       body: formData,
-//     })
-//     if (response.ok) {
-//       console.log('File uploaded')
-//     } else {
-//       console.error('Upload failed')
-//     }
-//   } catch (e) {
-//     console.error('Upload failed', e)
-//   }
-// }
+export async function createSenior({
+  name,
+  username,
+  password,
+  email,
+  medicalNeeds,
+  address,
+  phoneNumber,
+  biography,
+}: ICreateSeniorPayload) {
+  const response = await fetch(`${BASE_URL}/seniors`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name,
+      username,
+      password,
+      email,
+      medicalNeeds,
+      address,
+      phoneNumber,
+      biography,
+    }),
+  });
+  const newSenior = await response.json();
+  if (response.status === 400) {
+    throw new Error(newSenior.message);
+  }
+  return newSenior;
+}
+

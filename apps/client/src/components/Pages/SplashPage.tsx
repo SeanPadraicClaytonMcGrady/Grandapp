@@ -7,6 +7,7 @@ const SplashPage = () => {
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
+
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
@@ -17,10 +18,7 @@ const SplashPage = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    //EMAIL VALIDATION
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;!emailRegex.test
-    if ((!username)) {
+    if (!username) {
       setError("Invalid username format");
     }
 
@@ -29,21 +27,18 @@ const SplashPage = () => {
       setError("Please enter your password");
     }
     setError(null);
-    // setEmail();
-    // setPassword("");
     try {
       const user = await fetchLoginUsers({ username, password });
-
-      if (user.type === "senior") {
+      if (user.type == "senior") {
         navigate("/senior");
-      } else if (user.type === "volunteer") {
+      } else if (user.type == "volunteer") {
         navigate("/volunteer");
       } else {
         navigate("/welcome");
       }
     } catch (e) {
-      const error = e as Error
-      setError(error.message)
+      const error = e as Error;
+      setError(error.message);
     }
   };
   return (
@@ -94,11 +89,15 @@ const SplashPage = () => {
                 Proceed
               </button>
             </div>
-
+            <div className="flex justify-between">
+              <div>Don't have an account?</div>
+              <div>
+                <Link to="/register">Register here</Link>
+              </div>
+            </div>
             <div className="text-red-500 px-4 py-2 font-bold">
               <p> {error}</p>
             </div>
-
           </form>
         </div>
       </div>

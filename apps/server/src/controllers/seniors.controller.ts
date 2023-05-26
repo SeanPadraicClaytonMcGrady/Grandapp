@@ -2,14 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import Senior from "../models/Seniors";
 import User from "../models/Users";
 import { emit } from "process";
-import bcrypt from 'bcrypt'
+import bcrypt from "bcrypt";
 
-
-const saltRounds = 10
+const saltRounds = 10;
 
 async function hashPassword(pasw: string): Promise<string> {
-  const hashed = await bcrypt.hash(pasw, saltRounds)
-  return hashed
+  const hashed = await bcrypt.hash(pasw, saltRounds);
+  return hashed;
 }
 
 const SeniorsController = {
@@ -25,11 +24,20 @@ const SeniorsController = {
         medicalNeeds,
         address,
       } = req.body;
-      if (!username || !name || !password || !email || !phoneNumber || !biography || !medicalNeeds || !address) {
-        throw new Error('Missing parameters.')
+      if (
+        !username ||
+        !name ||
+        !password ||
+        !email ||
+        !phoneNumber ||
+        !biography ||
+        !medicalNeeds ||
+        !address
+      ) {
+        throw new Error("Missing parameters.");
       }
       //We need to add hashes to passwords.
-      const hashedPasw = await hashPassword(password)
+      const hashedPasw = await hashPassword(password);
       const newSenior = await Senior.createSenior(
         username,
         name,
@@ -48,11 +56,12 @@ const SeniorsController = {
         biography: newSenior.biography,
         medicalNeeds: newSenior.medicalNeeds,
         address: newSenior.address,
-      }
+      };
 
       return res.status(201).json(resp);
     } catch (e) {
-      next(e);
+      res.status(400).json({ message: "credentials already in use" });
+      // next(e);
     }
   },
 
