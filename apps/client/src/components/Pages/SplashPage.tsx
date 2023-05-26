@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { fetchLoginUsers } from "../../lib/apiClient";
 const SplashPage = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [isSeniorChecked, setIsSeniorChecked] = useState(false);
-  const [isVolunteerChecked, setIsVolunteerChecked] = useState(false);
 
   const navigate = useNavigate();
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,16 +13,6 @@ const SplashPage = () => {
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
-  };
-
-  const handleSeniorChange = () => {
-    setIsSeniorChecked(true);
-    setIsVolunteerChecked(false);
-  };
-
-  const handleVolunteerChange = () => {
-    setIsSeniorChecked(false);
-    setIsVolunteerChecked(true);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

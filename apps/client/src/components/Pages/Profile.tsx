@@ -1,7 +1,9 @@
+UploadPhoto
 import React from "react";
+import UploadPhoto from "./UploadPhoto";
 
 const Profile = () => {
-  return <div>Profile</div>;
+  return <UploadPhoto />
 };
 
 export default Profile;

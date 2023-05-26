@@ -1,104 +1,103 @@
-import { Task } from "../types";
+import { Task } from '../types'
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = 'http://localhost:8080'
 
 interface LoginUsers {
-    username: string,
-    password: string
+  username: string
+  password: string
 }
 
 let authToken = localStorage.getItem('token')
 
 export async function fetchLoginUsers({ username, password }: LoginUsers) {
-    const credentials = window.btoa(`${username}:${password}`)
-    const response = await fetch(`${BASE_URL}/login`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Basic ${credentials}`,
-            'Content-type': 'application/json'
-        },
-    })
-    if (response.status !== 200) {
-        throw new Error('Incorrect credentials! Please try again.')
-    }
-    const loginUser = await response.json()
+  const credentials = window.btoa(`${username}:${password}`)
+  const response = await fetch(`${BASE_URL}/login`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Basic ${credentials}`,
+      'Content-type': 'application/json',
+    },
+  })
+  if (response.status !== 200) {
+    throw new Error('Incorrect credentials! Please try again.')
+  }
+  const loginUser = await response.json()
 
-    localStorage.setItem("token", loginUser.token);
+  localStorage.setItem('token', loginUser.token)
 
-    return loginUser
+  return loginUser
 }
 
 export async function fetchEmotionalTasks() {
-  const response = await fetch(`${BASE_URL}/tasks`);
-  const emotionalTasks = await response.json();
-  return emotionalTasks;
+  const response = await fetch(`${BASE_URL}/tasks`)
+  const emotionalTasks = await response.json()
+  return emotionalTasks
 }
 export async function fetchPhysicalTasks() {
-  const response = await fetch(`${BASE_URL}/tasks`);
-  const physicalTasks = await response.json();
-  return physicalTasks;
+  const response = await fetch(`${BASE_URL}/tasks`)
+  const physicalTasks = await response.json()
+  return physicalTasks
 }
 
 export async function fetchTask(id: number) {
-  const response = await fetch(`${BASE_URL}/tasks/${id}`);
-  const individualTask = await response.json();
-  return individualTask;
+  const response = await fetch(`${BASE_URL}/tasks/${id}`)
+  const individualTask = await response.json()
+  return individualTask
 }
 export async function fetchSeniors() {
-  const response = await fetch(`${BASE_URL}/seniors`);
-  const seniors = await response.json();
-  return seniors;
+  const response = await fetch(`${BASE_URL}/seniors`)
+  const seniors = await response.json()
+  return seniors
 }
 
 export async function fetchVolunteers() {
-  const response = await fetch(`${BASE_URL}/volunteers`);
-  const volunteers = await response.json();
-  return volunteers;
+  const response = await fetch(`${BASE_URL}/volunteers`)
+  const volunteers = await response.json()
+  return volunteers
 }
 
 export async function fetchTasksNoResponder() {
-  const response = await fetch(`${BASE_URL}/seniors/tasks/open`);
-  const tasks = await response.json();
-  return tasks;
+  const response = await fetch(`${BASE_URL}/seniors/tasks/open`)
+  const tasks = await response.json()
+  return tasks
 }
 export async function fetchTasksWithResponder() {
-  const response = await fetch(`${BASE_URL}/seniors/tasks/responder`);
-  const tasks = await response.json();
-  return tasks;
+  const response = await fetch(`${BASE_URL}/seniors/tasks/responder`)
+  const tasks = await response.json()
+  return tasks
 }
 
 export type RelevantTasks = {
-
-    openTasks: Task[],
-    pendingTasks: Task[],
-    acceptedTasks: Task[]
+  openTasks: Task[]
+  pendingTasks: Task[]
+  acceptedTasks: Task[]
 }
 export async function getRelevantTasks(): Promise<RelevantTasks> {
-    const response = await fetch(`${BASE_URL}/relevant-tasks`, {
-        headers: {
-            Authorization: `Bearer ${authToken}`
-        }
-    })
-    const relevantTasks = await response.json()
-    return relevantTasks
+  const response = await fetch(`${BASE_URL}/relevant-tasks`, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  })
+  const relevantTasks = await response.json()
+  return relevantTasks
 }
 
 interface ICreateEmotionalTaskPayload {
-  author: string;
-  authorId: string;
-  type: string;
-  description: string;
-  scheduledDate: string;
-  location: string;
+  author: string
+  authorId: string
+  type: string
+  description: string
+  scheduledDate: string
+  location: string
 }
 
 interface ICreatePhysicalTaskPayload {
-  author: string;
-  authorId: string;
-  type: string;
-  description: string;
-  scheduledDate: string;
-  location: string;
+  author: string
+  authorId: string
+  type: string
+  description: string
+  scheduledDate: string
+  location: string
 }
 
 export async function createEmotionalTask({
@@ -110,9 +109,9 @@ export async function createEmotionalTask({
   location,
 }: ICreateEmotionalTaskPayload) {
   const response = await fetch(`${BASE_URL}/emotionalTasks`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       author,
@@ -122,15 +121,15 @@ export async function createEmotionalTask({
       scheduledDate,
       location,
     }),
-  });
-  console.log(response, "^ This is resposne!");
-  const newEmotionalTask = await response.json();
-  console.log(newEmotionalTask, "^ This is newEmotionalTask");
+  })
+  console.log(response, '^ This is resposne!')
+  const newEmotionalTask = await response.json()
+  console.log(newEmotionalTask, '^ This is newEmotionalTask')
 
   if (response.status === 400) {
-    throw new Error("Can not create the task.");
+    throw new Error('Can not create the task.')
   }
-  return newEmotionalTask;
+  return newEmotionalTask
 }
 export async function createPhysicalTask({
   author,
@@ -141,9 +140,9 @@ export async function createPhysicalTask({
   location,
 }: ICreatePhysicalTaskPayload) {
   const response = await fetch(`${BASE_URL}/physicalTasks`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       author,
@@ -153,10 +152,30 @@ export async function createPhysicalTask({
       scheduledDate,
       location,
     }),
-  });
-  const newPhysicalTask = await response.json();
+  })
+  const newPhysicalTask = await response.json()
   if (response.status === 400) {
-    throw new Error("Can not create the task.");
+    throw new Error('Can not create the task.')
   }
-  return newPhysicalTask;
+  return newPhysicalTask
 }
+
+// export async function uploadPhoto(photo: File) {
+//   const formData = new FormData()
+//   console.log(photo)
+//   formData.append('file', photo)
+//   try {
+//     const response = await fetch(`${BASE_URL}/uploadphoto`, {
+//       method: 'POST',
+
+//       body: formData,
+//     })
+//     if (response.ok) {
+//       console.log('File uploaded')
+//     } else {
+//       console.error('Upload failed')
+//     }
+//   } catch (e) {
+//     console.error('Upload failed', e)
+//   }
+// }
