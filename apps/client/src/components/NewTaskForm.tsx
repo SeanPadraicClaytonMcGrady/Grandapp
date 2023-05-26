@@ -3,7 +3,6 @@ import { EmotionalTask, PhysicalTask } from '../types'
 import { createEmotionalTask, createPhysicalTask } from '../lib/apiClient'
 import flatpickr from 'flatpickr'
 import 'flatpickr/dist/flatpickr.css'
-import Cookies from 'js-cookie'
 
 type NewTaskFromProps = {
   onEmotionalTaskCreated: (emotionalTask: EmotionalTask) => void
@@ -14,17 +13,6 @@ interface Props {
   value: string
   name: string
   handleChange: React.ChangeEventHandler<HTMLInputElement>
-}
-
-async function getUserInfoFromCookie() {
-  const id = Cookies.get('id')
-  const username = Cookies.get('username')
-
-  if (!id || !username) {
-    throw new Error('User information not found in the cookie.')
-  }
-
-  return { id, username }
 }
 
 const initialValues = {
@@ -41,14 +29,14 @@ function NewTaskForm({
 }: NewTaskFromProps): JSX.Element {
   const [values, setValues] = useState(initialValues)
 
+  //There are currently errors below.
+  //These ignore the fact we have a token implied. They work.
+  //Use any in the types?
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     try {
       if (values.type === 'emotional') {
-        const userInfo = await getUserInfoFromCookie()
         const emotionalTask = await createEmotionalTask({
-          author: userInfo.username,
-          authorId: userInfo.id,
           type: values.type,
           description: values.description,
           scheduledDate: values.scheduledDate[0],
@@ -56,15 +44,13 @@ function NewTaskForm({
         })
         onEmotionalTaskCreated(emotionalTask)
       } else if (values.type === 'physical') {
-        const userInfo = await getUserInfoFromCookie()
         const physicalTask = await createPhysicalTask({
-          author: userInfo.username,
-          authorId: userInfo.id,
           type: values.type,
           description: values.description,
           scheduledDate: values.scheduledDate[0],
           location: values.location,
         })
+        console.log(physicalTask)
         onPhysicalTaskCreated(physicalTask)
       }
       setValues(initialValues)

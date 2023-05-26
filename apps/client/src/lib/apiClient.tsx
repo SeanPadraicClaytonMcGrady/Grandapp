@@ -2,12 +2,6 @@ import { Task } from '../types'
 
 const BASE_URL = 'http://localhost:8080'
 
-import axios from 'axios'
-const apiClient = axios.create({
-  baseURL: BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
-})
-
 interface LoginUsers {
   username: string
   password: string
@@ -96,8 +90,7 @@ export async function getRelevantTasks(
 }
 
 interface ICreateEmotionalTaskPayload {
-  author: string | undefined
-  authorId: string | undefined
+  token: string | undefined
   type: string
   description: string
   scheduledDate: string
@@ -105,8 +98,7 @@ interface ICreateEmotionalTaskPayload {
 }
 
 interface ICreatePhysicalTaskPayload {
-  author: string | undefined
-  authorId: string | undefined
+  token: string | undefined
   type: string
   description: string
   scheduledDate: string
@@ -114,8 +106,7 @@ interface ICreatePhysicalTaskPayload {
 }
 
 export async function createEmotionalTask({
-  author,
-  authorId,
+  token,
   type,
   description,
   scheduledDate,
@@ -125,10 +116,10 @@ export async function createEmotionalTask({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
+    credentials: 'include',
     body: JSON.stringify({
-      author,
-      authorId,
       type,
       description,
       scheduledDate,
@@ -137,15 +128,11 @@ export async function createEmotionalTask({
   })
   const newEmotionalTask = await response.json()
 
-  if (response.status === 400) {
-    throw new Error('Can not create the task.')
-  }
   return newEmotionalTask
 }
 
 export async function createPhysicalTask({
-  author,
-  authorId,
+  token,
   type,
   description,
   scheduledDate,
@@ -155,10 +142,10 @@ export async function createPhysicalTask({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
+    credentials: 'include',
     body: JSON.stringify({
-      author,
-      authorId,
       type,
       description,
       scheduledDate,
@@ -166,11 +153,10 @@ export async function createPhysicalTask({
     }),
   })
 
-  const newPhysicalTask = response.body
+  const newPhysicalTask = await response.json()
+  console.log(newPhysicalTask)
   return newPhysicalTask
 }
-
-export default apiClient
 
 interface ICreateVolunteerPayload {
   name: string
