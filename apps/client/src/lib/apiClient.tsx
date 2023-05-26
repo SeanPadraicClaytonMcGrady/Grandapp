@@ -1,8 +1,12 @@
+
+import { Task } from '../types'
+
 import { EmotionalTask, PhysicalTask, Task } from "../types";
 import Cookies from "js-cookie";
 import { AxiosRequestConfig } from "axios";
 
-const BASE_URL = "http://localhost:8080";
+
+const BASE_URL = 'http://localhost:8080'
 
 import axios from "axios";
 const apiClient = axios.create({
@@ -16,22 +20,6 @@ interface LoginUsers {
 }
 
 //function that reads cookies
-
-//fetch(
-//   options {
-//   body
-//   headers: {
-//     authorization : getcookies -> token:
-//   }
-// }
-// )
-
-// const authOptions: AxiosRequestConfig = {
-//   const token: string | undefined = Cookies.get("token")
-//   headers: {
-//     Authorization: `Bearer ${token}`,
-//   },
-// };
 
 export async function fetchLoginUsers({ username, password }: LoginUsers) {
   console.log("here is the start of fetchLoginUsers");
@@ -58,26 +46,26 @@ export async function fetchLoginUsers({ username, password }: LoginUsers) {
 // }
 
 export async function fetchEmotionalTasks() {
-  const response = await apiClient.get(`${BASE_URL}/tasks`);
-  const emotionalTasks = response.data;
-  return emotionalTasks;
+  const response = await fetch(`${BASE_URL}/tasks`)
+  const emotionalTasks = await response.json()
+  return emotionalTasks
 }
 export async function fetchPhysicalTasks() {
-  const response = await fetch(`${BASE_URL}/tasks`);
-  const physicalTasks = await response.json();
-  return physicalTasks;
+  const response = await fetch(`${BASE_URL}/tasks`)
+  const physicalTasks = await response.json()
+  return physicalTasks
 }
 
 export async function fetchTask(id: number) {
-  const response = await fetch(`${BASE_URL}/tasks/${id}`);
-  const individualTask = await response.json();
-  return individualTask;
+  const response = await fetch(`${BASE_URL}/tasks/${id}`)
+  const individualTask = await response.json()
+  return individualTask
 }
 
 export async function fetchSeniors() {
-  const response = await fetch(`${BASE_URL}/seniors`);
-  const seniors = await response.json();
-  return seniors;
+  const response = await fetch(`${BASE_URL}/seniors`)
+  const seniors = await response.json()
+  return seniors
 }
 
 export async function fetchUser(id: number) {
@@ -87,20 +75,20 @@ export async function fetchUser(id: number) {
 }
 
 export async function fetchVolunteers() {
-  const response = await fetch(`${BASE_URL}/volunteers`);
-  const volunteers = await response.json();
-  return volunteers;
+  const response = await fetch(`${BASE_URL}/volunteers`)
+  const volunteers = await response.json()
+  return volunteers
 }
 
 export async function fetchTasksNoResponder() {
-  const response = await fetch(`${BASE_URL}/seniors/tasks/open`);
-  const tasks = await response.json();
-  return tasks;
+  const response = await fetch(`${BASE_URL}/seniors/tasks/open`)
+  const tasks = await response.json()
+  return tasks
 }
 export async function fetchTasksWithResponder() {
-  const response = await fetch(`${BASE_URL}/seniors/tasks/responder`);
-  const tasks = await response.json();
-  return tasks;
+  const response = await fetch(`${BASE_URL}/seniors/tasks/responder`)
+  const tasks = await response.json()
+  return tasks
 }
 
 export type RelevantTasks = {
@@ -139,33 +127,29 @@ export async function createEmotionalTask({
   description,
   scheduledDate,
   location,
-}: ICreateEmotionalTaskPayload): Promise<EmotionalTask> {
-  const token = apiClient.defaults.headers.common["Authorization"];
-  const response = await apiClient.post<EmotionalTask>(
-    "/emotionalTasks",
-    {
+}: ICreateEmotionalTaskPayload) {
+  const response = await fetch(`${BASE_URL}/emotionalTasks`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
       author,
       authorId,
       type,
       description,
       scheduledDate,
       location,
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    }
-  );
+    }),
+  })
+  const newEmotionalTask = await response.json()
 
-  const newEmotionalTask = response.data;
 
   if (response.status === 400) {
-    throw new Error("Can not create the task.");
+    throw new Error('Can not create the task.')
   }
-
   return newEmotionalTask;
+
 }
 
 export async function createPhysicalTask({
@@ -175,11 +159,13 @@ export async function createPhysicalTask({
   description,
   scheduledDate,
   location,
-}: ICreatePhysicalTaskPayload): Promise<PhysicalTask> {
-  const token = apiClient.defaults.headers.common["Authorization"];
-  const response = await apiClient.post<PhysicalTask>(
-    "/emotionalTasks",
-    {
+}: ICreatePhysicalTaskPayload) {
+  const response = await fetch(`${BASE_URL}/physicalTasks`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
       author,
       authorId,
       type,
@@ -187,12 +173,6 @@ export async function createPhysicalTask({
       scheduledDate,
       location,
     },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    }
   );
   const newPhysicalTask = response.data;
   return newPhysicalTask;
@@ -233,6 +213,12 @@ export async function createVolunteer({
       phoneNumber,
       biography,
     }),
+  })
+  const newPhysicalTask = await response.json()
+  if (response.status === 400) {
+    throw new Error('Can not create the task.')
+  }
+  return newPhysicalTask
   });
   const newVolunteer = await response.json();
   if (response.status === 400) {
@@ -284,3 +270,4 @@ export async function createSenior({
   }
   return newSenior;
 }
+

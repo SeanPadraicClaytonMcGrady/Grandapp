@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { fetchLoginUsers } from "../../lib/apiClient";
 const SplashPage = () => {
   const [username, setUsername] = useState<string>("");

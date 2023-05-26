@@ -30,6 +30,18 @@ const TasksList: FC<TasksProps> = ({ tasks }) => {
                     </th>
                     <th
                       scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-[60%]"
+                    >
+                      Location
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 w-[60%]"
+                    >
+                      Date
+                    </th>
+                    <th
+                      scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
                       Type

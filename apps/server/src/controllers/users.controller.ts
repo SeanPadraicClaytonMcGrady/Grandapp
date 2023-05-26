@@ -73,7 +73,6 @@ const UsersController = {
   async loginUser(req: Request, res: Response, next: NextFunction) {
     try {
       const secret = process.env.JWT_SECRET;
-      console.log(secret);
       if (!secret) return res.status(500);
       const { username, password } = req.body;
       const existingUser = await User.findUser(username);
@@ -97,6 +96,7 @@ const UsersController = {
       return next(e);
     }
   },
+
 };
 
 function inferUserType(

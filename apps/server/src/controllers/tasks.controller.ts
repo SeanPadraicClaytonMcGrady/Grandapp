@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Tasks from "../models/Tasks";
+import { emailNotification } from "../ContactService";
 
 const TasksController = {
   async findTaskById(req: Request, res: Response, next: NextFunction) {
@@ -66,11 +67,12 @@ const TasksController = {
 
   async getRelevantTasks(req: Request, res: Response, next: NextFunction) {
     try {
+
       const userId = req.user.id;
-      console.log(req);
       const openTasks = await Tasks.getOpenTasks(userId);
       const pendingTasks = await Tasks.getPendingTasks(userId);
       const acceptedTasks = await Tasks.getToDoTasks(userId);
+
 
       return res.json({
         openTasks,
