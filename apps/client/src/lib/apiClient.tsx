@@ -69,6 +69,17 @@ export async function fetchTask(id: number) {
   const individualTask = await response.json();
   return individualTask;
 }
+
+export async function fetchUser(id: number) {
+  const response = await fetch(`${BASE_URL}/user/${id}`, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
+  const user = await response.json();
+  console.log(user);
+  return user;
+}
 export async function fetchSeniors() {
   const response = await fetch(`${BASE_URL}/seniors`);
   const seniors = await response.json();
@@ -82,7 +93,11 @@ export async function fetchUser(id: number) {
 }
 
 export async function fetchVolunteers() {
-  const response = await fetch(`${BASE_URL}/volunteers`);
+  const response = await fetch(`${BASE_URL}/volunteers`, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
   const volunteers = await response.json();
   return volunteers;
 }
@@ -138,6 +153,7 @@ export async function createEmotionalTask({
   description,
   scheduledDate,
   location,
+
 }: ICreateEmotionalTaskPayload): Promise<EmotionalTask> {
   const token = apiClient.defaults.headers.common["Authorization"];
   const response = await apiClient.post<EmotionalTask>(
@@ -174,6 +190,7 @@ export async function createPhysicalTask({
   description,
   scheduledDate,
   location,
+
 }: ICreatePhysicalTaskPayload): Promise<PhysicalTask> {
   const token = apiClient.defaults.headers.common["Authorization"];
   const response = await apiClient.post<PhysicalTask>(
@@ -198,3 +215,90 @@ export async function createPhysicalTask({
 }
 
 export default apiClient;
+
+interface ICreateVolunteerPayload {
+  name: string;
+  username: string;
+  password: string;
+  email: string;
+  address: string;
+  phoneNumber: string;
+  biography: string;
+}
+
+export async function createVolunteer({
+  name,
+  username,
+  password,
+  email,
+  address,
+  phoneNumber,
+  biography,
+}: ICreateVolunteerPayload) {
+  const response = await fetch(`${BASE_URL}/volunteers`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify({
+      name,
+      username,
+      password,
+      email,
+      address,
+      phoneNumber,
+      biography,
+    }),
+  });
+  const newVolunteer = await response.json();
+  if (response.status === 400) {
+    throw new Error("Can not create new volunteer profile.");
+  }
+  return newVolunteer;
+}
+
+interface ICreateSeniorPayload {
+  name: string;
+  username: string;
+  password: string;
+  email: string;
+  medicalNeeds: string;
+  address: string;
+  phoneNumber: string;
+  biography: string;
+}
+
+export async function createSenior({
+  name,
+  username,
+  password,
+  email,
+  medicalNeeds,
+  address,
+  phoneNumber,
+  biography,
+}: ICreateSeniorPayload) {
+  const response = await fetch(`${BASE_URL}/seniors`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify({
+      name,
+      username,
+      password,
+      email,
+      medicalNeeds,
+      address,
+      phoneNumber,
+      biography,
+    }),
+  });
+  const newSenior = await response.json();
+  if (response.status === 400) {
+    throw new Error(newSenior.message);
+  }
+  return newSenior;
+}

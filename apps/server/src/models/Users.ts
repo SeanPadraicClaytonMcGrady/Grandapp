@@ -50,9 +50,12 @@ const User = {
     return updateUser;
   },
 
-  async findUser(
-    username: string
-  ): Promise<User & { volunteer: Volunteer | null; senior: Senior | null }> {
+  async findUser(username: string): Promise<
+    User & {
+      volunteer: Volunteer | null;
+      senior: Senior | null;
+    }
+  > {
     const user = await prismaInstance.user.findUnique({
       where: { username },
       include: {

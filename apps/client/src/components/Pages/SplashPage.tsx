@@ -7,6 +7,7 @@ const SplashPage = () => {
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
+
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
@@ -88,7 +89,12 @@ const SplashPage = () => {
                 Proceed
               </button>
             </div>
-
+            <div className="flex justify-between">
+              <div>Don't have an account?</div>
+              <div>
+                <Link to="/register">Register here</Link>
+              </div>
+            </div>
             <div className="text-red-500 px-4 py-2 font-bold">
               <p> {error}</p>
             </div>

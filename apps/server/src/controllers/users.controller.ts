@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../models/Users";
+import { Volunteer, Senior } from "@prisma/client";
+import dotenv from "dotenv";
+dotenv.config();
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import atob from "atob";
-import { Senior, Volunteer } from "@prisma/client";
 // import  passwordUtils  from "../utils/passwordUtils";
 
 const saltRounds = 10;
