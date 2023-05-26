@@ -4,19 +4,14 @@ import SeniorsController from "./controllers/seniors.controller";
 import UsersController from "./controllers/users.controller";
 import MessagesController from "./controllers/messages.controller";
 import TasksController from "./controllers/tasks.controller";
-import { ensureSenior, ensureVolunteer } from "./middlewares/ensureRoles";
 import authMiddleware from "./middlewares/authentication";
 
 const router = express.Router();
+router.post("/login", UsersController.loginUser);
 
 const authRouter = express.Router();
 authRouter.use(authMiddleware);
-
-const seniorRouter = express.Router();
-seniorRouter.use(ensureSenior);
-
-const volunteerRouter = express.Router();
-volunteerRouter.use(ensureVolunteer);
+router.use(authRouter);
 
 //volunteers, seniors, users
 router.post("/volunteers", VolunteersController.create);
@@ -25,7 +20,6 @@ router.get("/seniors", SeniorsController.getSeniors);
 router.get("/volunteers", VolunteersController.getVolunteers);
 router.get("/users", UsersController.getUsers);
 
-router.post("/login", UsersController.loginUser);
 router.get(
   "/seniors/username",
   authMiddleware,
@@ -66,9 +60,4 @@ authRouter.post("/emotionalTasks", TasksController.newEmotionalTask);
 authRouter.post("/physicalTasks", TasksController.newPhysicalTask);
 authRouter.put("/tasks/:id", TasksController.editTaskById);
 authRouter.delete("/tasks/:id", TasksController.deleteTaskById);
-
-router.use(authRouter);
-router.use(seniorRouter);
-router.use(volunteerRouter);
-
 export default router;

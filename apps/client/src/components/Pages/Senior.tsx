@@ -27,9 +27,7 @@ const Senior = () => {
       {acceptedTasks.length > 0 && <TasksList tasks={acceptedTasks} />}
       {pendingTasks.length > 0 && <TasksList tasks={pendingTasks} />}
       {openTasks.length > 0 && <TasksList tasks={openTasks} />}
-      <div className="flex justify-center">
-        <NewTaskForm />
-      </div>
+      <div className="flex justify-center">{/* <NewTaskForm /> */}</div>
     </>
   );
 };

@@ -70,35 +70,28 @@ const UsersController = {
 
   async loginUser(req: Request, res: Response, next: NextFunction) {
     try {
-      const authHeader = req.headers.authorization?.split("Basic ");
-      if (!authHeader) {
-        return res.status(401).json({
-          message: "There are no headers",
-        });
-      }
-      const decoded = atob(authHeader.toString());
-      const [username, password] = decoded.split(":");
-      const user = await User.findUser(username);
-      if (!user) {
-        return res.status(401).json({
-          message: "User does not exist",
-        });
-      }
-      const checkPasw = checkPassword(password, user.password);
+      const secret = process.env.JWT_SECRET;
+      console.log(secret);
+      if (!secret) return res.status(500);
+      const { username, password } = req.body;
+      const existingUser = await User.findUser(username);
+      const checkPasw = checkPassword(password, existingUser.password);
+
       if (checkPasw === false) {
         return res.status(401).json({
-          message: "Incorrect password.",
+          message: "Wrong credentials.",
         });
       }
-      const secret = process.env.JWT_SECRET;
-      if (!secret) return res.status(500);
-      const token = jwt.sign(user, secret);
-      return res.status(200).json({
-        id: user.id,
-        user: user.username,
-        token,
-        type: inferUserType(user),
+
+      const token = jwt.sign(username, secret);
+      res.cookie("AUTHORIZATION", `BEARER ${token}`, {
+        maxAge: 900000,
+        httpOnly: false,
       });
+      // res.setHeader(`Set-Cookie`, `BEARER ${token}`);
+      return res
+        .status(200)
+        .json({ ...existingUser, type: inferUserType(existingUser), token });
     } catch (e) {
       return next(e);
     }

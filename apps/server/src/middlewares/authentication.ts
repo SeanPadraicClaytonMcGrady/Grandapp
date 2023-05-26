@@ -10,16 +10,16 @@ interface DecodedToken extends JwtPayload {
 function authMiddleware(req: Request, res: Response, next: NextFunction): any {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
-    throw new Error("Authorization header missing");
+    return res.status(401).json({ error: "Authorization header missing" });
   }
   const token = authHeader.split(" ")[1];
 
   if (!token) {
-    throw new Error("Authorization token not found");
+    return res.status(401).json({ error: "Authorization token not found" });
   }
   // eslint-disable-next-line turbo/no-undeclared-env-vars
   if (!process.env.JWT_SECRET) {
-    throw new Error("missing credentials JWS token");
+    return res.status(500).json({ error: "Missing JWT secret" });
   }
   try {
     // eslint-disable-next-line turbo/no-undeclared-env-vars
@@ -34,7 +34,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction): any {
     return next();
   } catch (e) {
     if (e instanceof Error) {
-      return res.status(404).json({ message: e.message });
+      return res.status(401).json({ error: "Invalid or expired token" });
     }
   }
 }
