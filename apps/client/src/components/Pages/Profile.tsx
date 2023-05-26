@@ -1,9 +1,8 @@
-UploadPhoto
-import React from "react";
-import UploadPhoto from "./UploadPhoto";
+import React from 'react'
+// import UploadPhoto from './UploadPhoto'
 
 const Profile = () => {
-  return <UploadPhoto />
-};
+  // return <UploadPhoto />
+}
 
-export default Profile;
+export default Profile

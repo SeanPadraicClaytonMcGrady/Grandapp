@@ -8,7 +8,8 @@ interface DecodedToken extends JwtPayload {
 }
 
 function authMiddleware(req: Request, res: Response, next: NextFunction): any {
-  const authHeader = req.headers.authorization;
+  // const authHeader = req.headers.Authorization
+  const authHeader = req.cookies.AUTHORIZATION;
   if (!authHeader) {
     return res.status(401).json({ error: "Authorization header missing" });
   }
@@ -34,6 +35,7 @@ function authMiddleware(req: Request, res: Response, next: NextFunction): any {
     return next();
   } catch (e) {
     if (e instanceof Error) {
+      console.error(e);
       return res.status(401).json({ error: "Invalid or expired token" });
     }
   }

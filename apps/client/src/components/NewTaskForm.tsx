@@ -1,52 +1,51 @@
-import React, { useEffect, useState, useRef } from "react";
-import { EmotionalTask, PhysicalTask } from "../types";
-import { createEmotionalTask, createPhysicalTask } from "../lib/apiClient";
-import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.css";
-import Cookies from "js-cookie";
+import React, { useEffect, useState, useRef } from 'react'
+import { EmotionalTask, PhysicalTask } from '../types'
+import { createEmotionalTask, createPhysicalTask } from '../lib/apiClient'
+import flatpickr from 'flatpickr'
+import 'flatpickr/dist/flatpickr.css'
+import Cookies from 'js-cookie'
 
 type NewTaskFromProps = {
-  onEmotionalTaskCreated: (emotionalTask: EmotionalTask) => void;
-  onPhysicalTaskCreated: (physicalTask: PhysicalTask) => void;
-};
+  onEmotionalTaskCreated: (emotionalTask: EmotionalTask) => void
+  onPhysicalTaskCreated: (physicalTask: PhysicalTask) => void
+}
 
 interface Props {
-  value: string;
-  name: string;
-  handleChange: React.ChangeEventHandler<HTMLInputElement>;
+  value: string
+  name: string
+  handleChange: React.ChangeEventHandler<HTMLInputElement>
 }
 
 async function getUserInfoFromCookie() {
-  const id = Cookies.get("id");
-  const username = Cookies.get("username");
+  const id = Cookies.get('id')
+  const username = Cookies.get('username')
 
   if (!id || !username) {
-    throw new Error("User information not found in the cookie.");
+    throw new Error('User information not found in the cookie.')
   }
 
-  return { id, username };
+  return { id, username }
 }
 
 const initialValues = {
-  author: "",
-  type: "",
-  scheduledDate: "",
-  description: "",
-  location: "",
-};
+  author: '',
+  type: '',
+  scheduledDate: '',
+  description: '',
+  location: '',
+}
 
 function NewTaskForm({
   onEmotionalTaskCreated,
   onPhysicalTaskCreated,
 }: NewTaskFromProps): JSX.Element {
-  const [values, setValues] = useState(initialValues);
+  const [values, setValues] = useState(initialValues)
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+    e.preventDefault()
     try {
-      if (values.type === "emotional") {
-        const userInfo = await getUserInfoFromCookie();
-        console.log(userInfo, "UserInfo heeeeeeeeeeeeeere!");
+      if (values.type === 'emotional') {
+        const userInfo = await getUserInfoFromCookie()
         const emotionalTask = await createEmotionalTask({
           author: userInfo.username,
           authorId: userInfo.id,
@@ -54,10 +53,10 @@ function NewTaskForm({
           description: values.description,
           scheduledDate: values.scheduledDate[0],
           location: values.location,
-        });
-        onEmotionalTaskCreated(emotionalTask);
-      } else if (values.type === "physical") {
-        const userInfo = await getUserInfoFromCookie();
+        })
+        onEmotionalTaskCreated(emotionalTask)
+      } else if (values.type === 'physical') {
+        const userInfo = await getUserInfoFromCookie()
         const physicalTask = await createPhysicalTask({
           author: userInfo.username,
           authorId: userInfo.id,
@@ -65,14 +64,14 @@ function NewTaskForm({
           description: values.description,
           scheduledDate: values.scheduledDate[0],
           location: values.location,
-        });
-        onPhysicalTaskCreated(physicalTask);
+        })
+        onPhysicalTaskCreated(physicalTask)
       }
-      setValues(initialValues);
+      setValues(initialValues)
     } catch (e) {
       throw new Error(
-        "Could not submit information correctly for task creation. Missing values?"
-      );
+        'Could not submit information correctly for task creation. Missing values?'
+      )
     }
   }
 
@@ -81,37 +80,37 @@ function NewTaskForm({
       | React.ChangeEvent<HTMLSelectElement>
       | React.ChangeEvent<HTMLInputElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setValues({
       ...values,
       [name]: value,
-    });
-  };
+    })
+  }
 
   const Datepicker = ({ name, handleChange }: Props) => {
-    const datepickerRef = useRef<HTMLInputElement>(null);
+    const datepickerRef = useRef<HTMLInputElement>(null)
     useEffect(() => {
       if (datepickerRef.current) {
-        const today = new Date();
-        const maximumDate = new Date(today.setDate(today.getDate() + 30));
+        const today = new Date()
+        const maximumDate = new Date(today.setDate(today.getDate() + 30))
 
         flatpickr(datepickerRef.current, {
           enableTime: true,
-          minDate: "today",
+          minDate: 'today',
           maxDate: maximumDate,
-          mode: "multiple",
+          mode: 'multiple',
           minuteIncrement: 5,
           onChange: (selectedDates: Date[]) => {
             const formattedDates = selectedDates.map((date) =>
               date.toISOString()
-            );
+            )
             handleChange({
               target: { name, value: formattedDates },
-            } as unknown as React.ChangeEvent<HTMLInputElement>);
+            } as unknown as React.ChangeEvent<HTMLInputElement>)
           },
-        });
+        })
       }
-    }, [name, handleChange]);
+    }, [name, handleChange])
 
     return (
       <>
@@ -124,8 +123,8 @@ function NewTaskForm({
           className="datepicker block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400"
         />
       </>
-    );
-  };
+    )
+  }
 
   return (
     <div>
@@ -192,7 +191,7 @@ function NewTaskForm({
         </div>
       </form>
     </div>
-  );
+  )
 }
 
-export default NewTaskForm;
+export default NewTaskForm

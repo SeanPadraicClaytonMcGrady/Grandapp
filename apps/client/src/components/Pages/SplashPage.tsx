@@ -1,46 +1,47 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { fetchLoginUsers } from "../../lib/apiClient";
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { fetchLoginUsers } from '../../lib/apiClient'
+import { Link } from 'react-router-dom'
 const SplashPage = () => {
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
+  const [username, setUsername] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const [error, setError] = useState<string | null>(null)
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
-  };
+    setUsername(event.target.value)
+  }
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
+    setPassword(event.target.value)
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
     if (!username) {
-      setError("Invalid username format");
+      setError('Invalid username format')
     }
 
     //PASSWORD VALIDATION
     if (!password) {
-      setError("Please enter your password");
+      setError('Please enter your password')
     }
-    setError(null);
+    setError(null)
     try {
-      const user = await fetchLoginUsers({ username, password });
-      if (user.type == "senior") {
-        navigate("/senior");
-      } else if (user.type == "volunteer") {
-        navigate("/volunteer");
+      const user = await fetchLoginUsers({ username, password })
+      if (user.type == 'senior') {
+        navigate('/senior')
+      } else if (user.type == 'volunteer') {
+        navigate('/volunteer')
       } else {
-        navigate("/welcome");
+        navigate('/welcome')
       }
     } catch (e) {
-      const error = e as Error;
-      setError(error.message);
+      const error = e as Error
+      setError(error.message)
     }
-  };
+  }
   return (
     <>
       <div className="min-h-screen min-w-screen flex flex-col justify-center">
@@ -102,7 +103,7 @@ const SplashPage = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default SplashPage;
+export default SplashPage
