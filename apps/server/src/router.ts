@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/login", UsersController.loginUser);
 
 const authRouter = express.Router();
-authRouter.use(authMiddleware);
+// authRouter.use(authMiddleware);
 router.use(authRouter);
 
 //volunteers, seniors, users

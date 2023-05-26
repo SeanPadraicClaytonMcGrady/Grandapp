@@ -5,12 +5,7 @@ import router from "./router";
 
 const app = express();
 
-app.use(
-  cors({
-    credentials: true,
-    exposedHeaders: ["set-cookie"],
-  })
-);
+app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(express.json());
 app.use(router);
 

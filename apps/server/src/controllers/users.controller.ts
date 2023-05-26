@@ -86,11 +86,10 @@ const UsersController = {
       }
 
       const token = jwt.sign(username, secret);
-      res.cookie("AUTHORIZATION", `BEARER ${token}`, {
-        maxAge: 900000,
-        httpOnly: false,
-      });
-      // res.setHeader(`Set-Cookie`, `BEARER ${token}`);
+      res.setHeader(
+        `Set-Cookie`,
+        `AUTHORIZATION=BEARER ${token}; Max-Age=90000;`
+      );
       return res
         .status(200)
         .json({ ...existingUser, type: inferUserType(existingUser), token });

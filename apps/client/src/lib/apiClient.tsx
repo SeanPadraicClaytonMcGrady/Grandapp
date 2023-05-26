@@ -38,7 +38,11 @@ export async function fetchLoginUsers({ username, password }: LoginUsers) {
   const response = await fetch(`${BASE_URL}/login`, {
     method: "POST",
     body: JSON.stringify({ username, password }),
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Credentials": "true",
+    },
+    credentials: "include",
   });
   console.log(response.headers);
   if (response.status !== 200) {
@@ -70,16 +74,6 @@ export async function fetchTask(id: number) {
   return individualTask;
 }
 
-export async function fetchUser(id: number) {
-  const response = await fetch(`${BASE_URL}/user/${id}`, {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  });
-  const user = await response.json();
-  console.log(user);
-  return user;
-}
 export async function fetchSeniors() {
   const response = await fetch(`${BASE_URL}/seniors`);
   const seniors = await response.json();
@@ -93,11 +87,7 @@ export async function fetchUser(id: number) {
 }
 
 export async function fetchVolunteers() {
-  const response = await fetch(`${BASE_URL}/volunteers`, {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  });
+  const response = await fetch(`${BASE_URL}/volunteers`);
   const volunteers = await response.json();
   return volunteers;
 }
@@ -120,10 +110,6 @@ export type RelevantTasks = {
 };
 export async function getRelevantTasks(): Promise<RelevantTasks> {
   const response = await fetch(`${BASE_URL}/relevant-tasks`);
-  console.log(
-    response,
-    "getRelevantTasks apiClient Response is heeeeeeeeeeeeeeeeeeeere!"
-  );
   const relevantTasks = await response.json();
   return relevantTasks;
 }
@@ -153,7 +139,6 @@ export async function createEmotionalTask({
   description,
   scheduledDate,
   location,
-
 }: ICreateEmotionalTaskPayload): Promise<EmotionalTask> {
   const token = apiClient.defaults.headers.common["Authorization"];
   const response = await apiClient.post<EmotionalTask>(
@@ -190,7 +175,6 @@ export async function createPhysicalTask({
   description,
   scheduledDate,
   location,
-
 }: ICreatePhysicalTaskPayload): Promise<PhysicalTask> {
   const token = apiClient.defaults.headers.common["Authorization"];
   const response = await apiClient.post<PhysicalTask>(
@@ -239,7 +223,6 @@ export async function createVolunteer({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${authToken}`,
     },
     body: JSON.stringify({
       name,
@@ -283,7 +266,6 @@ export async function createSenior({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${authToken}`,
     },
     body: JSON.stringify({
       name,

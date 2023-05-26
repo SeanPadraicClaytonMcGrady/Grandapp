@@ -19,27 +19,7 @@ import {
   fetchPhysicalTasks,
   fetchSeniors,
 } from "./lib/apiClient.tsx";
-
-// const [emotionalTasks, setEmotionalTasks] = useState([]);
-// const [physicalTasks, setPhysicalTasks] = useState([]);
-// const [seniors, setSeniors] = useState([]);
-
-// const reloadEmotionalTasks = () => {
-//   fetchEmotionalTasks().then((emotionalTasks) =>
-//     setEmotionalTasks(emotionalTasks)
-//   );
-// };
-// const reloadPhysicalTasks = () => {
-//   fetchPhysicalTasks().then((physicalTasks) => setPhysicalTasks(physicalTasks));
-// };
-// const reloadSeniors = () => {
-//   fetchSeniors().then((seniors) => setSeniors(seniors));
-// };
-// useEffect(() => {
-//   reloadEmotionalTasks();
-//   reloadPhysicalTasks();
-//   reloadSeniors();
-// }, []);
+import Senior from "./components/Pages/Senior.tsx";
 
 const router = createBrowserRouter([
   {
@@ -76,10 +56,10 @@ const router = createBrowserRouter([
     element: <SplashPage />,
   },
 
-  // {
-  //   path: "/senior",
-  //   element: <Senior />
-  // }
+  {
+    path: "/senior",
+    element: <Senior />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

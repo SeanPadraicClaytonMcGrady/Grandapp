@@ -19,7 +19,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "js-cookie": "^3.0.5"
+    "js-cookie": "^3.0.5",
     "bcrypt": "^5.1.0"
   }
 }
