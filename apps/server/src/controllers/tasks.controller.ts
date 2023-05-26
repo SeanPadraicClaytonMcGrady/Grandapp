@@ -67,6 +67,7 @@ const TasksController = {
   async getRelevantTasks(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = req.user.id;
+      console.log(req);
       const openTasks = await Tasks.getOpenTasks(userId);
       const pendingTasks = await Tasks.getPendingTasks(userId);
       const acceptedTasks = await Tasks.getToDoTasks(userId);
@@ -86,6 +87,8 @@ const TasksController = {
     try {
       const { author, authorId, type, description, scheduledDate, location } =
         req.body;
+
+      console.log(req.body);
       const emotionalTask = await Tasks.createEmotionalTask(
         author,
         authorId,

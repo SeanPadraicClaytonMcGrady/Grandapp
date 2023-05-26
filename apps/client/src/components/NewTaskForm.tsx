@@ -1,13 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
-import { EmotionalTask, PhysicalTask, Senior } from "../types";
-import {
-  createEmotionalTask,
-  createPhysicalTask,
-  fetchSeniors,
-} from "../lib/apiClient";
+import { EmotionalTask, PhysicalTask } from "../types";
+import { createEmotionalTask, createPhysicalTask } from "../lib/apiClient";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.css";
-import Navbar from "./Pages/NavBar";
+import Cookies from "js-cookie";
 
 type NewTaskFromProps = {
   onEmotionalTaskCreated: (emotionalTask: EmotionalTask) => void;
@@ -20,13 +16,15 @@ interface Props {
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-function useSeniors() {
-  const [seniors, setSeniors] = useState<Senior[]>([]);
+async function getUserInfoFromCookie() {
+  const id = Cookies.get("id");
+  const username = Cookies.get("username");
 
-  useEffect(() => {
-    fetchSeniors().then((seniors) => setSeniors(seniors));
-  }, []);
-  return seniors;
+  if (!id || !username) {
+    throw new Error("User information not found in the cookie.");
+  }
+
+  return { id, username };
 }
 
 const initialValues = {
@@ -41,21 +39,17 @@ function NewTaskForm({
   onEmotionalTaskCreated,
   onPhysicalTaskCreated,
 }: NewTaskFromProps): JSX.Element {
-  const seniors = useSeniors();
-
   const [values, setValues] = useState(initialValues);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
-      //emotionalTask seems to be null in our attempts to call it. values has all the information, but we still get null.
-      const seniorId = seniors.filter(
-        (senior) => senior.username === values.author
-      )[0].id;
       if (values.type === "emotional") {
+        const userInfo = await getUserInfoFromCookie();
+        console.log(userInfo, "UserInfo heeeeeeeeeeeeeere!");
         const emotionalTask = await createEmotionalTask({
-          author: values.author,
-          authorId: seniorId.toString(),
+          author: userInfo.username,
+          authorId: userInfo.id,
           type: values.type,
           description: values.description,
           scheduledDate: values.scheduledDate[0],
@@ -63,9 +57,10 @@ function NewTaskForm({
         });
         onEmotionalTaskCreated(emotionalTask);
       } else if (values.type === "physical") {
+        const userInfo = await getUserInfoFromCookie();
         const physicalTask = await createPhysicalTask({
-          author: values.author,
-          authorId: seniorId.toString(),
+          author: userInfo.username,
+          authorId: userInfo.id,
           type: values.type,
           description: values.description,
           scheduledDate: values.scheduledDate[0],
@@ -75,7 +70,9 @@ function NewTaskForm({
       }
       setValues(initialValues);
     } catch (e) {
-      console.error((e as Error).message);
+      throw new Error(
+        "Could not submit information correctly for task creation. Missing values?"
+      );
     }
   }
 
@@ -138,30 +135,13 @@ function NewTaskForm({
       >
         <div className="border-b border-gray-900/10 pb-12">
           <h2 className="font-bold text-xl mb-2">Create a New Task</h2>
-          <div className="inline-block border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-0">
-            <select name="author" onChange={handleChange}>
-              <option key="" value="">
-                Author
-              </option>
-              {seniors.map((senior) => (
-                <option
-                  id={`${senior.id}`}
-                  key={senior.id}
-                  data-key={senior.id}
-                  value={senior.username}
-                >
-                  {senior.username}
-                </option>
-              ))}
-            </select>
-          </div>
           <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-3">
               <label className="block text-sm font-medium leading-6 text-gray-900"></label>
               <div className="inline-block border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2">
                 <select name="type" onChange={handleChange}>
                   <option> Select type of task</option>
-                  <option value="emotional">Emotional</option>
+                  <option value="emotional">Social</option>
                   <option value="physical">Physical</option>
                 </select>
               </div>

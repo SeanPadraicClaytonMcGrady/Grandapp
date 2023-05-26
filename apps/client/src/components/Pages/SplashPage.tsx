@@ -18,9 +18,6 @@ const SplashPage = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    //EMAIL VALIDATION
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;!emailRegex.test
     if (!username) {
       setError("Invalid username format");
     }
@@ -30,13 +27,11 @@ const SplashPage = () => {
       setError("Please enter your password");
     }
     setError(null);
-
     try {
       const user = await fetchLoginUsers({ username, password });
-
-      if (user.type === "senior") {
+      if (user.type == "senior") {
         navigate("/senior");
-      } else if (user.type === "volunteer") {
+      } else if (user.type == "volunteer") {
         navigate("/volunteer");
       } else {
         navigate("/welcome");

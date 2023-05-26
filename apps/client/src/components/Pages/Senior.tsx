@@ -24,9 +24,9 @@ const Senior = () => {
   return (
     <>
       <Navbar />
-      {acceptedTasks.length > 0 && <TasksList tasks={acceptedTasks} />}
-      {pendingTasks.length > 0 && <TasksList tasks={pendingTasks} />}
-      {openTasks.length > 0 && <TasksList tasks={openTasks} />}
+      {acceptedTasks?.length > 0 && <TasksList tasks={acceptedTasks} />}
+      {pendingTasks?.length > 0 && <TasksList tasks={pendingTasks} />}
+      {openTasks?.length > 0 && <TasksList tasks={openTasks} />}
       <div className="flex justify-center">
         <NewTaskForm />
       </div>
