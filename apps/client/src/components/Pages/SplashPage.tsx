@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchLoginUsers } from '../../lib/apiClient'
 import { Link } from 'react-router-dom'
+import { UserContext } from '../../lib/userContext'
 const SplashPage = () => {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [error, setError] = useState<string | null>(null)
+  const { setUser } = useContext(UserContext)
 
   const navigate = useNavigate()
 
@@ -30,6 +32,9 @@ const SplashPage = () => {
     setError(null)
     try {
       const user = await fetchLoginUsers({ username, password })
+
+      setUser(user)
+
       if (user.type == 'senior') {
         navigate('/senior')
       } else if (user.type == 'volunteer') {

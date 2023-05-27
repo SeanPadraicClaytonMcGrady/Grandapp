@@ -1,19 +1,19 @@
 import TasksList from '../TasksList'
 import { getRelevantTasks } from '../../lib/apiClient'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Task } from '../../types'
 import NewTaskForm from '../NewTaskForm'
 import Navbar from './NavBar'
-import Cookies from 'js-cookie'
+import { UserContext } from '../../lib/userContext'
 
 const Senior = () => {
+  const {user} = useContext(UserContext)
+
   const [openTasks, setOpenTasks] = useState<Task[]>([])
   const [pendingTasks, setPendingTasks] = useState<Task[]>([])
   const [acceptedTasks, setAcceptedTasks] = useState<Task[]>([])
-  console.log(Cookies.get('AUTHORIZATION'))
 
   const reloadTasks = async () => {
-    console.log(Cookies.get('AUTHORIZATION'))
     const relevantTasks = await getRelevantTasks()
     setOpenTasks(relevantTasks.openTasks)
     setPendingTasks(relevantTasks.pendingTasks)
@@ -27,6 +27,7 @@ const Senior = () => {
   return (
     <>
       <Navbar />
+      <h1>{`Hi, ${user?.username}!`}</h1>
       {acceptedTasks?.length > 0 && <TasksList tasks={acceptedTasks} />}
       {pendingTasks?.length > 0 && <TasksList tasks={pendingTasks} />}
       {openTasks?.length > 0 && <TasksList tasks={openTasks} />}
