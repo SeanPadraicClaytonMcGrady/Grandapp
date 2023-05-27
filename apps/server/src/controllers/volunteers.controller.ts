@@ -7,7 +7,7 @@ import User from "../models/Users";
 // import  passwordUtils  from "../utils/passwordUtils";
 const saltRounds = 10
 
-async function hashPassword(pasw: string): Promise<string> {
+export async function hashPassword(pasw: string): Promise<string> {
   const hashed = await bcrypt.hash(pasw, saltRounds)
   return hashed
 }

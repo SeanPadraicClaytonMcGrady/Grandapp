@@ -5,11 +5,8 @@ import {
   fetchPhysicalTasks,
   fetchSeniors,
 } from "./lib/apiClient";
-import TasksList from "./components/TasksList";
 import Navbar from "./components/Pages/NavBar";
-import Volunteer from "./components/Pages/Volunteer";
 import SplashPage from "./components/Pages/SplashPage";
-import { EmotionalTask, PhysicalTask } from "./types";
 
 function App() {
   const [emotionalTasks, setEmotionalTasks] = useState([]);
