@@ -22,11 +22,9 @@ const ApplyToTask = () => {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const loggedInUserId = user?.id
-    console.log(loggedInUserId)
     const taskId = Number(id)
-    console.log(taskId)
     if (loggedInUserId && taskId) {
-      await createApplication()
+      await createApplication(taskId)
       navigate(`/tasks/${id}/response`)
     }
   }

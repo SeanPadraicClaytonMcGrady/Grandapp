@@ -86,7 +86,6 @@ export async function getRelevantTasks(): Promise<RelevantTasks> {
 }
 
 interface ICreateEmotionalTaskPayload {
-  token: string | undefined
   type: string
   description: string
   scheduledDate: string
@@ -94,7 +93,6 @@ interface ICreateEmotionalTaskPayload {
 }
 
 interface ICreatePhysicalTaskPayload {
-  token: string | undefined
   type: string
   description: string
   scheduledDate: string
@@ -232,8 +230,8 @@ export async function createSenior({
   return newSenior
 }
 
-export async function createApplication(): Promise<void> {
-  const response = await fetch(`${BASE_URL}/tasks/:id`, {
+export async function createApplication(taskId: number): Promise<void> {
+  const response = await fetch(`${BASE_URL}/tasks/${taskId}`, {
     method: 'PUT',
     credentials: 'include',
   })

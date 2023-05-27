@@ -46,7 +46,7 @@ router.get("/tasks/:id", TasksController.findTaskById);
 router.get("/tasks", TasksController.findAllTasks);
 
 authRouter.get("/relevant-tasks", TasksController.getRelevantTasks);
-authRouter.put("/tasks/1/response", TasksController.createResponse);
+authRouter.put("/tasks/:id", TasksController.createResponse);
 authRouter.put("/tasks/:id/cancel", TasksController.volunteerCancelTaskById);
 
 //Confirm this one works after merge.

@@ -181,7 +181,6 @@ const TasksController = {
 
   async createResponse(req: Request, res: Response, next: NextFunction) {
     try {
-      console.log(req.user, "I am req.user in tasks.controller.ts");
       const responderId = req.user.id;
       const taskId = Number(req.params.id);
       console.log("req params id", req.params.id);
