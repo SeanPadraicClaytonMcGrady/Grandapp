@@ -1,22 +1,20 @@
-import { Link } from "react-router-dom";
-import { EmotionalTask, PhysicalTask } from "../types";
-import { FC, useState } from "react";
-import PopupMap from "./PopUpMap";
-import ExactLocation from "./ExactLocation";
-
+import { Link } from 'react-router-dom'
+import { EmotionalTask, PhysicalTask } from '../types'
+import { FC, useState } from 'react'
+import PopupMap from './PopUpMap'
+import ExactLocation from './ExactLocation'
+import ApplyToTask from './Pages/ApplyToTask'
 
 type TaskProps = {
-  task: EmotionalTask | PhysicalTask;
-};
-
+  task: EmotionalTask | PhysicalTask
+}
 
 const TaskCard: FC<TaskProps> = ({ task }) => {
-
   const initialLocation = {
     lat: 51.505,
     lng: -0.09,
     name: 'London',
-  };
+  }
 
   const locations = [
     {
@@ -34,7 +32,7 @@ const TaskCard: FC<TaskProps> = ({ task }) => {
       lng: -0.11,
       name: 'Location 3',
     },
-  ];
+  ]
 
   return (
     <tr>
@@ -45,13 +43,18 @@ const TaskCard: FC<TaskProps> = ({ task }) => {
         {task.description}
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-        <PopupMap initialLocation={{ lat: 51.5, lng: -0.1, name: 'Initial Location' }}
+        <PopupMap
+          initialLocation={{ lat: 51.5, lng: -0.1, name: 'Initial Location' }}
           address={task.location}
-          locations={[
-            // { lat: 51.51, lng: -0.09, name: 'Location A' },
-            // { lat: 51.52, lng: -0.1, name: 'Location B' },
-            // { lat: 51.49, lng: -0.08, name: 'Location C' },
-          ]} /> Location
+          locations={
+            [
+              // { lat: 51.51, lng: -0.09, name: 'Location A' },
+              // { lat: 51.52, lng: -0.1, name: 'Location B' },
+              // { lat: 51.49, lng: -0.08, name: 'Location C' },
+            ]
+          }
+        />{' '}
+        Location
       </td>
       {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
         <ExactLocation address={task.location} />
@@ -71,7 +74,7 @@ const TaskCard: FC<TaskProps> = ({ task }) => {
         </Link>
       </td>
     </tr>
-  );
-};
+  )
+}
 
-export default TaskCard;
+export default TaskCard
