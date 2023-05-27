@@ -1,5 +1,5 @@
-import { createContext, useState } from "react";
-import { User } from "../types";
+import { createContext, useState } from 'react'
+import { User } from '../types'
 
 interface UserContextProps {
   children: React.ReactElement
@@ -12,18 +12,18 @@ interface UserContextValue {
 
 export const UserContext = createContext<UserContextValue>({
   user: null,
-  setUser: () => {}
+  setUser: () => {},
 })
 
-export function UserContextProvider ({children}:UserContextProps) {
-  const [user, setUser] = useState<User|null>(null)
+export function UserContextProvider({ children }: UserContextProps) {
+  const [user, setUser] = useState<User | null>(null)
 
   const defaultValue: UserContextValue = {
     user,
-    setUser
+    setUser,
   }
-
-  return <UserContext.Provider value={defaultValue}>
-    {children}
-  </UserContext.Provider>
+  console.log(user)
+  return (
+    <UserContext.Provider value={defaultValue}>{children}</UserContext.Provider>
+  )
 }

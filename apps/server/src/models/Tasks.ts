@@ -7,7 +7,6 @@ import {
   Volunteer,
   Prisma,
 } from "@prisma/client";
-import { get } from "http";
 const prismaInstance = new PrismaClient();
 
 const includeAuthor = {
@@ -266,7 +265,9 @@ const Tasks = {
             },
           },
         },
-        include: includeAuthor,
+        include: {
+          author: true,
+        },
       });
       return openTasksVolunteer;
     }
@@ -298,10 +299,17 @@ const Tasks = {
           },
           accepted: null,
         },
-        include: includeAuthor,
+        include: {
+          author: {
+            include: {
+              user: true,
+            },
+          },
+        },
       });
       return pendingTasksVolunteer;
     }
+
     const pendingTasksSenior = await prismaInstance.task.findMany({
       where: {
         authorId: id,
@@ -333,7 +341,13 @@ const Tasks = {
         authorId: id,
         acceptedId: { gt: 0 },
       },
-      include: includeVolunteer,
+      include: {
+        author: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
     return seniorToDoTasks;
   },

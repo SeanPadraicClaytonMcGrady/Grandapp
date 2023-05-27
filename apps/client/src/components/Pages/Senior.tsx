@@ -5,9 +5,10 @@ import { Task } from '../../types'
 import NewTaskForm from '../NewTaskForm'
 import Navbar from './NavBar'
 import { UserContext } from '../../lib/userContext'
+import SeniorTaskList from '../SeniorTaskList'
 
 const Senior = () => {
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   const [openTasks, setOpenTasks] = useState<Task[]>([])
   const [pendingTasks, setPendingTasks] = useState<Task[]>([])
@@ -28,11 +29,18 @@ const Senior = () => {
     <>
       <Navbar />
       <h1>{`Hi, ${user?.username}!`}</h1>
-      {acceptedTasks?.length > 0 && <TasksList tasks={acceptedTasks} />}
-      {pendingTasks?.length > 0 && <TasksList tasks={pendingTasks} />}
-      {openTasks?.length > 0 && <TasksList tasks={openTasks} />}
+      {acceptedTasks?.length > 0 && <SeniorTaskList tasks={acceptedTasks} />}
+      {pendingTasks?.length > 0 && <SeniorTaskList tasks={pendingTasks} />}
+      {openTasks?.length > 0 && <SeniorTaskList tasks={openTasks} />}
       <div className="flex justify-center">
-        <NewTaskForm />
+        <NewTaskForm
+          onEmotionalTaskCreated={(task) => {
+            setOpenTasks((prev) => [task, ...prev])
+          }}
+          onPhysicalTaskCreated={(task) => {
+            setOpenTasks((prev) => [task, ...prev])
+          }}
+        />
       </div>
     </>
   )

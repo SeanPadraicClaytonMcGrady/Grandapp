@@ -1,4 +1,4 @@
-import { Task } from '../types'
+import { Task, User } from '../types'
 
 const BASE_URL = 'http://localhost:8080'
 
@@ -22,6 +22,21 @@ export async function fetchLoginUsers({ username, password }: LoginUsers) {
   const loginUser = await response.json()
 
   return loginUser
+}
+
+export const seniorAcceptVolunteer = async (taskId: number, respId: number) => {
+  const response = await fetch(`${BASE_URL}/tasks/${taskId}/confirmed`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify({
+      responderId: respId,
+    }),
+  })
+  const data = await response.json()
+  return data
 }
 
 export async function fetchEmotionalTasks() {
@@ -75,9 +90,7 @@ export type RelevantTasks = {
   pendingTasks: Task[]
   acceptedTasks: Task[]
 }
-export async function getRelevantTasks(
-  token: string | undefined
-): Promise<RelevantTasks> {
+export async function getRelevantTasks(token?: string): Promise<RelevantTasks> {
   const response = await fetch(`${BASE_URL}/relevant-tasks`, {
     headers: {
       'Content-Type': 'application/json',
@@ -90,7 +103,6 @@ export async function getRelevantTasks(
 }
 
 interface ICreateEmotionalTaskPayload {
-  token: string | undefined
   type: string
   description: string
   scheduledDate: string
@@ -98,7 +110,6 @@ interface ICreateEmotionalTaskPayload {
 }
 
 interface ICreatePhysicalTaskPayload {
-  token: string | undefined
   type: string
   description: string
   scheduledDate: string
@@ -106,7 +117,6 @@ interface ICreatePhysicalTaskPayload {
 }
 
 export async function createEmotionalTask({
-  token,
   type,
   description,
   scheduledDate,
@@ -116,7 +126,6 @@ export async function createEmotionalTask({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
     },
     credentials: 'include',
     body: JSON.stringify({
@@ -132,7 +141,6 @@ export async function createEmotionalTask({
 }
 
 export async function createPhysicalTask({
-  token,
   type,
   description,
   scheduledDate,
@@ -142,7 +150,6 @@ export async function createPhysicalTask({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
     },
     credentials: 'include',
     body: JSON.stringify({
