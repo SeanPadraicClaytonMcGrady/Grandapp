@@ -36,7 +36,9 @@ export async function fetchPhysicalTasks() {
 }
 
 export async function fetchTask(id: number) {
-  const response = await fetch(`${BASE_URL}/tasks/${id}`)
+  const response = await fetch(`${BASE_URL}/tasks/${id}`, {
+    credentials: 'include',
+  })
   const individualTask = await response.json()
   return individualTask
 }
@@ -75,14 +77,8 @@ export type RelevantTasks = {
   pendingTasks: Task[]
   acceptedTasks: Task[]
 }
-export async function getRelevantTasks(
-  token: string | undefined
-): Promise<RelevantTasks> {
+export async function getRelevantTasks(): Promise<RelevantTasks> {
   const response = await fetch(`${BASE_URL}/relevant-tasks`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
     credentials: 'include',
   })
   const relevantTasks = await response.json()
@@ -106,7 +102,6 @@ interface ICreatePhysicalTaskPayload {
 }
 
 export async function createEmotionalTask({
-  token,
   type,
   description,
   scheduledDate,
@@ -116,7 +111,6 @@ export async function createEmotionalTask({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
     },
     credentials: 'include',
     body: JSON.stringify({
@@ -132,7 +126,6 @@ export async function createEmotionalTask({
 }
 
 export async function createPhysicalTask({
-  token,
   type,
   description,
   scheduledDate,
@@ -140,10 +133,6 @@ export async function createPhysicalTask({
 }: ICreatePhysicalTaskPayload) {
   const response = await fetch(`${BASE_URL}/physicalTasks`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
     credentials: 'include',
     body: JSON.stringify({
       type,
@@ -241,4 +230,25 @@ export async function createSenior({
     throw new Error(newSenior.message)
   }
   return newSenior
+}
+
+interface ICreateVolunteerApplicationPayload {
+  token: string | undefined
+}
+
+export async function createApplication({
+  token,
+}: ICreateVolunteerApplicationPayload): Promise<void> {
+  console.log(token)
+  const response = await fetch(`${BASE_URL}/tasks/:id/response`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    credentials: 'include',
+  })
+  const newApplication = await response.json()
+  console.log(newApplication)
+  // return newApplication
 }

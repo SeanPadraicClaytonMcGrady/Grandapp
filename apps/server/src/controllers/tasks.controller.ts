@@ -148,6 +148,22 @@ const TasksController = {
     }
   },
 
+  //Volunteer needs to put its id into response of task.
+
+  async volunteerApplyToTaskById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      console.log(req.body);
+      // const taskId = parseInt(req.params.id)
+      // const  = parseInt(req.body.userId)
+    } catch (e) {
+      next(e);
+    }
+  },
+
   async volunteerConfirmedByAcceptedId(
     req: Request,
     res: Response,
@@ -165,7 +181,9 @@ const TasksController = {
 
   async createResponse(req: Request, res: Response, next: NextFunction) {
     try {
+      console.log(req.user, "I am req.user in tasks.controller.ts");
       const responderId = req.user.id;
+      console.log(responderId, "I am responderId in tasks.controller.ts");
       const taskId = parseInt(req.params.id);
       const response = await Tasks.createResponse(taskId, responderId);
       return res.status(201).json(response);
