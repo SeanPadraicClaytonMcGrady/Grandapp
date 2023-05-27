@@ -29,9 +29,6 @@ function NewTaskForm({
 }: NewTaskFromProps): JSX.Element {
   const [values, setValues] = useState(initialValues)
 
-  //There are currently errors below.
-  //These ignore the fact we have a token implied. They work.
-  //Use any in the types?
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     try {
