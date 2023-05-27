@@ -183,8 +183,10 @@ const TasksController = {
     try {
       console.log(req.user, "I am req.user in tasks.controller.ts");
       const responderId = req.user.id;
-      console.log(responderId, "I am responderId in tasks.controller.ts");
-      const taskId = parseInt(req.params.id);
+      const taskId = Number(req.params.id);
+      console.log("req params id", req.params.id);
+      console.log("req params", req.params);
+      console.log(typeof taskId, "taskId type");
       const response = await Tasks.createResponse(taskId, responderId);
       return res.status(201).json(response);
     } catch (e) {
