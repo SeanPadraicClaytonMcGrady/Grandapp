@@ -58,8 +58,8 @@ authRouter.get(
 authRouter.get("/volunteers/tasks", TasksController.volunteerGetAcceptedTasks);
 
 //Conirm this one works after merge.
-authRouter.post("/emotionalTasks", TasksController.newEmotionalTask);
-authRouter.post("/physicalTasks", TasksController.newPhysicalTask);
+router.post("/emotionalTasks", TasksController.newEmotionalTask);
+router.post("/physicalTasks", TasksController.newPhysicalTask);
 authRouter.put("/tasks/:id", TasksController.editTaskById);
 authRouter.delete("/tasks/:id", TasksController.deleteTaskById);
 export default router;
