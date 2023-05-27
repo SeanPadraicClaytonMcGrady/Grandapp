@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import dotenv from "dotenv";
+import { hashPassword } from "../src/controllers/volunteers.controller";
 dotenv.config();
 
 async function main() {
@@ -12,7 +13,7 @@ async function main() {
       username: "Mr. Darcy",
       name: "Fitzwilliam Darcy",
       email: "FitzwilliamDarcy@mail.com",
-      password: "10001",
+      password: await hashPassword("12345"),
       phoneNumber: "1-555-555-555",
       biography: "I make a lot of money.",
       medicalNeeds: "",
@@ -40,7 +41,7 @@ async function main() {
       username: "Mrs. Isabella",
       name: "Isabella de Ville",
       email: "IsabelladeVille@mail.com",
-      password: "12345",
+      password: await hashPassword("12345"),
       phoneNumber: "1-555-555-556",
       biography:
         "I have many cats & I need help feeding them. I also like to walk outside and remember how I played in the snow as a girl.",
@@ -67,7 +68,7 @@ async function main() {
       username: "Mrs. Veronika",
       name: "Veronika Kovalchuk",
       email: "Kovalchuk@mail.ru",
-      password: "123",
+      password: await hashPassword("12345"),
       phoneNumber: "1-555-555-557",
       biography: "Ya gavaro pa russki.",
       medicalNeeds: "None",
@@ -97,7 +98,7 @@ async function main() {
       username: "Sadie",
       name: "Sadie Williams",
       email: "sadiegirl1992@mail.com",
-      password: "1992",
+      password: await hashPassword("12345"),
       phoneNumber: "1-555-555-444",
       biography: "I like to help people!",
       medicalNeeds: "",
@@ -121,7 +122,7 @@ async function main() {
       username: "Stewart",
       name: "Stewart Smith",
       email: "jackdanielsconnoissuer1989@mail.com",
-      password: "1989",
+      password: await hashPassword("12345"),
       phoneNumber: "1-555-555-333",
       biography:
         "Jack Daniels is my best friend, but for you I'll make an exception.",
