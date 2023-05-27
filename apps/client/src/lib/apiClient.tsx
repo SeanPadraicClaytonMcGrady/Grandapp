@@ -232,23 +232,12 @@ export async function createSenior({
   return newSenior
 }
 
-interface ICreateVolunteerApplicationPayload {
-  token: string | undefined
-}
-
-export async function createApplication({
-  token,
-}: ICreateVolunteerApplicationPayload): Promise<void> {
-  console.log(token)
-  const response = await fetch(`${BASE_URL}/tasks/:id/response`, {
+export async function createApplication(): Promise<void> {
+  const response = await fetch(`${BASE_URL}/tasks/:id`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
     credentials: 'include',
   })
   const newApplication = await response.json()
-  console.log(newApplication)
-  // return newApplication
+
+  return newApplication
 }
