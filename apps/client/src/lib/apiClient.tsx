@@ -239,3 +239,20 @@ export async function createApplication(taskId: number): Promise<void> {
 
   return newApplication
 }
+
+export async function acceptResponse(
+  taskId: number,
+  responderIdArray: number[]
+): Promise<any> {
+  const response = await fetch(`${BASE_URL}/tasks/${taskId}/accept`, {
+    method: 'PUT',
+    credentials: 'include',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({ responderIds: responderIdArray }),
+  })
+  const newAcceptedVolunteers = await response.json()
+
+  return newAcceptedVolunteers
+}

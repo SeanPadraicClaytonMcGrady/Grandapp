@@ -11,7 +11,7 @@ export interface EmotionalTask {
   scheduledDate: string
   location: string
   accepted: Volunteer | undefined
-  acceptedId: Number | undefined
+  acceptedId: number | undefined
   responses: Response[]
 }
 
@@ -23,7 +23,7 @@ export interface PhysicalTask {
   scheduledDate: string
   location: string
   accepted: Volunteer | undefined
-  acceptedId: Number | undefined
+  acceptedId: number | undefined
   responses: Response[]
 }
 
@@ -59,15 +59,15 @@ export interface Task {
   scheduledDate: string
   location: string
   accepted: Volunteer | undefined
-  acceptedId: Number | undefined
+  acceptedId: number | undefined
   responses: Response[]
 }
 
 export interface Response {
   task: Task
-  taskId: Number
+  taskId: number
   responder: Volunteer
-  responderId: Number
+  responderId: number
 }
 
 export interface User {

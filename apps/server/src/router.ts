@@ -14,17 +14,17 @@ authRouter.use(authMiddleware);
 router.use(authRouter);
 
 //volunteers, seniors, users
-router.post("/volunteers", VolunteersController.create);
-router.post("/seniors", SeniorsController.create);
-router.get("/seniors", SeniorsController.getSeniors);
-router.get("/volunteers", VolunteersController.getVolunteers);
-router.get("/users", UsersController.getUsers);
-router.get(
+authRouter.post("/volunteers", VolunteersController.create);
+authRouter.post("/seniors", SeniorsController.create);
+authRouter.get("/seniors", SeniorsController.getSeniors);
+authRouter.get("/volunteers", VolunteersController.getVolunteers);
+authRouter.get("/users", UsersController.getUsers);
+authRouter.get(
   "/seniors/username",
   authMiddleware,
   SeniorsController.getSeniorByUsername
 );
-router.get(
+authRouter.get(
   "/volunteers/username",
   authMiddleware,
   VolunteersController.getVolunteerByUsername
@@ -42,14 +42,13 @@ authRouter.delete("/messages/:id", MessagesController.deleteMessageById);
 
 //tasks
 
-router.get("/tasks/:id", TasksController.findTaskById);
-router.get("/tasks", TasksController.findAllTasks);
+authRouter.get("/tasks/:id", TasksController.findTaskById);
+authRouter.get("/tasks", TasksController.findAllTasks);
 
 authRouter.get("/relevant-tasks", TasksController.getRelevantTasks);
 authRouter.put("/tasks/:id", TasksController.createResponse);
 authRouter.put("/tasks/:id/cancel", TasksController.volunteerCancelTaskById);
 
-//Confirm this one works after merge.
 authRouter.get(
   "/seniors/:id/tasks",
   TasksController.volunteerGetSingleSeniorTasksById
@@ -57,9 +56,13 @@ authRouter.get(
 
 authRouter.get("/volunteers/tasks", TasksController.volunteerGetAcceptedTasks);
 
-//Conirm this one works after merge.
-router.post("/emotionalTasks", TasksController.newEmotionalTask);
-router.post("/physicalTasks", TasksController.newPhysicalTask);
-authRouter.put("/tasks/:id", TasksController.editTaskById);
+authRouter.post("/emotionalTasks", TasksController.newEmotionalTask);
+authRouter.post("/physicalTasks", TasksController.newPhysicalTask);
+authRouter.put("/tasks/:id/", TasksController.editTaskById);
+//Accepted Volunteer is here.
+authRouter.put(
+  "/tasks/:id/accept",
+  TasksController.volunteerConfirmedByAcceptedId
+);
 authRouter.delete("/tasks/:id", TasksController.deleteTaskById);
 export default router;

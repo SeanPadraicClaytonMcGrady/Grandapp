@@ -1,7 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
 import Navbar from './NavBar'
 import { useNavigate, useParams } from 'react-router-dom'
-import { createApplication, fetchTask } from '../../lib/apiClient'
+import {
+  acceptResponse,
+  createApplication,
+  fetchTask,
+} from '../../lib/apiClient'
 import { Task } from '../../types'
 import { Link } from 'react-router-dom'
 import { UserContext } from '../../lib/userContext'
@@ -10,6 +14,7 @@ const ApplyToTask = () => {
   const { id } = useParams<{ id: string }>()
   const { user } = useContext(UserContext)
   const [task, setTask] = useState<Task | null>(null)
+  const [selectedResponders, setSelectedResponders] = useState<number[]>([])
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -29,22 +34,29 @@ const ApplyToTask = () => {
     }
   }
 
+  function handleSelectResponder(responderId: number) {
+    setSelectedResponders((prevSelectedResponders) => {
+      if (prevSelectedResponders.includes(responderId)) {
+        return prevSelectedResponders.filter((id) => id !== responderId)
+      } else {
+        return [...prevSelectedResponders, responderId]
+      }
+    })
+  }
+
   function renderApplicationButton() {
     if (!task || !user) {
       return null
     }
 
-    console.log(task, user, 'Task and user heeeeeeeeeeeeeeeeeeeeeeeeere!')
     const isVolunteer = user.volunteer
-    // const hasResponse = task.responses.some(
-    //   (response) => response.responderId === user.id
-    // )
-
-    const hasAcceptedResponse = task.responses.some(
-      (response) => response.responderId === task.acceptedId
+    const hasResponse = task.responses.some(
+      (response) => response.responderId === user.id
     )
 
-    if (isVolunteer) {
+    const taskHasAcceptedResponse = task.acceptedId !== null
+
+    if (isVolunteer && !hasResponse && !taskHasAcceptedResponse) {
       return (
         <button
           className="bg-gray-400 mt-4 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
@@ -56,7 +68,7 @@ const ApplyToTask = () => {
       )
     }
 
-    if (!isVolunteer && hasAcceptedResponse) {
+    if (!isVolunteer && taskHasAcceptedResponse) {
       const acceptedResponse = task.responses.find(
         (response) => response.responderId === task.acceptedId
       )
@@ -64,7 +76,7 @@ const ApplyToTask = () => {
       if (acceptedResponse) {
         return (
           <div>
-            <p>Accepted Volunteer: {acceptedResponse.responder.username}</p>
+            {/* <p>Accepted Volunteer: {acceptedResponse.responder.username}</p> */}
             <Link
               to={`/volunteers/${acceptedResponse.responderId}`}
               className="bg-gray-400 mt-4 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
@@ -76,7 +88,38 @@ const ApplyToTask = () => {
       }
     }
 
-    return null
+    return (
+      <div>
+        <h2>Responders:</h2>
+        {task.responses.map((response) => (
+          <div key={response.responderId}>
+            <input
+              type="checkbox"
+              checked={selectedResponders.includes(response.responderId)}
+              onChange={() => handleSelectResponder(response.responderId)}
+            />
+            {/* <span>{response.responder.username}</span> */}
+          </div>
+        ))}
+        <button
+          className="bg-gray-400 mt-4 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
+          type="submit"
+          value={'confirm volunteer'}
+          disabled={selectedResponders.length === 0}
+          onClick={handleAccept}
+        ></button>
+      </div>
+    )
+  }
+
+  async function handleAccept() {
+    try {
+      const taskId = Number(id)
+      await acceptResponse(taskId, selectedResponders)
+      navigate(`/tasks/${id}`)
+    } catch (error) {
+      throw error
+    }
   }
 
   return (
@@ -89,7 +132,7 @@ const ApplyToTask = () => {
           {task && (
             <div className="max-w-md w-full mx-auto">
               <h2 className="flex justify-center font-bold text-xl mb-2">
-                Apply to task
+                Task Overview
               </h2>
               <div className="block mb-2">
                 <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
