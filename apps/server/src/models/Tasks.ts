@@ -34,6 +34,14 @@ const includeVolunteer = {
   },
 };
 
+const includeResponses = {
+  responses: {
+    select: {
+      responderId: true,
+    },
+  },
+};
+
 const Tasks = {
   async findTask(taskId: number): Promise<Task> {
     const task = await prismaInstance.task.findUnique({
@@ -311,6 +319,7 @@ const Tasks = {
           },
         },
       },
+      include: includeResponses,
     });
     return pendingTasksSenior;
   },

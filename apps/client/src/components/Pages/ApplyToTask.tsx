@@ -29,6 +29,56 @@ const ApplyToTask = () => {
     }
   }
 
+  function renderApplicationButton() {
+    if (!task || !user) {
+      return null
+    }
+
+    console.log(task, user, 'Task and user heeeeeeeeeeeeeeeeeeeeeeeeere!')
+    const isVolunteer = user.volunteer
+    // const hasResponse = task.responses.some(
+    //   (response) => response.responderId === user.id
+    // )
+
+    const hasAcceptedResponse = task.responses.some(
+      (response) => response.responderId === task.acceptedId
+    )
+
+    if (isVolunteer) {
+      return (
+        <button
+          className="bg-gray-400 mt-4 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
+          type="submit"
+          value={'apply to task'}
+        >
+          Apply to task
+        </button>
+      )
+    }
+
+    if (!isVolunteer && hasAcceptedResponse) {
+      const acceptedResponse = task.responses.find(
+        (response) => response.responderId === task.acceptedId
+      )
+
+      if (acceptedResponse) {
+        return (
+          <div>
+            <p>Accepted Volunteer: {acceptedResponse.responder.username}</p>
+            <Link
+              to={`/volunteers/${acceptedResponse.responderId}`}
+              className="bg-gray-400 mt-4 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
+            >
+              Confirm Volunteer
+            </Link>
+          </div>
+        )
+      }
+    }
+
+    return null
+  }
+
   return (
     <div>
       <Navbar />
@@ -62,13 +112,7 @@ const ApplyToTask = () => {
                 </div>
               </div>
               <div className="flex justify-center">
-                <button
-                  className="bg-gray-400 mt-4 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
-                  type="submit"
-                  value="apply to task"
-                >
-                  Apply to task
-                </button>
+                {renderApplicationButton()}
               </div>
             </div>
           )}
