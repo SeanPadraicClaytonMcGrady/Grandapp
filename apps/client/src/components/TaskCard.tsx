@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { EmotionalTask, PhysicalTask } from '../types'
+import { EmotionalTask, PhysicalTask, Senior, User, Volunteer } from '../types'
 import { FC, useState } from 'react'
 import PopupMap from './PopUpMap'
 import ExactLocation from './ExactLocation'
@@ -7,9 +7,10 @@ import ApplyToTask from './Pages/ApplyToTask'
 
 type TaskProps = {
   task: EmotionalTask | PhysicalTask
+  user: User | null
 }
 
-const TaskCard: FC<TaskProps> = ({ task }) => {
+const TaskCard: FC<TaskProps> = ({ task, user }) => {
   const initialLocation = {
     lat: 51.505,
     lng: -0.09,
@@ -34,10 +35,17 @@ const TaskCard: FC<TaskProps> = ({ task }) => {
     },
   ]
 
+  let applyButtonLabel = 'Apply'
+  if (task.acceptedId === user?.id) {
+    applyButtonLabel = 'View Details'
+  } else if (task.author?.id === user?.id) {
+    applyButtonLabel = 'View'
+  }
+
   return (
     <tr>
       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-        {task.author.user.username}
+        {task.author?.user?.username || 'You!'}
       </td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
         {task.description}
@@ -70,7 +78,8 @@ const TaskCard: FC<TaskProps> = ({ task }) => {
           to={`/tasks/${task.id}`}
           className="text-indigo-600 hover:text-indigo-900"
         >
-          Apply <span className="sr-only">, {task.description}</span>
+          {applyButtonLabel}{' '}
+          <span className="sr-only">, {task.description}</span>
         </Link>
       </td>
     </tr>

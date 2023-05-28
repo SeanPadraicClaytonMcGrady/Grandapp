@@ -1,12 +1,13 @@
-import { Task } from "../types";
-import { FC } from "react";
-import TaskCard from "./TaskCard";
+import { Task, User } from '../types'
+import { FC } from 'react'
+import TaskCard from './TaskCard'
 
 type TasksProps = {
-  tasks: Task[];
-};
+  tasks: Task[]
+  user: User | null
+}
 
-const TasksList: FC<TasksProps> = ({ tasks }) => {
+const TasksList: FC<TasksProps> = ({ tasks, user }) => {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="mt-8 flow-root">
@@ -56,7 +57,7 @@ const TasksList: FC<TasksProps> = ({ tasks }) => {
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {tasks.map((task) => (
-                    <TaskCard task={task} key={task.id} />
+                    <TaskCard task={task} user={user} key={task.id} />
                   ))}
                 </tbody>
               </table>
@@ -65,7 +66,7 @@ const TasksList: FC<TasksProps> = ({ tasks }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TasksList;
+export default TasksList

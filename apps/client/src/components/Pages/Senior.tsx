@@ -7,7 +7,7 @@ import Navbar from './NavBar'
 import { UserContext } from '../../lib/userContext'
 
 const Senior = () => {
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   const [openTasks, setOpenTasks] = useState<Task[]>([])
   const [pendingTasks, setPendingTasks] = useState<Task[]>([])
@@ -28,9 +28,13 @@ const Senior = () => {
     <>
       <Navbar />
       <h1>{`Hi, ${user?.username}!`}</h1>
-      {acceptedTasks?.length > 0 && <TasksList tasks={acceptedTasks} />}
-      {pendingTasks?.length > 0 && <TasksList tasks={pendingTasks} />}
-      {openTasks?.length > 0 && <TasksList tasks={openTasks} />}
+      {acceptedTasks?.length > 0 && (
+        <TasksList tasks={acceptedTasks} user={user} />
+      )}
+      {pendingTasks?.length > 0 && (
+        <TasksList tasks={pendingTasks} user={user} />
+      )}
+      {openTasks?.length > 0 && <TasksList tasks={openTasks} user={user} />}
       <div className="flex justify-center">
         <NewTaskForm />
       </div>

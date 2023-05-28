@@ -34,6 +34,14 @@ const includeVolunteer = {
   },
 };
 
+const includeResponses = {
+  responses: {
+    select: {
+      responderId: true,
+    },
+  },
+};
+
 const Tasks = {
   async findTask(taskId: number): Promise<Task> {
     const task = await prismaInstance.task.findUnique({
@@ -42,6 +50,7 @@ const Tasks = {
         author: {
           include: { user: true },
         },
+        responses: true,
       },
     });
     if (!task) {
@@ -50,27 +59,11 @@ const Tasks = {
     return task;
   },
 
-  // Return to this ASAP
-
-  // `SELECT * FROM "Task" WHERE
-  // "Task"."responderId" IS NULL`
-
   // List all seniors tasks that 0 volunteers applied
 
   // List all the seniors task that have not been accepted
   // ordered by number of applications (ascending)
   async findAllTasks(): Promise<any> {
-    // const searchResult = await prismaInstance.$queryRaw(
-    //   Prisma.sql`SELECT "Task".*, "User"."name" AS name, CAST(count("Response"."taskId") AS INTEGER) AS "numberOfApplications"
-    //   FROM "Task"
-    //   INNER JOIN "Senior" ON "Senior"."id" = "Task"."authorId"
-    //   INNER JOIN "User" ON "User"."id" = "Senior"."id"
-    //   LEFT JOIN "Response" ON "Response"."taskId" = "Task"."id"
-    //   WHERE "Task"."acceptedId" IS NULL
-    //   GROUP BY "Task"."id"
-    //   `
-    // );
-
     const searchResult = await prismaInstance.$queryRaw(
       Prisma.sql`
         SELECT "Task".*, "User"."name" AS "name", CAST(COUNT("Response"."responderId") AS INTEGER) AS "numberOfApplications"
@@ -231,14 +224,16 @@ const Tasks = {
     return deletedTask;
   },
 
-  async accept(taskId: number, responderId: number): Promise<Task> {
-    const acceptedVolunteer = await prismaInstance.task.update({
+  async accept(taskId: number, responderIds: number[]): Promise<Task> {
+    const updatedTask = await prismaInstance.task.update({
       where: { id: taskId },
       data: {
-        accepted: { connect: { id: responderId } },
+        accepted: {
+          connect: { id: responderIds[0] },
+        },
       },
     });
-    return acceptedVolunteer;
+    return updatedTask;
   },
 
   //Need boolean check for user identity in functions below:
@@ -266,7 +261,7 @@ const Tasks = {
             },
           },
         },
-        include: includeAuthor,
+        include: { ...includeAuthor, ...includeResponses },
       });
       return openTasksVolunteer;
     }
@@ -280,6 +275,7 @@ const Tasks = {
           },
         },
       },
+      include: { ...includeAuthor, ...includeResponses },
     });
     return openTasksSenior;
   },
@@ -298,7 +294,7 @@ const Tasks = {
           },
           accepted: null,
         },
-        include: includeAuthor,
+        include: { ...includeAuthor, ...includeResponses },
       });
       return pendingTasksVolunteer;
     }
@@ -311,6 +307,7 @@ const Tasks = {
           },
         },
       },
+      include: { ...includeAuthor, ...includeResponses },
     });
     return pendingTasksSenior;
   },
@@ -321,7 +318,7 @@ const Tasks = {
     if (isUserVolunteer) {
       const volunteerToDoTasks = await prismaInstance.task.findMany({
         where: { acceptedId: id },
-        include: includeAuthor,
+        include: { ...includeAuthor, ...includeResponses },
       });
       if (!isUserVolunteer) {
         throw new Error("Task does not exist");
@@ -333,7 +330,7 @@ const Tasks = {
         authorId: id,
         acceptedId: { gt: 0 },
       },
-      include: includeVolunteer,
+      include: { ...includeAuthor, ...includeResponses },
     });
     return seniorToDoTasks;
   },

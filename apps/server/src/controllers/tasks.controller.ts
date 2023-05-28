@@ -170,9 +170,9 @@ const TasksController = {
     next: NextFunction
   ) {
     try {
-      const responderId = parseInt(req.body.responderId);
+      const responderIds = req.body.responderIds;
       const taskId = parseInt(req.params.id);
-      const accept = await Tasks.accept(taskId, responderId);
+      const accept = await Tasks.accept(taskId, responderIds);
       return res.status(201).json(accept);
     } catch (e) {
       next(e);
@@ -183,9 +183,6 @@ const TasksController = {
     try {
       const responderId = req.user.id;
       const taskId = Number(req.params.id);
-      console.log("req params id", req.params.id);
-      console.log("req params", req.params);
-      console.log(typeof taskId, "taskId type");
       const response = await Tasks.createResponse(taskId, responderId);
       return res.status(201).json(response);
     } catch (e) {

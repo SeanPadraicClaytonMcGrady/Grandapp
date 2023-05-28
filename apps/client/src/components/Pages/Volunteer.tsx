@@ -26,9 +26,13 @@ const Volunteer = () => {
     <>
       <Navbar />
       <h1>{`Hi, ${user?.username}!`}</h1>
-      {acceptedTasks.length > 0 && <TasksList tasks={acceptedTasks} />}
-      {pendingTasks.length > 0 && <TasksList tasks={pendingTasks} />}
-      {openTasks.length > 0 && <TasksList tasks={openTasks} />}
+      {acceptedTasks.length > 0 && (
+        <TasksList tasks={acceptedTasks} user={user} />
+      )}
+      {pendingTasks.length > 0 && (
+        <TasksList tasks={pendingTasks} user={user} />
+      )}
+      {openTasks.length > 0 && <TasksList tasks={openTasks} user={user} />}
     </>
   )
 }

@@ -10,6 +10,9 @@ export interface EmotionalTask {
   description: string
   scheduledDate: string
   location: string
+  accepted: Volunteer | undefined
+  acceptedId: number | undefined
+  responses: Response[]
 }
 
 export interface PhysicalTask {
@@ -19,6 +22,9 @@ export interface PhysicalTask {
   description: string
   scheduledDate: string
   location: string
+  accepted: Volunteer | undefined
+  acceptedId: number | undefined
+  responses: Response[]
 }
 
 export interface Senior {
@@ -42,6 +48,8 @@ export interface Volunteer {
   phoneNumber: string
   biography: string
   address: string
+  responses: Response[]
+  acceptedTask: Task[]
 }
 export interface Task {
   id: number
@@ -50,6 +58,16 @@ export interface Task {
   description: string
   scheduledDate: string
   location: string
+  accepted: Volunteer | undefined
+  acceptedId: number | undefined
+  responses: Response[]
+}
+
+export interface Response {
+  task: Task
+  taskId: number
+  responder: Volunteer
+  responderId: number
 }
 
 export interface User {
