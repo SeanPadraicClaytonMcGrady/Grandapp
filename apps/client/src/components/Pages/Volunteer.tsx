@@ -25,14 +25,33 @@ const Volunteer = () => {
   return (
     <>
       <Navbar />
-      <h1>{`Hi, ${user?.username}!`}</h1>
+      <span className="flex justify-center text-3xl mt-5">{`Hi, ${user?.username}!`}</span>
       {acceptedTasks.length > 0 && (
-        <TasksList tasks={acceptedTasks} user={user} />
+        <div>
+          <div className="px-4 sm:px-6 lg:px-8 mt-5">
+            Upcoming tasks
+            <TasksList tasks={acceptedTasks} user={user} />
+          </div>
+        </div>
       )}
+
       {pendingTasks.length > 0 && (
-        <TasksList tasks={pendingTasks} user={user} />
+        <div>
+          <div className="px-4 sm:px-6 lg:px-8 mt-5">
+            You've applied, we're just waiting for a response
+          </div>
+          <TasksList tasks={pendingTasks} user={user} />
+        </div>
       )}
-      {openTasks.length > 0 && <TasksList tasks={openTasks} user={user} />}
+
+      {openTasks.length > 0 && (
+        <div>
+          <div className="px-4 sm:px-6 lg:px-8 mt-5">
+            Would you like to help any of these Seniors?
+          </div>
+          <TasksList tasks={openTasks} user={user} />
+        </div>
+      )}
     </>
   )
 }
