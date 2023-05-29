@@ -108,6 +108,7 @@ const TasksController = {
     try {
       const { author, authorId, type, description, scheduledDate, location } =
         req.body;
+      console.log(scheduledDate);
       const physicalTask = await Tasks.createPhysicalTask(
         author,
         authorId,

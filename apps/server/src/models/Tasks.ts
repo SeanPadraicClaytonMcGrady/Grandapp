@@ -178,6 +178,7 @@ const Tasks = {
         },
       },
     });
+
     if (senior) {
       try {
         const newDate = new Date(scheduledDate);
@@ -201,6 +202,46 @@ const Tasks = {
     }
     return null;
   },
+
+  // async createPhysicalTask(
+  //   authorName: string,
+  //   authorId: number,
+  //   type: string,
+  //   description: string,
+  //   scheduledDate: string,
+  //   location: string
+  // ): Promise<Task | null> {
+  //   console.log(scheduledDate, typeof scheduledDate);
+  //   const senior = await prismaInstance.senior.findFirst({
+  //     where: {
+  //       user: {
+  //         username: authorName,
+  //       },
+  //     },
+  //   });
+  //   if (senior) {
+  //     try {
+  //       const newDate = new Date(scheduledDate);
+  //       const physicalTask = await prismaInstance.task.create({
+  //         data: {
+  //           author: { connect: { id: senior.id } },
+  //           type: "PHYSICAL",
+  //           description,
+  //           scheduledDate: newDate,
+  //           location,
+  //         },
+  //         include: {
+  //           author: true,
+  //         },
+  //       });
+  //       return physicalTask;
+  //     } catch (err) {
+  //       console.log(err);
+  //       return null;
+  //     }
+  //   }
+  //   return null;
+  // },
 
   async editTask(
     taskId: number,
@@ -269,10 +310,9 @@ const Tasks = {
     const openTasksSenior = await prismaInstance.task.findMany({
       where: {
         authorId: id,
+        acceptedId: null,
         responses: {
-          none: {
-            responderId: { equals: 0 },
-          },
+          none: {},
         },
       },
       include: { ...includeAuthor, ...includeResponses },
@@ -301,9 +341,10 @@ const Tasks = {
     const pendingTasksSenior = await prismaInstance.task.findMany({
       where: {
         authorId: id,
+        acceptedId: null,
         responses: {
           some: {
-            responderId: { gt: 0 },
+            responderId: { not: 0 },
           },
         },
       },

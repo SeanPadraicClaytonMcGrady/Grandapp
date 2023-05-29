@@ -56,6 +56,7 @@ const ApplyToTask = () => {
 
     const taskHasAcceptedResponse = task.acceptedId !== null
 
+    //This button is for volunteers applying normally.
     if (isVolunteer && !hasResponse && !taskHasAcceptedResponse) {
       return (
         <button
@@ -68,6 +69,7 @@ const ApplyToTask = () => {
       )
     }
 
+    //Senior view or confirm?
     if (!isVolunteer && taskHasAcceptedResponse) {
       const acceptedResponse = task.responses.find(
         (response) => response.responderId === task.acceptedId
@@ -77,37 +79,50 @@ const ApplyToTask = () => {
         return (
           <div>
             {/* <p>Accepted Volunteer: {acceptedResponse.responder.username}</p> */}
-            <Link
-              to={`/volunteers/${acceptedResponse.responderId}`}
-              className="bg-gray-400 mt-4 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
-            >
-              Confirm Volunteer
-            </Link>
+            {/* {user.senior && (
+              <Link
+                to={`/volunteers/${acceptedResponse.responderId}`}
+                className="bg-gray-400 mt-4 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
+              >
+                View To-Do Task
+              </Link>
+            )} */}
           </div>
         )
       }
     }
 
+    // Volunteer and Senior see this section when:
+    // - They are a volunteer or senior user
+    // - The task has not accepted any response or they are not the accepted volunteer
+    // - This is a pending task (Volunteer has responded, but Senior has not accepted)
+
     return (
       <div>
-        <h2>Responders:</h2>
+        {user.senior && <h2>Responders:</h2>}
         {task.responses.map((response) => (
           <div key={response.responderId}>
-            <input
-              type="checkbox"
-              checked={selectedResponders.includes(response.responderId)}
-              onChange={() => handleSelectResponder(response.responderId)}
-            />
+            {user.senior && (
+              <input
+                type="checkbox"
+                checked={selectedResponders.includes(response.responderId)}
+                onChange={() => handleSelectResponder(response.responderId)}
+              />
+            )}
             {/* <span>{response.responder.username}</span> */}
           </div>
         ))}
-        <button
-          className="bg-gray-400 mt-4 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
-          type="submit"
-          value={'confirm volunteer'}
-          disabled={selectedResponders.length === 0}
-          onClick={handleAccept}
-        ></button>
+        {user.senior && (
+          <button
+            className="bg-gray-400 mt-4 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
+            type="submit"
+            value={'confirm volunteer'}
+            disabled={selectedResponders.length === 0}
+            onClick={handleAccept}
+          >
+            Accept Volunteers
+          </button>
+        )}
       </div>
     )
   }
@@ -150,9 +165,9 @@ const ApplyToTask = () => {
                 <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
                   {task.location}
                 </div>
-                <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
+                {/* <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
                   {user?.username}
-                </div>
+                </div> */}
               </div>
               <div className="flex justify-center">
                 {renderApplicationButton()}
