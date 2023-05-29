@@ -76,7 +76,7 @@ const TaskCard: FC<TaskProps> = ({ task, user }) => {
       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
         <Link
           to={`/tasks/${task.id}`}
-          className="text-indigo-600 hover:text-indigo-900"
+          className="text-teal-400 hover:text-teal-600"
         >
           {applyButtonLabel}{' '}
           <span className="sr-only">, {task.description}</span>

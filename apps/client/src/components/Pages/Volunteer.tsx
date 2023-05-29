@@ -4,6 +4,7 @@ import { useState, useEffect, useContext } from 'react'
 import { Task } from '../../types'
 import Navbar from './NavBar'
 import { UserContext } from '../../lib/userContext'
+import Footer from '../Footer'
 
 const Volunteer = () => {
   const { user } = useContext(UserContext)
@@ -25,7 +26,9 @@ const Volunteer = () => {
   return (
     <>
       <Navbar />
-      <h1>{`Hi, ${user?.username}!`}</h1>
+      <div className="ml-8">
+        <h1>{`Hi, ${user?.username}!`}</h1>
+      </div>
       {acceptedTasks.length > 0 && (
         <TasksList tasks={acceptedTasks} user={user} />
       )}
@@ -33,6 +36,7 @@ const Volunteer = () => {
         <TasksList tasks={pendingTasks} user={user} />
       )}
       {openTasks.length > 0 && <TasksList tasks={openTasks} user={user} />}
+      <Footer />
     </>
   )
 }

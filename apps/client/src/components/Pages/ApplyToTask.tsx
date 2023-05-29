@@ -9,6 +9,7 @@ import {
 import { Task } from '../../types'
 import { Link } from 'react-router-dom'
 import { UserContext } from '../../lib/userContext'
+import Footer from '../Footer'
 
 const ApplyToTask = () => {
   const { id } = useParams<{ id: string }>()
@@ -161,6 +162,7 @@ const ApplyToTask = () => {
           )}
         </div>
       </form>
+      <Footer />
     </div>
   )
 }

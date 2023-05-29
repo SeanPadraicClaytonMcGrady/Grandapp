@@ -28,6 +28,14 @@ function NewTaskForm({
   onPhysicalTaskCreated,
 }: NewTaskFromProps): JSX.Element {
   const [values, setValues] = useState(initialValues)
+  const [showForm, setShowForm] = useState(false)
+
+  const handleOpenForm = () => {
+    setShowForm(true)
+  }
+  const handleCloseForm = () => {
+    setShowForm(false)
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -111,68 +119,84 @@ function NewTaskForm({
 
   return (
     <div>
-      <form
-        onSubmit={handleSubmit}
-        className="p-5  border-0 rounded-lg max-w-sm overflow-hidden shadow-lg"
+      <button
+        onClick={handleOpenForm}
+        className="border rounded-md bg-teal-400 text-white p-2"
       >
-        <div className="border-b border-gray-900/10 pb-12">
-          <h2 className="font-bold text-xl mb-2">Create a New Task</h2>
-          <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div className="sm:col-span-3">
-              <label className="block text-sm font-medium leading-6 text-gray-900"></label>
-              <div className="inline-block border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2">
-                <select name="type" onChange={handleChange}>
-                  <option> Select type of task</option>
-                  <option value="emotional">Social</option>
-                  <option value="physical">Physical</option>
-                </select>
-              </div>
-              <div>
-                <div className="sm:col-span-3 mt-2 text-sm leading-6 text-gray-900 name='ddw">
-                  <label htmlFor="scheduledDate">Schedule Date</label>
-                  <div>
-                    <Datepicker
-                      handleChange={handleChange}
-                      name="scheduledDate"
-                      value={values.scheduledDate}
-                    />
+        New Task
+      </button>
+      {showForm && (
+        <form
+          onSubmit={handleSubmit}
+          className="p-5  border-0 rounded-lg max-w-sm overflow-hidden shadow-lg bg-white"
+        >
+          <div className="border-b border-gray-900/10 pb-12">
+            <h2 className="font-bold text-xl mb-2">Create a New Task</h2>
+            <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="sm:col-span-3">
+                <label className="block text-sm font-medium leading-6 text-gray-900"></label>
+                <div className="inline-block border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2">
+                  <select name="type" onChange={handleChange}>
+                    <option> Select type of task</option>
+                    <option value="emotional">Social</option>
+                    <option value="physical">Physical</option>
+                  </select>
+                </div>
+                <div>
+                  <div className="sm:col-span-3 mt-2 text-sm leading-6 text-gray-900 name='ddw">
+                    <label htmlFor="scheduledDate">Schedule Date</label>
+                    <div>
+                      <Datepicker
+                        handleChange={handleChange}
+                        name="scheduledDate"
+                        value={values.scheduledDate}
+                      />
+                    </div>
+                    <div className="mt-2"></div>
                   </div>
-                  <div className="mt-2"></div>
                 </div>
-              </div>
-              <div className="sm:col-span-4">
-                <label htmlFor="description"></label>Description:
-                <input
-                  onChange={handleChange}
-                  className="block text-sm leading-6 text-gray-900"
-                  name="description"
-                  value={values.description}
-                />
-                <div>
-                  <label htmlFor="location">
-                    Location:
-                    <input
-                      onChange={handleChange}
-                      className=""
-                      name="location"
-                      value={values.location}
-                    />
-                  </label>
-                </div>
-                <div>
-                  <button
-                    className="bg-gray-400 mt-4 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
-                    type="submit"
-                    value="create new task"
-                  >
-                    Create Task
-                  </button>
+                <div className="sm:col-span-4">
+                  <label htmlFor="description"></label>Description:
+                  <input
+                    onChange={handleChange}
+                    type="text"
+                    id="large-input"
+                    className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+                    name="description"
+                    value={values.description}
+                  />
+                  <div>
+                    <label htmlFor="location">
+                      Location:
+                      <input
+                        onChange={handleChange}
+                        className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+                        name="location"
+                        value={values.location}
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <button
+                      className="bg-teal-400 mt-4 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded"
+                      type="submit"
+                      value="create new task"
+                    >
+                      Create Task
+                    </button>
+                    <button
+                      className="border p-1 rounded-md mt-4"
+                      onClick={handleCloseForm}
+                    >
+                      Close
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      )}
     </div>
   )
 }

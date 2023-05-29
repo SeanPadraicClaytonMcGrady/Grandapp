@@ -5,6 +5,8 @@ import { Task } from '../../types'
 import NewTaskForm from '../NewTaskForm'
 import Navbar from './NavBar'
 import { UserContext } from '../../lib/userContext'
+import Footer from '../Footer'
+import backgroundgrind from '../assets/backgroundgrind.jpg'
 
 const Senior = () => {
   const { user } = useContext(UserContext)
@@ -27,17 +29,29 @@ const Senior = () => {
   return (
     <>
       <Navbar />
-      <h1>{`Hi, ${user?.username}!`}</h1>
-      {acceptedTasks?.length > 0 && (
-        <TasksList tasks={acceptedTasks} user={user} />
-      )}
-      {pendingTasks?.length > 0 && (
-        <TasksList tasks={pendingTasks} user={user} />
-      )}
-      {openTasks?.length > 0 && <TasksList tasks={openTasks} user={user} />}
-      <div className="flex justify-center">
-        <NewTaskForm />
+      <div
+        className=""
+        // style={{
+        //   backgroundImage: `url(${backgroundgrind})`,
+        //   backgroundSize: 'cover',
+        //   backgroundRepeat: 'no-repeat',
+        // }}
+      >
+        <div className="ml-8">
+          <h1>{`Hi, ${user?.username}!`}</h1>
+        </div>
+        {acceptedTasks?.length > 0 && (
+          <TasksList tasks={acceptedTasks} user={user} />
+        )}
+        {pendingTasks?.length > 0 && (
+          <TasksList tasks={pendingTasks} user={user} />
+        )}
+        {openTasks?.length > 0 && <TasksList tasks={openTasks} user={user} />}
+        <div className="flex justify-center p-6">
+          <NewTaskForm />
+        </div>
       </div>
+      <Footer />
     </>
   )
 }
