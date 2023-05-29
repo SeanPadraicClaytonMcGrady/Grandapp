@@ -32,9 +32,9 @@ const Volunteer = () => {
       {acceptedTasks.length > 0 && (
         <div>
           <div className="px-4 sm:px-6 lg:px-8 mt-5">
-            Upcoming tasks
-            <TasksList tasks={acceptedTasks} user={user} />
+            Get ready! Here are your upcoming tasks
           </div>
+          <TasksList tasks={acceptedTasks} user={user} />
         </div>
       )}
       {pendingTasks.length > 0 && (
@@ -47,13 +47,15 @@ const Volunteer = () => {
       )}
       {openTasks.length > 0 && (
         <div>
-          <div className="px-4 sm:px-6 lg:px-8 mt-5">
+          <div className="px-4 sm:px-6 lg:px-8 mt-5 mb-4">
             Would you like to help any of these Seniors?
           </div>
           <TasksList tasks={openTasks} user={user} />
         </div>
       )}
-      <Footer />
+      <div className="mt-4">
+        <Footer />
+      </div>
     </>
   )
 }

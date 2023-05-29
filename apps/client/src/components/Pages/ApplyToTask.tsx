@@ -10,6 +10,8 @@ import { Task } from '../../types'
 import { Link } from 'react-router-dom'
 import { UserContext } from '../../lib/userContext'
 import Footer from '../Footer'
+import ExactLocation from '../ExactLocation'
+import background from '../Assets/background.jpg'
 
 const ApplyToTask = () => {
   const { id } = useParams<{ id: string }>()
@@ -141,42 +143,55 @@ const ApplyToTask = () => {
   return (
     <div>
       <Navbar />
-
-      <form className="" onSubmit={handleSubmit}>
-        <div className="min-h-screen min-w-screen flex flex-col justify-center">
-          {!task && 'Loading task'}
-          {task && (
-            <div className="max-w-md w-full mx-auto">
-              <h2 className="flex justify-center font-bold text-xl mb-2">
-                Task Overview
-              </h2>
-              <div className="block mb-2">
-                <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
-                  {task.type}
-                </div>
-                <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
-                  {task.author.user.username}
-                </div>
-                <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
-                  {task.scheduledDate}
-                </div>
-                <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
-                  {task.description}
-                </div>
-                <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
-                  {task.location}
-                </div>
-                {/* <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
+      <div
+        className="w-full"
+        style={{
+          backgroundImage: `url(${background})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <form className="" onSubmit={handleSubmit}>
+          <div className="min-h-screen min-w-screen flex flex-col justify-center">
+            {!task && 'Loading task'}
+            {task && (
+              <div className="max-w-md w-full mx-auto">
+                <div className="max-w-md w-full mx-auto mt-4 bg-white p-8 border border-gray-300 rounded-lg">
+                  <h2 className="flex justify-center font-bold text-xl mb-2">
+                    Task Overview
+                  </h2>
+                  <div className="block mb-2">
+                    <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
+                      {task.type}
+                    </div>
+                    <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
+                      {task.author.user.username}
+                    </div>
+                    <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
+                      {task.scheduledDate}
+                    </div>
+                    <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
+                      {task.description}
+                    </div>
+                    <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
+                      {task.location}
+                    </div>
+                    <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
+                      <ExactLocation address={task.location} />
+                    </div>
+                    {/* <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
                   {user?.username}
                 </div> */}
+                  </div>
+                  <div className="flex justify-center">
+                    {renderApplicationButton()}
+                  </div>
+                </div>
               </div>
-              <div className="flex justify-center">
-                {renderApplicationButton()}
-              </div>
-            </div>
-          )}
-        </div>
-      </form>
+            )}
+          </div>
+        </form>
+      </div>
       <Footer />
     </div>
   )
