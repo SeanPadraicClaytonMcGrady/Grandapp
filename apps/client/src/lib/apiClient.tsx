@@ -233,7 +233,7 @@ export async function createSenior({
 }
 
 export async function createApplication(): Promise<void> {
-  const response = await fetch(`${BASE_URL}/tasks/:id`, {
+  const response = await fetch(`${BASE_URL}/tasks/:id/response`, {
     method: 'PUT',
     credentials: 'include',
   })

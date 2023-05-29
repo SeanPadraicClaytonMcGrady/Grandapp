@@ -20,6 +20,7 @@ import {
   fetchSeniors,
 } from './lib/apiClient.tsx'
 import Senior from './components/Pages/Senior.tsx'
+import { UserContextProvider } from './lib/userContext.tsx'
 
 const router = createBrowserRouter([
   {
@@ -29,10 +30,6 @@ const router = createBrowserRouter([
   {
     path: '/home',
     element: <Home />,
-  },
-  {
-    path: '/profile',
-    element: <Profile />,
   },
   {
     path: '/users',

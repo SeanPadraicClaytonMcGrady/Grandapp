@@ -183,7 +183,7 @@ const TasksController = {
     try {
       console.log(req.user, "I am req.user in tasks.controller.ts");
       const responderId = req.user.id;
-      const taskId = Number(req.params.id);
+      const taskId = parseInt(req.params.id);
       console.log("req params id", req.params.id);
       console.log("req params", req.params);
       console.log(typeof taskId, "taskId type");

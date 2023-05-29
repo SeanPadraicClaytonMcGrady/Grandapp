@@ -27,7 +27,7 @@ const ApplyToTask = () => {
     console.log(taskId)
     if (loggedInUserId && taskId) {
       await createApplication()
-      navigate(`/tasks/${id}/response`)
+      navigate(`/tasks/:id/response`)
     }
   }
 
