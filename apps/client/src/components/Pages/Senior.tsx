@@ -27,15 +27,32 @@ const Senior = () => {
   return (
     <>
       <Navbar />
-      <h1>{`Hi, ${user?.username}!`}</h1>
+      <span className="flex justify-center text-3xl mt-5">{`Hi, ${user?.username}!`}</span>
       {acceptedTasks?.length > 0 && (
-        <TasksList tasks={acceptedTasks} user={user} />
+        <div>
+          <div className="px-4 sm:px-6 lg:px-8 mt-5">Confirmed tasks</div>
+          <TasksList tasks={acceptedTasks} user={user} />
+        </div>
       )}
       {pendingTasks?.length > 0 && (
-        <TasksList tasks={pendingTasks} user={user} />
+        <div>
+          <div className="px-4 sm:px-6 lg:px-8 mt-5">
+            You've got applicants, please see if you'd like to confirm any!
+          </div>
+          <TasksList tasks={pendingTasks} user={user} />
+        </div>
       )}
-      {openTasks?.length > 0 && <TasksList tasks={openTasks} user={user} />}
-      <div className="flex justify-center">
+
+      {openTasks?.length > 0 && (
+        <div>
+          <div className="px-4 sm:px-6 lg:px-8 mt-5">
+            There aren't any applicants for these tasks yet, we'll let you know
+            when someone applies!
+          </div>
+          <TasksList tasks={openTasks} user={user} />
+        </div>
+      )}
+      <div className="flex justify-center mt-5">
         <NewTaskForm />
       </div>
     </>
