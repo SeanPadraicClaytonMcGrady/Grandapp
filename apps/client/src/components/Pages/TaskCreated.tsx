@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from './NavBar'
 import Footer from '../Footer'
 import background from '../Assets/background.jpg'
-const AppliedToTask = () => {
+const TaskCreated = () => {
   return (
     <div>
       <Navbar />
@@ -16,8 +16,8 @@ const AppliedToTask = () => {
       >
         <form className="max-w-4xl w-full h-screen mx-auto">
           <div className="flex justify-center text-3xl border p-3 rounded-md bg-white text-gray-500">
-            Thank you for your application, you will be notified if you've been
-            successful!
+            Thank you for creating this task, we'll let you know when you've got
+            some applicants!
           </div>
         </form>
       </div>
@@ -28,4 +28,4 @@ const AppliedToTask = () => {
   )
 }
 
-export default AppliedToTask
+export default TaskCreated

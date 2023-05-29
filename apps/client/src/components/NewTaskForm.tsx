@@ -3,6 +3,7 @@ import { EmotionalTask, PhysicalTask } from '../types'
 import { createEmotionalTask, createPhysicalTask } from '../lib/apiClient'
 import flatpickr from 'flatpickr'
 import 'flatpickr/dist/flatpickr.css'
+import { Link } from 'react-router-dom'
 
 type NewTaskFromProps = {
   onEmotionalTaskCreated: (emotionalTask: EmotionalTask) => void
@@ -182,7 +183,7 @@ function NewTaskForm({
                       type="submit"
                       value="create new task"
                     >
-                      Create Task
+                      <Link to="/senior/taskrequested">Create Task</Link>
                     </button>
                     <button
                       className="border p-1 rounded-md mt-4"
