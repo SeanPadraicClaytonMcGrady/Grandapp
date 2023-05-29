@@ -131,6 +131,9 @@ export async function createPhysicalTask({
 }: ICreatePhysicalTaskPayload) {
   const response = await fetch(`${BASE_URL}/physicalTasks`, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     credentials: 'include',
     body: JSON.stringify({
       type,

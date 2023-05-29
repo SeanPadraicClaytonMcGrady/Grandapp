@@ -29,6 +29,7 @@ const Senior = () => {
   return (
     <>
       <Navbar />
+
       <div
         className=""
         // style={{
@@ -40,16 +41,31 @@ const Senior = () => {
         <div className="ml-8">
           <h1>{`Hi, ${user?.username}!`}</h1>
         </div>
-        {acceptedTasks?.length > 0 && (
+      {acceptedTasks?.length > 0 && (
+        <div>
+          <div className="px-4 sm:px-6 lg:px-8 mt-5">Confirmed tasks</div>
           <TasksList tasks={acceptedTasks} user={user} />
-        )}
-        {pendingTasks?.length > 0 && (
-          <TasksList tasks={pendingTasks} user={user} />
-        )}
-        {openTasks?.length > 0 && <TasksList tasks={openTasks} user={user} />}
-        <div className="flex justify-center p-6">
-          <NewTaskForm />
         </div>
+      )}
+      {pendingTasks?.length > 0 && (
+        <div>
+          <div className="px-4 sm:px-6 lg:px-8 mt-5">
+            You've got applicants, please see if you'd like to confirm any!
+          </div>
+          <TasksList tasks={pendingTasks} user={user} />
+        </div>
+      )}
+      {openTasks?.length > 0 && (
+        <div>
+          <div className="px-4 sm:px-6 lg:px-8 mt-5">
+            There aren't any applicants for these tasks yet, we'll let you know
+            when someone applies!
+          </div>
+          <TasksList tasks={openTasks} user={user} />
+        </div>
+      )}
+      <div className="flex justify-center mt-5">
+        <NewTaskForm />
       </div>
       <Footer />
     </>

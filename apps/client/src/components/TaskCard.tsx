@@ -39,7 +39,9 @@ const TaskCard: FC<TaskProps> = ({ task, user }) => {
   if (task.acceptedId === user?.id) {
     applyButtonLabel = 'View Details'
   } else if (task.author?.id === user?.id) {
-    applyButtonLabel = 'View'
+    applyButtonLabel = 'View Details'
+  } else if (task.author?.id === user?.id && task.responses.length > 0) {
+    applyButtonLabel = 'Confirm Volunteer'
   }
 
   return (
