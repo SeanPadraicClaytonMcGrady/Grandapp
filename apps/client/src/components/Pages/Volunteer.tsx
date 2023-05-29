@@ -4,6 +4,7 @@ import { useState, useEffect, useContext } from 'react'
 import { Task } from '../../types'
 import Navbar from './NavBar'
 import { UserContext } from '../../lib/userContext'
+import Footer from '../Footer'
 
 const Volunteer = () => {
   const { user } = useContext(UserContext)
@@ -25,7 +26,9 @@ const Volunteer = () => {
   return (
     <>
       <Navbar />
-      <span className="flex justify-center text-3xl mt-5">{`Hi, ${user?.username}!`}</span>
+      <div className="ml-8">
+        <h1>{`Hi, ${user?.username}!`}</h1>
+      </div>
       {acceptedTasks.length > 0 && (
         <div>
           <div className="px-4 sm:px-6 lg:px-8 mt-5">
@@ -34,7 +37,6 @@ const Volunteer = () => {
           </div>
         </div>
       )}
-
       {pendingTasks.length > 0 && (
         <div>
           <div className="px-4 sm:px-6 lg:px-8 mt-5">
@@ -43,7 +45,6 @@ const Volunteer = () => {
           <TasksList tasks={pendingTasks} user={user} />
         </div>
       )}
-
       {openTasks.length > 0 && (
         <div>
           <div className="px-4 sm:px-6 lg:px-8 mt-5">
@@ -52,6 +53,7 @@ const Volunteer = () => {
           <TasksList tasks={openTasks} user={user} />
         </div>
       )}
+      <Footer />
     </>
   )
 }

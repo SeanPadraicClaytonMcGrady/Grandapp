@@ -6,7 +6,7 @@ const Navbar = () => {
   const { user } = useContext(UserContext)
   return (
     <>
-      <nav className="bg-teal-400 mt-0 border-box">
+      <nav className="bg-white mt-0 border-box p-2 m-4">
         <div className="flex justify-between px-1 py-1">
           <div className="">
             <img
@@ -16,12 +16,14 @@ const Navbar = () => {
             />
           </div>
 
-          <div className="flex items-center px-2 border-solid border-2 border-black rounded mt-2 mb-2">
+          <div className="flex items-center bg-teal-400 px-2 border-solid border-1 rounded mt-2 mb-2 text-white">
+           
             {!(user?.senior === null) ? (
               <Link to="/senior">GrandApp</Link>
             ) : (
               <Link to="/volunteer">Grandapp</Link>
             )}
+
           </div>
 
           <div className="flex items-center">

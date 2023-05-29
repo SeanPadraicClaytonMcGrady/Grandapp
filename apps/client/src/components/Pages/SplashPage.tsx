@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { fetchLoginUsers } from '../../lib/apiClient'
 import { Link } from 'react-router-dom'
 import { UserContext } from '../../lib/userContext'
+import background from '../assets/background.jpg'
+import Footer from '../Footer'
 const SplashPage = () => {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -49,12 +51,21 @@ const SplashPage = () => {
   }
   return (
     <>
-      <div className="min-h-screen min-w-screen flex flex-col justify-center">
+      <div className="text-3xl font-bold text-center border rounded-b-md bg-teal-400 text-white py-3">
+        GrandApp
+      </div>
+      <div
+        className="min-h-screen min-w-screen flex flex-col justify-center w-full"
+        style={{
+          backgroundImage: `url(${background})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
         <div className="max-w-md w-full mx-auto">
-          <div className="text-3xl font-bold text-gray-900 mt-2 text-center">
+          {/* <div className="text-3xl font-bold text-center border-1 rounded-md bg-teal-400 text-white">
             GrandApp
-          </div>
-          <div className="text-center font-medium text-xl">Login</div>
+          </div> */}
         </div>
         <div className="max-w-md w-full mx-auto mt-4 bg-white p-8 border border-gray-300 rounded-lg">
           <form action="" className="space-y-6" onSubmit={handleSubmit}>
@@ -91,11 +102,11 @@ const SplashPage = () => {
               />
             </div>
             <div>
-              <button className="w-full py-2 px-4 bg-blue-400 hover:bg-orange-500 rounded-md text-white text-sm">
+              <button className="w-full py-2 px-4 bg-teal-400 hover:bg-teal-600 rounded-md text-white text-sm">
                 Proceed
               </button>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between text-gray-600 font-bold">
               <div>Don't have an account?</div>
               <div>
                 <Link to="/register">Register here</Link>
@@ -107,6 +118,7 @@ const SplashPage = () => {
           </form>
         </div>
       </div>
+      <Footer />
     </>
   )
 }
