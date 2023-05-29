@@ -26,7 +26,7 @@ const Volunteer = () => {
   return (
     <>
       <Navbar />
-      <div className="ml-8">
+      <div className="ml-8 mt-5 font-bold text-xl">
         <h1>{`Hi, ${user?.username}!`}</h1>
       </div>
       {acceptedTasks.length > 0 && (

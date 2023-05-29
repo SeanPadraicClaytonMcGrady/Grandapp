@@ -63,7 +63,7 @@ const ApplyToTask = () => {
     if (isVolunteer && !hasResponse && !taskHasAcceptedResponse) {
       return (
         <button
-          className="bg-gray-400 mt-4 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
+          className="bg-teal-400 mt-4 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded"
           type="submit"
           value={'apply to task'}
         >
@@ -157,7 +157,7 @@ const ApplyToTask = () => {
             {task && (
               <div className="max-w-md w-full mx-auto">
                 <div className="max-w-md w-full mx-auto mt-4 bg-white p-8 border border-gray-300 rounded-lg">
-                  <h2 className="flex justify-center font-bold text-xl mb-2">
+                  <h2 className="flex justify-center font-bold text-xl mb-2 text-gray-500">
                     Task Overview
                   </h2>
                   <div className="block mb-2">

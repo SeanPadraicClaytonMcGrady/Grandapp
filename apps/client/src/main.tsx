@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import Home from './components/Pages/Home.tsx'
+
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 import React from 'react'
@@ -14,17 +14,17 @@ import SignUp from './components/Pages/SignUp.tsx'
 
 import Senior from './components/Pages/Senior.tsx'
 import { UserContextProvider } from './lib/userContext.tsx'
+import TaskCreated from './components/Pages/TaskCreated.tsx'
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
   },
-  {
-    path: '/home',
-    element: <Home />,
-  },
-
+  // {
+  //   path: '/home',
+  //   element: <Home />,
+  // },
   {
     path: '/users',
     element: <Users />,
@@ -54,6 +54,11 @@ const router = createBrowserRouter([
   {
     path: '/tasks/:id/response',
     element: <AppliedToTask />,
+  },
+
+  {
+    path: '/senior/taskrequested',
+    element: <TaskCreated />,
   },
 ])
 

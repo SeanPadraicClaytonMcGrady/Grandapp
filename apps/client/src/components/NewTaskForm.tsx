@@ -3,6 +3,7 @@ import { EmotionalTask, PhysicalTask } from '../types'
 import { createEmotionalTask, createPhysicalTask } from '../lib/apiClient'
 import flatpickr from 'flatpickr'
 import 'flatpickr/dist/flatpickr.css'
+import { Link } from 'react-router-dom'
 
 type NewTaskFromProps = {
   onEmotionalTaskCreated: (emotionalTask: EmotionalTask) => void
@@ -47,6 +48,7 @@ function NewTaskForm({
           scheduledDate: values.scheduledDate[0],
           location: values.location,
         })
+        console.log(emotionalTask)
         onEmotionalTaskCreated(emotionalTask)
       } else if (values.type === 'physical') {
         const physicalTask = await createPhysicalTask({
@@ -184,6 +186,7 @@ function NewTaskForm({
                     >
                       Create Task
                     </button>
+
                     <button
                       className="border p-1 rounded-md mt-4"
                       onClick={handleCloseForm}
