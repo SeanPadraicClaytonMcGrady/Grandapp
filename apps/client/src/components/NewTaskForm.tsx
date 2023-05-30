@@ -48,6 +48,7 @@ function NewTaskForm({
           scheduledDate: values.scheduledDate[0],
           location: values.location,
         })
+        console.log(emotionalTask)
         onEmotionalTaskCreated(emotionalTask)
       } else if (values.type === 'physical') {
         const physicalTask = await createPhysicalTask({
@@ -183,8 +184,9 @@ function NewTaskForm({
                       type="submit"
                       value="create new task"
                     >
-                      <Link to="/senior/taskrequested">Create Task</Link>
+                      Create Task
                     </button>
+
                     <button
                       className="border p-1 rounded-md mt-4"
                       onClick={handleCloseForm}
