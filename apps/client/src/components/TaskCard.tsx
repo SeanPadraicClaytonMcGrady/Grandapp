@@ -35,13 +35,55 @@ const TaskCard: FC<TaskProps> = ({ task, user }) => {
     },
   ]
 
-  let applyButtonLabel = 'Apply'
-  if (task.acceptedId === user?.id) {
+  let applyButtonLabel = 'View'
+  if (task.acceptedId == user?.id) {
     applyButtonLabel = 'View Details'
-  } else if (task.author?.id === user?.id) {
+  }
+  if (
+    user?.username == task.author.user.username &&
+    task.responses.length > 0 &&
+    task.acceptedId == undefined
+  ) {
+    applyButtonLabel = 'View Responses'
+  }
+  if (
+    user?.username == task.author.user.username &&
+    task.responses.length > 0 &&
+    task.acceptedId
+  ) {
     applyButtonLabel = 'View Details'
-  } else if (task.author?.id === user?.id && task.responses.length > 0) {
-    applyButtonLabel = 'Confirm Volunteer'
+  }
+  if (
+    user?.username == task.author.user.username &&
+    task.responses.length == 0
+  ) {
+    applyButtonLabel = 'Review & Change Info'
+  }
+  if (user?.volunteer && task.responses.length == 0) {
+    applyButtonLabel = 'Apply First!'
+  }
+  if (
+    user?.volunteer &&
+    task.responses.some((response) => response.responderId == user.id)
+  ) {
+    applyButtonLabel = 'Review'
+  }
+  if (
+    user?.volunteer &&
+    task.responses.length > 0 &&
+    !task.responses.some((response) => response.responderId == user.id)
+  ) {
+    applyButtonLabel = 'Apply'
+  }
+  // if (
+  //   user?.username == task.author.user.username &&
+  //   task.responses.length > 0 &&
+  //   task.acceptedId == undefined
+  // ) {
+  //   applyButtonLabel = 'View Responses'
+  // }
+  if (user?.volunteer && task.acceptedId == user.id) {
+    applyButtonLabel = 'View details'
   }
 
   return (
