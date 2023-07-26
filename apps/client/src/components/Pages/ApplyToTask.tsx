@@ -12,6 +12,7 @@ import { UserContext } from '../../lib/userContext'
 import Footer from '../Footer'
 import ExactLocation from '../ExactLocation'
 import background from '../Assets/background.jpg'
+import { User } from '../../types'
 
 const ApplyToTask = () => {
   const { id } = useParams<{ id: string }>()
@@ -72,24 +73,18 @@ const ApplyToTask = () => {
       )
     }
 
-    //Senior view or confirm?
+    //Senior view accepted & confirmed task.
     if (!isVolunteer && taskHasAcceptedResponse) {
       const acceptedResponse = task.responses.find(
-        (response) => response.responderId === task.acceptedId
+        (response) => response.responderId == task.acceptedId
       )
 
       if (acceptedResponse) {
         return (
           <div>
-            {/* <p>Accepted Volunteer: {acceptedResponse.responder.username}</p> */}
-            {/* {user.senior && (
-              <Link
-                to={`/volunteers/${acceptedResponse.responderId}`}
-                className="bg-gray-400 mt-4 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded"
-              >
-                View To-Do Task
-              </Link>
-            )} */}
+            <p>
+              Accepted Volunteer(s): {acceptedResponse.responder.user.username}
+            </p>
           </div>
         )
       }
@@ -104,15 +99,18 @@ const ApplyToTask = () => {
       <div>
         {user.senior && <h2>Responders:</h2>}
         {task.responses.map((response) => (
-          <div key={response.responderId}>
+          <div className="flex" key={response.responderId}>
             {user.senior && (
               <input
+                className="flex-initial"
                 type="checkbox"
                 checked={selectedResponders.includes(response.responderId)}
                 onChange={() => handleSelectResponder(response.responderId)}
               />
             )}
-            {/* <span>{response.responder.username}</span> */}
+            <span className="flex-1 px-1">
+              {response.responder.user?.username}
+            </span>
           </div>
         ))}
         {user.senior && (
@@ -179,9 +177,6 @@ const ApplyToTask = () => {
                     <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
                       <ExactLocation address={task.location} />
                     </div>
-                    {/* <div className="border-2 rounded-md px-3 py-1 text-sm text-gray-700 mr-2 mb-2">
-                  {user?.username}
-                </div> */}
                   </div>
                   <div className="flex justify-center">
                     {renderApplicationButton()}
