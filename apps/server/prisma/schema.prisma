@@ -34,7 +34,6 @@ model Senior {
   authorTask Task[] @relation("author")
 }
 
-// delted repospderTask
 model Volunteer {
   id           Int        @id @default(autoincrement())
   user         User       @relation(fields: [id], references: [id])

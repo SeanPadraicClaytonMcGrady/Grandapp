@@ -50,7 +50,15 @@ const Tasks = {
         author: {
           include: { user: true },
         },
-        responses: true,
+        responses: {
+          include: {
+            responder: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
       },
     });
     if (!task) {

@@ -41,26 +41,20 @@ export interface Senior {
 
 export interface Volunteer {
   id: number
-  name: string
-  username: string
-  email: string
-  password: string
-  phoneNumber: string
-  biography: string
-  address: string
+  user: User
   responses: Response[]
   acceptedTask: Task[]
 }
 export interface Task {
   id: number
   author: Author
+  responses: Response[]
+  accepted: Volunteer | undefined
+  acceptedId: number | undefined
   type: string
   description: string
   scheduledDate: string
   location: string
-  accepted: Volunteer | undefined
-  acceptedId: number | undefined
-  responses: Response[]
 }
 
 export interface Response {
