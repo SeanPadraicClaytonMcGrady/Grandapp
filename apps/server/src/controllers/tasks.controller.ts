@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import Tasks from "../models/Tasks";
 import dotenv from "dotenv";
+import jwt, { JwtPayload } from "jsonwebtoken";
 dotenv.config();
 
 const TasksController = {
@@ -83,26 +84,36 @@ const TasksController = {
     }
   },
 
-  //Here
-  async newEmotionalTask(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { author, authorId, type, description, scheduledDate, location } =
-        req.body;
+  //I think the Mr. Darcy Dominance bug takes place here.
+  //I believe the problem is that this controller was destructuring something which didn't exist.
+  //Then in Prisma it would default to 1. I think. I'm not actually sure.
+  //In any event, the previous code was incorrect because it didn't take information from credentials.
+  //I will work on this ASAP. -Sean
 
-      console.log(req.body);
-      const emotionalTask = await Tasks.createEmotionalTask(
-        author,
-        authorId,
-        type,
-        description,
-        scheduledDate,
-        location
-      );
-      return res.status(201).json(emotionalTask);
-    } catch (e) {
-      next(e);
-    }
-  },
+  // async newEmotionalTask(req: Request, res: Response, next: NextFunction) {
+  //   try {
+  //     const { type, description, scheduledDate, location } = req.body;
+  //     const credentials = req.headers.authorization;
+  //     const token = credentials?.replace("BEARER", "");
+  //     const decodedToken: JwtPayload | null = token
+  //       ? jwt.decode(token)
+  //       : null;
+  //     const { username, id } = decodedToken;
+
+  //     console.log(credentials);
+  //     const emotionalTask = await Tasks.createEmotionalTask(
+  //       username,
+  //       id,
+  //       type,
+  //       description,
+  //       scheduledDate,
+  //       location
+  //     );
+  //     return res.status(201).json(emotionalTask);
+  //   } catch (e) {
+  //     next(e);
+  //   }
+  // },
 
   async newPhysicalTask(req: Request, res: Response, next: NextFunction) {
     try {
