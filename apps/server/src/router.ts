@@ -7,12 +7,12 @@ import TasksController from "./controllers/tasks.controller";
 import authMiddleware from "./middlewares/authentication";
 
 const router = express.Router();
-router.post("/login", UsersController.loginUser);
 
 const authRouter = express.Router();
 authRouter.use(authMiddleware);
 router.use(authRouter);
 
+authRouter.post("/login", UsersController.loginUser);
 //volunteers, seniors, users
 authRouter.post("/volunteers", VolunteersController.create);
 authRouter.post("/seniors", SeniorsController.create);

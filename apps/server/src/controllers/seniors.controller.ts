@@ -36,7 +36,6 @@ const SeniorsController = {
       ) {
         throw new Error("Missing parameters.");
       }
-      //We need to add hashes to passwords.
       const hashedPasw = await hashPassword(password);
       const newSenior = await Senior.createSenior(
         username,

@@ -1,20 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import Volunteer from "../models/Volunteers";
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import atob from 'atob'
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import atob from "atob";
 import User from "../models/Users";
 // import  passwordUtils  from "../utils/passwordUtils";
-const saltRounds = 10
+const saltRounds = 10;
 
 export async function hashPassword(pasw: string): Promise<string> {
-  const hashed = await bcrypt.hash(pasw, saltRounds)
-  return hashed
+  const hashed = await bcrypt.hash(pasw, saltRounds);
+  return hashed;
 }
 // function checkPassword(pasw: string, hashedPasw: string): Boolean {
 //   return bcrypt.compareSync(pasw, hashedPasw)
 // }
-
 
 const VolunteersController = {
   async create(req: Request, res: Response, next: NextFunction) {
@@ -29,11 +28,19 @@ const VolunteersController = {
         medicalNeeds,
         address,
       } = req.body;
-      if (!username || !name || !password || !email || !phoneNumber || !biography || !address) {
-        throw new Error('Missing parameters.')
+      if (
+        !username ||
+        !name ||
+        !password ||
+        !email ||
+        !phoneNumber ||
+        !biography ||
+        !address
+      ) {
+        throw new Error("Missing parameters.");
       }
 
-      const hashedPasw = await hashPassword(password)
+      const hashedPasw = await hashPassword(password);
       const newVolunteer = await Volunteer.createVolunteer(
         username,
         name,
@@ -43,7 +50,7 @@ const VolunteersController = {
         biography,
         medicalNeeds,
         address
-      )
+      );
       const resp = {
         username: newVolunteer.username,
         name: newVolunteer.name,
@@ -52,8 +59,7 @@ const VolunteersController = {
         biography: newVolunteer.biography,
         medicalNeeds: newVolunteer.medicalNeeds,
         address: newVolunteer.address,
-      }
-      //We need to add hashes to passwords.
+      };
       return res.status(201).json(resp);
     } catch (e) {
       next(e);
