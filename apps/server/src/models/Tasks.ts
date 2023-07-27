@@ -211,46 +211,6 @@ const Tasks = {
     return null;
   },
 
-  // async createPhysicalTask(
-  //   authorName: string,
-  //   authorId: number,
-  //   type: string,
-  //   description: string,
-  //   scheduledDate: string,
-  //   location: string
-  // ): Promise<Task | null> {
-  //   console.log(scheduledDate, typeof scheduledDate);
-  //   const senior = await prismaInstance.senior.findFirst({
-  //     where: {
-  //       user: {
-  //         username: authorName,
-  //       },
-  //     },
-  //   });
-  //   if (senior) {
-  //     try {
-  //       const newDate = new Date(scheduledDate);
-  //       const physicalTask = await prismaInstance.task.create({
-  //         data: {
-  //           author: { connect: { id: senior.id } },
-  //           type: "PHYSICAL",
-  //           description,
-  //           scheduledDate: newDate,
-  //           location,
-  //         },
-  //         include: {
-  //           author: true,
-  //         },
-  //       });
-  //       return physicalTask;
-  //     } catch (err) {
-  //       console.log(err);
-  //       return null;
-  //     }
-  //   }
-  //   return null;
-  // },
-
   async editTask(
     taskId: number,
     description: string,
