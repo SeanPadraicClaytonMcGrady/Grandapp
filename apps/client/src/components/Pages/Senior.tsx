@@ -65,7 +65,7 @@ const Senior = () => {
           </div>
         )}
         <div className="flex justify-center mt-5">
-          <NewTaskForm />
+          <NewTaskForm authorId={user?.id ?? 0} />
         </div>
         <Footer />
       </div>

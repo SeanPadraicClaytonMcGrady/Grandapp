@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 type NewTaskFromProps = {
   onEmotionalTaskCreated: (emotionalTask: EmotionalTask) => void
   onPhysicalTaskCreated: (physicalTask: PhysicalTask) => void
+  authorId: number
 }
 
 interface Props {
@@ -27,6 +28,7 @@ const initialValues = {
 function NewTaskForm({
   onEmotionalTaskCreated,
   onPhysicalTaskCreated,
+  authorId,
 }: NewTaskFromProps): JSX.Element {
   const [values, setValues] = useState(initialValues)
   const [showForm, setShowForm] = useState(false)
@@ -38,11 +40,13 @@ function NewTaskForm({
     setShowForm(false)
   }
 
+  //Change this to receive the id of the user.
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     try {
       if (values.type === 'emotional') {
         const emotionalTask = await createEmotionalTask({
+          authorId: authorId,
           type: values.type,
           description: values.description,
           scheduledDate: values.scheduledDate[0],

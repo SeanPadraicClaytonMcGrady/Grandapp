@@ -90,30 +90,22 @@ const TasksController = {
   //In any event, the previous code was incorrect because it didn't take information from credentials.
   //I will work on this ASAP. -Sean
 
-  // async newEmotionalTask(req: Request, res: Response, next: NextFunction) {
-  //   try {
-  //     const { type, description, scheduledDate, location } = req.body;
-  //     const credentials = req.headers.authorization;
-  //     const token = credentials?.replace("BEARER", "");
-  //     const decodedToken: JwtPayload | null = token
-  //       ? jwt.decode(token)
-  //       : null;
-  //     const { username, id } = decodedToken;
-
-  //     console.log(credentials);
-  //     const emotionalTask = await Tasks.createEmotionalTask(
-  //       username,
-  //       id,
-  //       type,
-  //       description,
-  //       scheduledDate,
-  //       location
-  //     );
-  //     return res.status(201).json(emotionalTask);
-  //   } catch (e) {
-  //     next(e);
-  //   }
-  // },
+  async newEmotionalTask(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { authorId, type, description, scheduledDate, location } = req.body;
+      console.log(scheduledDate);
+      const emotionalTask = await Tasks.createEmotionalTask(
+        Number(authorId),
+        type,
+        description,
+        scheduledDate,
+        location
+      );
+      return res.status(201).json(emotionalTask);
+    } catch (e) {
+      next(e);
+    }
+  },
 
   async newPhysicalTask(req: Request, res: Response, next: NextFunction) {
     try {

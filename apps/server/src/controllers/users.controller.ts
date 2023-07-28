@@ -86,6 +86,7 @@ const UsersController = {
         },
         secret
       );
+
       res.setHeader(
         `Set-Cookie`,
         `AUTHORIZATION=BEARER ${token}; Max-Age=90000;`
