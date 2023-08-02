@@ -171,7 +171,6 @@ const Tasks = {
   },
 
   async createPhysicalTask(
-    authorName: string,
     authorId: number,
     type: string,
     description: string,
@@ -181,7 +180,7 @@ const Tasks = {
     const senior = await prismaInstance.senior.findFirst({
       where: {
         user: {
-          username: authorName,
+          id: authorId,
         },
       },
     });

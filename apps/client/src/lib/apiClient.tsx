@@ -94,6 +94,7 @@ interface ICreateEmotionalTaskPayload {
 }
 
 interface ICreatePhysicalTaskPayload {
+  authorId: number
   type: string
   description: string
   scheduledDate: string
@@ -127,6 +128,7 @@ export async function createEmotionalTask({
 }
 
 export async function createPhysicalTask({
+  authorId,
   type,
   description,
   scheduledDate,
@@ -139,6 +141,7 @@ export async function createPhysicalTask({
     },
     credentials: 'include',
     body: JSON.stringify({
+      authorId,
       type,
       description,
       scheduledDate,

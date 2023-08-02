@@ -52,16 +52,15 @@ function NewTaskForm({
           scheduledDate: values.scheduledDate[0],
           location: values.location,
         })
-        console.log(emotionalTask)
         onEmotionalTaskCreated(emotionalTask)
       } else if (values.type === 'physical') {
         const physicalTask = await createPhysicalTask({
+          authorId: authorId,
           type: values.type,
           description: values.description,
           scheduledDate: values.scheduledDate[0],
           location: values.location,
         })
-        console.log(physicalTask)
         onPhysicalTaskCreated(physicalTask)
       }
       setValues(initialValues)
