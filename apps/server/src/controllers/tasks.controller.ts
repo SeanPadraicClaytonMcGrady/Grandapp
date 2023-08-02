@@ -109,11 +109,9 @@ const TasksController = {
 
   async newPhysicalTask(req: Request, res: Response, next: NextFunction) {
     try {
-      const { author, authorId, type, description, scheduledDate, location } =
-        req.body;
+      const { authorId, type, description, scheduledDate, location } = req.body;
       console.log(scheduledDate);
       const physicalTask = await Tasks.createPhysicalTask(
-        author,
         authorId,
         type,
         description,

@@ -16,8 +16,7 @@ const AppliedToTask = () => {
       >
         <form className="max-w-4xl w-full h-screen mx-auto">
           <div className="flex justify-center text-3xl border p-3 rounded-md bg-white text-gray-500">
-            Thank you for your application, you will be notified if you've been
-            successful!
+            You've applied! Returning to your task page...
           </div>
         </form>
       </div>
