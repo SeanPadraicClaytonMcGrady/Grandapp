@@ -84,16 +84,9 @@ const TasksController = {
     }
   },
 
-  //I think the Mr. Darcy Dominance bug takes place here.
-  //I believe the problem is that this controller was destructuring something which didn't exist.
-  //Then in Prisma it would default to 1. I think. I'm not actually sure.
-  //In any event, the previous code was incorrect because it didn't take information from credentials.
-  //I will work on this ASAP. -Sean
-
   async newEmotionalTask(req: Request, res: Response, next: NextFunction) {
     try {
       const { authorId, type, description, scheduledDate, location } = req.body;
-      console.log(scheduledDate);
       const emotionalTask = await Tasks.createEmotionalTask(
         Number(authorId),
         type,
@@ -110,9 +103,8 @@ const TasksController = {
   async newPhysicalTask(req: Request, res: Response, next: NextFunction) {
     try {
       const { authorId, type, description, scheduledDate, location } = req.body;
-      console.log(scheduledDate);
       const physicalTask = await Tasks.createPhysicalTask(
-        authorId,
+        Number(authorId),
         type,
         description,
         scheduledDate,

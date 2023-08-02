@@ -61,7 +61,7 @@ const ApplyToTask = () => {
     const taskHasAcceptedResponse = task.acceptedId !== null
 
     //This button is for volunteers applying normally.
-    if (isVolunteer && !hasResponse && !taskHasAcceptedResponse) {
+    if (isVolunteer && !taskHasAcceptedResponse) {
       return (
         <button
           className="bg-teal-400 mt-4 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded"
