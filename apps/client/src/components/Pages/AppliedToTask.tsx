@@ -1,23 +1,27 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import Navbar from './NavBar'
 import Footer from '../Footer'
 import background from '../Assets/background.jpg'
 import { UserContext } from '../../lib/userContext'
+import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const AppliedToTask = () => {
-  //Continue coding in the area below: cycle the user back to the volunteer dashboard after 5 seconds.
-  //Later implement this for a senior posting a task.
+  const { user } = useContext(UserContext)
+  const navigate = useNavigate()
+  const [redirect, setRedirect] = useState(false)
 
-  // const { user } = useContext(UserContext)
-  // const loggedInVolunteer = user?.volunteer
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setRedirect(true)
+      navigate('/volunteer')
+    }, 5000)
+    setRedirect(true)
 
-  // useEffect(() => {
-  //   if (loggedInVolunteer) {
-  //     const countdown = 5000
-
-  //     const timeoutId = setTimeout(() => {})
-  //   }
-  // })
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  }, [navigate])
 
   return (
     <div>
