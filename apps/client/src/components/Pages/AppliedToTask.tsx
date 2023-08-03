@@ -1,22 +1,16 @@
-import React, { useEffect, useContext, useState } from 'react'
+import { useEffect } from 'react'
 import Navbar from './NavBar'
 import Footer from '../Footer'
 import background from '../Assets/background.jpg'
-import { UserContext } from '../../lib/userContext'
-import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
 const AppliedToTask = () => {
-  const { user } = useContext(UserContext)
   const navigate = useNavigate()
-  const [redirect, setRedirect] = useState(false)
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setRedirect(true)
       navigate('/volunteer')
     }, 5000)
-    setRedirect(true)
 
     return () => {
       clearTimeout(timeoutId)
