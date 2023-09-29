@@ -1,11 +1,13 @@
-# Turborepo starter
+#GrandApp
 
-This is an official starter Turborepo.
+This app aims to connect volunteers with seniors.
 
-## Using this example
+#How to start
 
-Run the following command:
+To currently run GrandApp, you will need to: 
 
-```sh
-npx create-turbo@latest
-```
+1) set up a server with Docker Compose & match the port to the .env_default
+2) make the .env_default .env
+3) push the prisma DB scheme to it with: yarn prisma migrate dev init
+4) follow that with: prisma generate
+5) run the app with 'yarn dev'
